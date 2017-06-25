@@ -31,6 +31,18 @@
             opacity: 0.4;
             fill: cornflowerblue;
         }
+
+        .high-development-border, .world-biocapacity-border {
+            opacity: 0.3;
+            stroke:  #000;
+            stroke-dasharray: 3, 3;
+        }
+
+        .annotation-text {
+            font-size: 10px;
+            opacity: 0.8;
+            fill: cornflowerblue;
+        }
         
         .axis path,
         .axis line {
@@ -138,7 +150,7 @@
                 return +d.HDI
             });
 
-            // Display x-axis
+            // display x-axis
             var xScale = d3.scaleLinear()
                         .range([0, width])
                         .domain([0, 1.0]);
@@ -152,7 +164,7 @@
                 .attr("transform", "translate(0, "+height+")")
                 .call(xAxis);
 
-            // Display y-axis
+            // display y-axis
             var yScale = d3.scaleLinear()
                             .range([height, 0])
                             .domain([0, maxEfPerCapita]);
@@ -164,12 +176,12 @@
                 .attr("class", "x axis")
                 .call(yAxis);
 
-            // Create scale for radius
+            // create scale for radius/population
             var rScale = d3.scaleLinear()
-                .range([3, 30])
+                .range([3, 50])
                 .domain([0, Math.sqrt(maxPopulation)]);
 
-            // Draw bubbles
+            // draw bubbles
             svg.selectAll("bubble")
                 .data(data)
                 .enter()
@@ -184,6 +196,34 @@
                 .attr("r", function(d){
                     return rScale(Math.sqrt(d.Population));
                 }); 
+
+            // draw hight development line 
+            svg.append("line")
+                .attr("class", "high-development-border")
+                .attr("x1", xScale(0.7))
+                .attr("y1", height)
+                .attr("x2", xScale(0.7))
+                .attr("y2", 0);
+            
+            svg.append("text")
+                .attr("class", "annotation-text")
+                .text("High human development")
+                .attr("x", xScale(0.7) + 10)
+                .attr("y", 100);
+
+            // draw world bio capacity line 
+            svg.append("line")
+                .attr("class", "world-biocapacity-border")
+                .attr("x1", 0)
+                .attr("y1", yScale(1.74))
+                .attr("x2", width)
+                .attr("y2", yScale(1.74));
+            
+            svg.append("text")
+                .attr("class", "annotation-text")
+                .text("World Biocapacity per Person (1.74)")
+                .attr("x", 100)
+                .attr("y", yScale(1.74) -5);
 
         }
     </script>
