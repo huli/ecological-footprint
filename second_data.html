@@ -2,16 +2,27 @@
 <html lang="en">
 
 <head>
-    <title></title>
+    <title>The ecological footprint of countries</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="" rel="stylesheet">
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Average" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 40px;
             font: 14px/1.4 'Roboto', 'Helvetica Neue', Helvetica, sans-serif;
+        }
+
+        h1 {
+            font-family: 'Average', serif;
+            text-align: center;
+            color: darkslateblue;
+        }
+
+        .title {
+            width: 1400px;
+            margin-left: 100px;
         }
         
         .bubble:hover {
@@ -43,28 +54,16 @@
             opacity: 0.8;
             fill: cornflowerblue;
         }
-        
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
+
+        .y.axis, .x.axis{            
+            font-size: 10px;
+            opacity: 0.8;
         }
         
-        .x.axis path {
+        .x.axis path, .y.axis path {
             display: none;
         }
         
-        line.grid-line {
-            opacity: 0.3;
-            stroke-dasharray: 3, 3;
-        }
-        
-        .y.axis .tick:first-child line.grid-line {
-            opacity: 1;
-            stroke-dasharray: 0, 0;
-        }
-
         div.tooltip {	
             position: absolute;			
             text-align: center;		
@@ -123,7 +122,7 @@
 
             var xAxis = d3.axisBottom()
                 .scale(xScale)
-                .ticks(10);
+                .ticks(5);
 
             svg.append("g")
                 .attr("class", "x axis")
@@ -133,13 +132,13 @@
             // display y-axis
             var yScale = d3.scaleLinear()
                             .range([height, 0])
-                            .domain([0, maxEfPerCapita]);
+                            .domain([0, 15]);
             var yAxis = d3.axisLeft()
                             .scale(yScale)
-                            .ticks(10);
+                            .ticks(5);
             
             svg.append("g")
-                .attr("class", "x axis")
+                .attr("class", "y axis")
                 .call(yAxis);
 
             // create scale for radius/population
@@ -211,6 +210,13 @@
 
 <body>
     <script>
+
+        d3.select("body")
+            .append("div")
+            .attr("class", "title")
+            .append("h1")
+            .text("The Ecological Footprint of Countries");
+
         d3.csv('country_metrics.csv', draw)
     </script>    
 </body>
