@@ -1,1 +1,1 @@
-<?php include_once("basic_charts.html"); ?>
+<?php include_once("first_data.html"); ?>
