@@ -54,8 +54,35 @@
                 .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
                 .rangeRound([0, width]);
 
+            var animation_time = 1200;
+
+            var world_biocap = data.filter(function (d){
+                return d.record == "BiocapPerCap" &&
+                        d.country == "World";
+            });
+
+            var swiss_biocap = data.filter(function (d){
+                return d.record == "BiocapPerCap" &&
+                        d.country == "Switzerland";
+            });
+
+            var swiss_footprint = data.filter(function (d){
+                return d.record == "EFConsPerCap" &&
+                        d.country == "Switzerland";
+            });
+
+            var world_footprint = data.filter(function (d){
+                return d.record == "EFConsPerCap" &&
+                        d.country == "World";
+            });
+
+            var maxFootprint = d3.max(swiss_footprint, function(d) {return d.total});
+            var maxBiocap = d3.max(swiss_biocap, function(d) {return d.total});
+
+           var maxScale = Math.ceil(d3.max([maxFootprint, maxBiocap]));
+
             var y = d3.scaleLinear()
-                .domain([0, 15])
+                .domain([0, maxScale])
                 .rangeRound([height, 0]);
         
             var line = d3.line()
@@ -84,10 +111,6 @@
                 .text("ef per capita");
 
             // Show biocapacity of world and country
-            var world_biocap = data.filter(function (d){
-                return d.record == "BiocapPerCap" &&
-                        d.country == "World";
-            });
 
             svg.append("path")
                 .datum(world_biocap)
@@ -95,19 +118,15 @@
                 .attr("stroke", "green")
                 .attr("stroke-linejoin", "round")
                 .attr("stroke-linecap", "round")
-                .attr("stroke-width", 1.5)
+                .attr("stroke-width", 1)
                 .attr("stroke-opacity", 0.1)
                 .attr("d", zero_line)
                 .transition()
-                .duration(2000) 
+                .duration(animation_time) 
                 .ease(d3.easePolyInOut)
                 .attr("d", line)
-                .attr("stroke-opacity", .3);
+                .attr("stroke-opacity", .2);
             
-            var swiss_biocap = data.filter(function (d){
-                return d.record == "BiocapPerCap" &&
-                        d.country == "Switzerland";
-            });
 
             svg.append("path")
                 .datum(world_biocap)
@@ -115,22 +134,19 @@
                 .attr("stroke", "green")
                 .attr("stroke-linejoin", "round")
                 .attr("stroke-linecap", "round")
-                .attr("stroke-width", 1.5)
+                .attr("stroke-width", 1)
                 .attr("stroke-opacity", 0)
                 .attr("d", line)
                 .datum(swiss_biocap)
                 .transition()
-                .delay(2000)
-                .duration(2000) 
+                .delay(animation_time)
+                .duration(animation_time) 
                 .ease(d3.easePolyInOut)
                 .attr("d", line)
                 .attr("stroke-opacity", 1);
 
             // Show footprint of world and country
-            var world_footprint = data.filter(function (d){
-                return d.record == "EFConsPerCap" &&
-                        d.country == "World";
-            });
+
 
             svg.append("path")
                 .datum(world_footprint)
@@ -139,36 +155,32 @@
                 .attr("stroke", "red")
                 .attr("stroke-linejoin", "round")
                 .attr("stroke-linecap", "round")
-                .attr("stroke-width", 1.5)
+                .attr("stroke-width", 1)
                 .attr("stroke-opacity", 0.1)
                 .attr("d", zero_line)
                 .transition()
-                .duration(2000) 
+                .duration(animation_time) 
                 .ease(d3.easePolyInOut)
-                .delay(4000)
+                .delay(2*animation_time)
                 .attr("d", line)
-                .attr("stroke-opacity", .3);
+                .attr("stroke-opacity", .2);
 
-             var swiss_footprint = data.filter(function (d){
-                return d.record == "EFConsPerCap" &&
-                        d.country == "Switzerland";
-            });
 
             svg.append("path")
                 .datum(world_footprint)
                 .attr("fill", "none")
-                .attr("stroke", "green")
+                .attr("stroke", "red")
                 .attr("stroke-linejoin", "round")
                 .attr("stroke-linecap", "round")
-                .attr("stroke-width", 1.5)
+                .attr("stroke-width", 1)
                 .attr("stroke-opacity", 0)
                 .attr("d", line)
                 .datum(swiss_footprint)
                 .transition()
                 .delay(2000)
-                .duration(2000) 
+                .duration(animation_time) 
                 .ease(d3.easePolyInOut)
-                .delay(6000)
+                .delay(3*animation_time)
                 .attr("d", line)
                 .attr("stroke-opacity", 1);
         }
