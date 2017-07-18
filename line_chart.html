@@ -54,7 +54,8 @@
                 .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
                 .rangeRound([0, width]);
 
-            var animation_time = 1200;
+            var animation_time = 1000;
+            var animation_overlap = 500;
 
             var world_biocap = data.filter(function (d){
                 return d.record == "BiocapPerCap" &&
@@ -111,11 +112,10 @@
                 .text("ef per capita");
 
             // Show biocapacity of world and country
-
             svg.append("path")
                 .datum(world_biocap)
                 .attr("fill", "none")
-                .attr("stroke", "green")
+                .attr("stroke", "#5ab4ac")
                 .attr("stroke-linejoin", "round")
                 .attr("stroke-linecap", "round")
                 .attr("stroke-width", 1)
@@ -125,13 +125,14 @@
                 .duration(animation_time) 
                 .ease(d3.easePolyInOut)
                 .attr("d", line)
-                .attr("stroke-opacity", .2);
+                .attr("stroke-opacity", .3)
+                .attr("stroke-width", 2);;
             
 
             svg.append("path")
                 .datum(world_biocap)
                 .attr("fill", "none")
-                .attr("stroke", "green")
+                .attr("stroke", "#5ab4ac")
                 .attr("stroke-linejoin", "round")
                 .attr("stroke-linecap", "round")
                 .attr("stroke-width", 1)
@@ -139,37 +140,37 @@
                 .attr("d", line)
                 .datum(swiss_biocap)
                 .transition()
-                .delay(animation_time)
+                .delay(animation_time - animation_overlap)
                 .duration(animation_time) 
                 .ease(d3.easePolyInOut)
                 .attr("d", line)
-                .attr("stroke-opacity", 1);
+                .attr("stroke-opacity", 1)
+                .attr("stroke-width", 3);
 
             // Show footprint of world and country
-
-
             svg.append("path")
                 .datum(world_footprint)
                 .attr("class", ".reference")
                 .attr("fill", "none")
-                .attr("stroke", "red")
+                .attr("stroke", "#d8b365")
                 .attr("stroke-linejoin", "round")
                 .attr("stroke-linecap", "round")
                 .attr("stroke-width", 1)
                 .attr("stroke-opacity", 0.1)
                 .attr("d", zero_line)
                 .transition()
+                .delay(2*animation_time - animation_overlap)
                 .duration(animation_time) 
                 .ease(d3.easePolyInOut)
-                .delay(2*animation_time)
                 .attr("d", line)
-                .attr("stroke-opacity", .2);
+                .attr("stroke-opacity", .3)
+                .attr("stroke-width", 2);
 
 
             svg.append("path")
                 .datum(world_footprint)
                 .attr("fill", "none")
-                .attr("stroke", "red")
+                .attr("stroke", "#d8b365")
                 .attr("stroke-linejoin", "round")
                 .attr("stroke-linecap", "round")
                 .attr("stroke-width", 1)
@@ -180,9 +181,10 @@
                 .delay(2000)
                 .duration(animation_time) 
                 .ease(d3.easePolyInOut)
-                .delay(3*animation_time)
+                .delay(3*animation_time  - 2* animation_overlap)
                 .attr("d", line)
-                .attr("stroke-opacity", 1);
+                .attr("stroke-opacity", 1)
+                .attr("stroke-width", 3);
         }
 
     </script>
