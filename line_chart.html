@@ -159,7 +159,7 @@
                 .attr("stroke-opacity", 0.1)
                 .attr("d", zero_line)
                 .transition()
-                .delay(2*animation_time - animation_overlap)
+                .delay(2* (animation_time - animation_overlap))
                 .duration(animation_time) 
                 .ease(d3.easePolyInOut)
                 .attr("d", line)
@@ -181,7 +181,7 @@
                 .delay(2000)
                 .duration(animation_time) 
                 .ease(d3.easePolyInOut)
-                .delay(3*animation_time  - 2* animation_overlap)
+                .delay(3* (animation_time  - animation_overlap))
                 .attr("d", line)
                 .attr("stroke-opacity", 1)
                 .attr("stroke-width", 3);
