@@ -149,7 +149,7 @@
             // draw bubbles
             svg.selectAll("bubble")
                 .data(data.sort(function(x, y){
-                    return x.EFConsPerCap - y.EFConsPerCap;
+                    return 0; //x.EFConsPerCap - y.EFConsPerCap;
                     }))
                 .enter()
                 .append("circle")
