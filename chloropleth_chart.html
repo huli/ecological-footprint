@@ -61,13 +61,11 @@
                             .enter()
                             .append('path')
                             .attr('d', path)
-                            .style('fill',"rgb(9, 157, 217)")
-                            .style('stroke', "lightblue")
+                            .style('fill',"#ffffbf")
+                            .style('stroke', "#BDBD8F")
                             .style('stroke-width',"0.3");
-            
 
-
-            function highlightCountry(){
+            function highlight_country(){
                 var selectedCountry = this.value;
 
                 svg.selectAll('path')
@@ -76,28 +74,57 @@
                     .style('fill', function (d){
                                 if(selectedCountry.indexOf(d.properties.name) !== -1)
                                 {
-                                    return "lightblue";
+                                    return "#BDBD8F";
                                 }
-                                else{
-                                    return "white";
+                                else
+                                {
+                                    return "#ffffbf";
                                 }
                             });
-
             }
 
-            
-
-
-
-            var yInput = d3.select('select')
+            d3.select('select')
                 .attr('id','xSelect')
-                .on('change', highlightCountry)
+                .on('change', highlight_country)
                 .selectAll('option')
                 .data(geo_data.features)
                 .enter()
                 .append('option')
                 .attr('value', function (feature) { return feature.properties.name })
                 .text(function (feature) { return feature.properties.name ;});
+
+
+            function color_countries(data)
+            {
+                 svg.selectAll('path')
+                    .transition()
+                    .duration(600)
+                    .style('fill', function (d){
+
+                                var record = data.filter(function(f) 
+                                    { 
+                                        return f["Country Name"] == d.properties.name; 
+                                    });
+                            
+                                if(record.length < 1)
+                                {
+                                    console.log(d.properties.name);
+                                    return "black";
+                                }
+                                if(record[0].EFConsPerCap > 5)
+                                {
+                                    return "white";
+                                }
+                                else
+                                {
+                                    return "white";
+                                } 
+                            });
+            }
+
+            d3.csv("country_metrics.csv", function (d){
+                return d;
+            }, color_countries);
         }
     </script>
 </head>
