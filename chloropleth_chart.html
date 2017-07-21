@@ -68,6 +68,7 @@
             function highlight_country(){
                 var selectedCountry = this.value;
 
+                debugger;
                 svg.selectAll('path')
                     .transition()
                     .duration(600)
@@ -125,7 +126,7 @@
                                             max_year: last_year_of_country,
                                             biocap: 0,
                                             footprint: 0,
-                                            result: 0
+                                            metric: 0
                                         }
                                     }
 
@@ -146,36 +147,44 @@
                                             max_year: last_year_of_country,
                                             biocap: biocap,
                                             footprint: footprint,
-                                            result: result
+                                            metric: result
                                     }})
                                 .entries(capacity_and_prints);
-
-                debugger;
 
                  svg.selectAll('path')
                     .transition()
                     .duration(600)
                     .style('fill', function (d){
 
-                                return "black";
-                                /* var record = data.filter(function(f) 
+                                var record = biocapacity_metrics.filter(function(f) 
                                     { 
-                                        return f["Country Name"] == d.properties.name; 
+                                        return f.key == d.properties.name; 
                                     });
                             
                                 if(record.length < 1)
                                 {
                                     console.log(d.properties.name);
-                                    return "black";
+                                    return "#ffffbf";
                                 }
-                                if(record[0].EFConsPerCap > 5)
-                                {
-                                    return "white";
+
+                                var colors = ["#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850"];
+
+                                var val = record[0].values.metric;
+                                var color_index = 0;
+
+                                switch (true) {
+                                    case (val < -1.5): color_index = 1; break;
+                                    case (val < -1): color_index = 2; break;
+                                    case (val < -0.5): color_index = 3; break;
+                                    case (val < 0.0): color_index = 4; break;
+                                    case (val < 0.5): color_index = 5; break;
+                                    case (val < 1.0): color_index = 6; break;
+                                    case (val < 1.5): color_index = 7; break;
+                                    case (val >= 1.5): color_index = 8; break;
                                 }
-                                else
-                                {
-                                    return "white";
-                                }  */
+
+
+                                return colors[color_index-1];
                             });
             }
 
