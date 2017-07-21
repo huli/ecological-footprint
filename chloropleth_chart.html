@@ -96,12 +96,69 @@
 
             function color_countries(data)
             {
+
+                var capacity_and_prints = data
+                                            .filter(function(d) 
+                                            { 
+                                                return d.record == "BiocapPerCap" 
+                                                || d.record == "EFConsPerCap"; 
+                                                });
+
+                var biocapacity_metrics = d3.nest()
+                                .key(function(d) { return d.country; })
+                                .rollup(function(v) { 
+                                    
+                                    var last_year_of_country = d3.max(v, function(d) {return d.year;});
+
+                                    var biocap_entry = v.filter(function(iv){
+                                        return iv.year == last_year_of_country && iv.record == "BiocapPerCap";
+                                    });
+
+                                    var footprint_entry = v.filter(function(iv){
+                                        return iv.year == last_year_of_country && iv.record == "EFConsPerCap";
+                                    });
+
+                                    var country_metric;
+                                    if(biocap_entry.length < 1 || footprint_entry < 1)
+                                    {
+                                        return  {
+                                            max_year: last_year_of_country,
+                                            biocap: 0,
+                                            footprint: 0,
+                                            result: 0
+                                        }
+                                    }
+
+                                    var biocap = biocap_entry[0].total;
+                                    var footprint = footprint_entry[0].total;
+
+                                    var result;
+                                    if(biocap > footprint)
+                                    {
+                                        result = 1.0000 * biocap / footprint;
+                                    }
+                                    else{
+                                        
+                                        result = -(1.0000 * footprint / biocap);
+                                    }
+
+                                    return {
+                                            max_year: last_year_of_country,
+                                            biocap: biocap,
+                                            footprint: footprint,
+                                            result: result
+                                    }})
+                                .entries(capacity_and_prints);
+
+                debugger;
+
                  svg.selectAll('path')
                     .transition()
                     .duration(600)
                     .style('fill', function (d){
 
-                                var record = data.filter(function(f) 
+                                return "black";
+                                /* var record = data.filter(function(f) 
                                     { 
                                         return f["Country Name"] == d.properties.name; 
                                     });
@@ -118,11 +175,11 @@
                                 else
                                 {
                                     return "white";
-                                } 
+                                }  */
                             });
             }
 
-            d3.csv("country_metrics.csv", function (d){
+            d3.csv("NFA 2017 Edition.csv", function (d){
                 return d;
             }, color_countries);
         }
