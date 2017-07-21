@@ -6,13 +6,12 @@
     <link href="https://fonts.googleapis.com/css?family=Average" rel="stylesheet">
     <style>
         circle {
-        fill: orange;
-        stroke: black;
-        stroke-width: 0.7;
-        opacity: 0.6;
+            stroke: black;
+            stroke-width: 0.1;
+            opacity: 0.6;
         }  
         
-        h1, h2 {
+        h1, h2, h3 {
             font-family: 'Average', serif;
             text-align: center;
             color: "black";
@@ -68,7 +67,6 @@
             function highlight_country(){
                 var selectedCountry = this.value;
 
-                debugger;
                 svg.selectAll('path')
                     .transition()
                     .duration(600)
@@ -94,6 +92,48 @@
                 .attr('value', function (feature) { return feature.properties.name })
                 .text(function (feature) { return feature.properties.name ;});
 
+
+            var colors = ["#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850"];
+
+            function draw_legend()
+            {
+
+                 d3.select("body")
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("top", "0px")
+                    .style("left", width - 400 + "px")
+                    .append("svg")
+                    .attr("height", 1000)
+                    .attr("width", 50)
+                    .selectAll("circle")
+                    .data(colors)
+                    .enter()
+                    .append("circle")
+                    .attr("r", 20)
+                    .attr("cx", 20)
+                    .attr("cy", function(c,i ) { return 100 + (i * 80)})
+                    .attr("fill", function(c) {return c;})
+
+                var legend = ["> 150%", 
+                                "150% > 100%", 
+                                "100% > 50%",
+                                "50% > 0%",
+                                "0% < 50%",
+                                "50% < 100%",
+                                "100% < 150%",
+                                "150% <"];
+                d3.select("div")
+                    .style("width", "200px")
+                    .selectAll("h1")
+                    .data(legend)
+                    .enter()
+                    .append("h3")
+                    .style("position", "absolute")
+                    .style("top", function(d, i) { return 70 + (i * 80) + "px";})
+                    .style("left", "50px")
+                    .text(function(d) {return d});
+            }
 
             function color_countries(data)
             {
@@ -167,7 +207,6 @@
                                     return "white";
                                 }
 
-                                var colors = ["#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850"];
 
                                 var val = record[0].values.metric;
                                 var color_index = 0;
@@ -186,6 +225,8 @@
 
                                 return colors[color_index-1];
                             });
+
+                draw_legend();
             }
 
             d3.csv("NFA 2017 Edition.csv", function (d){
