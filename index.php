@@ -1,1 +1,1 @@
-<?php include_once("bubble_chart_animated.html"); ?>
+<?php include_once("index.html"); ?>
