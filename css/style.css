@@ -8,10 +8,11 @@
     font-size: 18px;
     text-align: center;
     padding-top: 40px;
+    margin-left: -45px;
 }
 
 .description {
-    font-size: 28px;
+    font-size: 24px;
 }
 
 h1 {
@@ -38,16 +39,14 @@ h1 {
 @keyframes arrow
 {
     0% {opacity:0}
-    40% {opacity:1}
-    80% {opacity:0}
+    50% {opacity:1}
     100% {opacity:0}
 }
 
 @-webkit-keyframes arrow /*Safari and Chrome*/
 {
     0% {opacity:0}
-    40% {opacity:1}
-    80% {opacity:0}
+    50% {opacity:1}
     100% {opacity:0}
 }
 
