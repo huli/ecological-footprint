@@ -3,6 +3,11 @@
     padding: 54px;
 }
 
+#about-you
+{
+    margin-bottom: 200px;
+}
+
 .hint
 {
     font-size: 16px;
@@ -16,7 +21,7 @@
 }
 
 .story{
-  margin-top: 300px;
+  margin-top: 350px;
 }
 
 .description {
