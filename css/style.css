@@ -1,5 +1,3 @@
-
-
 #about-you
 {
     margin-bottom: 200px;
@@ -23,15 +21,14 @@
 }
 
 #sections > div{
-  background: white;
-  opacity: .2;
+  /*opacity: .4;*/
 }
 #sections > div:last-child{
   margin-bottom: 30px;
 }
 
 #sections > div.graph-scroll-active{
-  opacity: 1;
+  /*opacity: 1;*/
 }
 
 
