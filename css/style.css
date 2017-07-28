@@ -1,11 +1,43 @@
-#legend {
-    width: 600px;
-    padding: 54px;
-}
+
 
 #about-you
 {
     margin-bottom: 200px;
+}
+
+#graph{
+  margin-left: 40px;
+  width: 500px;
+  position: absolute;
+  top: 0px;
+  margin-left: 380px;
+  background-color: grey;
+}
+
+#container{
+  position: relative;
+}
+
+#sections{
+  width: 600px;
+}
+
+#sections > div{
+  background: white;
+  opacity: .2;
+}
+#sections > div:last-child{
+  margin-bottom: 30px;
+}
+
+#sections > div.graph-scroll-active{
+  opacity: 1;
+}
+
+
+.legend {
+    width: 600px;
+    padding: 54px;
 }
 
 .hint

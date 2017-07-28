@@ -6,18 +6,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="css/style.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Average" rel="stylesheet">
+        <script src="js/d3v4+jetpack.js"></script>
+        <script src="js/graph-scroll.js"></script>
     </head>
     <body>
-        <div id="legend">
-            <div id="introduction">
-                <div id="graph"></div>
-                <h1>The ecological footprint<br /> of our world</h1>
+        <div id="container" class="legend">
+            <div id="graph"></div>
+            <div id="sections">
+                <div><h1>The ecological footprint<br /> of our world</h1></div>
                 <div id="introduction-content" class="description">
                     The ecological footprint measures the amount
                     of natural resources we use in one year.
                     <p />
                     If the demand we oppose to our nature exceeds the supply, 
-                    the world will not be able to recover.
+                    the world sooner or later will not be able to recover.
                     <p />
                 </div>
             </div>
@@ -25,19 +27,22 @@
                 Let's see, how we do.<br/> 
                 <p />
                 <svg class="arrows">
-							<path class="a1" d="M0 0 L30 32 L60 0"></path>
-							<path class="a2" d="M0 20 L30 52 L60 20"></path>
-							<path class="a3" d="M0 40 L30 72 L60 40"></path>
-			    </svg>
+                            <path class="a1" d="M0 0 L30 32 L60 0"></path>
+                            <path class="a2" d="M0 20 L30 52 L60 20"></path>
+                            <path class="a3" d="M0 40 L30 72 L60 40"></path>
+                </svg>
             </div>
-            <div id="overview" class="story">
-                <h2>Human development drives footprint</h2>
+        </div>
+        <div id="container" class="legend">
+            <div id="graph"></div>
+            <div id="sections" class="story">    
+                <div><h2>Human development drives footprint</h2></div>
                 <div id="overview-content" class="description">
                     The further a country has developed, the higher the 
                     footprint most often is.
                     <p />
                     With a global footprint of 2.87 hectares are we using more 
-                    than 50% of what our nature can regenerate.
+                    than 1.5 times what our nature can regenerate.
                     The world currently has a biocapacity of 1.7 hectares
                     per capita. 
                 </div>
@@ -47,8 +52,12 @@
                     being knowledgeable and have a decent standard of living.
                 </div>
             </div>
-            <div id="the-best" class="story">
-                <h2>Who is doing well?</h2>
+        </div>
+        <div id="container" class="legend">
+            <div id="graph"></div>
+            <div id="sections" class="story">                
+                <div id="graph"></div>
+                <div><h2>Who is doing well?</h2></div>
                 <div id="the-best-content" class="description">
                     Haiti and Burundi are doing very well for example.
                     <p/>
@@ -63,8 +72,11 @@
                     STORY MISSING <br/>
                 </div>
             </div>
-            <div id="the-worst" class="story">
-                <h2>Who is not doing well, at all</h2>
+        </div>        
+        <div id="container" class="legend">
+            <div id="graph"></div>
+            <div id="sections" class="story">     
+                <div><h2>Who is not doing well, at all</h2></div>
                 <div id="the-worst-content" class="description">
                     Luxembourg is the country with the highest footprint per
                     per capita. Followed by Canada and Australia.
@@ -77,8 +89,11 @@
                     STORY MISSING <br/>
                 </div>
             </div>
-            <div id="global-timeline" class="story">
-                <h2>How has the global footprint changed over time</h2>
+        </div>        
+        <div id="container" class="legend">
+            <div id="graph"></div>
+            <div id="sections" class="story">      
+                <div><h2>How has the global footprint changed over time</h2></div>
                 <div id="global-timeline-content" class="description">
                     Our global footprint is constantly growing while
                     the biocapacity of our planet is decreasing.
@@ -91,10 +106,13 @@
                     STORY MISSING <br/>
                 </div>
             </div>
-            <div id="best-timeline" class="story">
-                <h2>Which country has made the biggest change - 
+        </div>        
+        <div id="container" class="legend">
+            <div id="graph"></div>
+            <div id="sections" class="story">    
+                <div><h2>Which country has made the biggest change - 
                     in the right direction?
-                </h2>
+                </h2></div>
                 <div id="best-timeline-content" class="description">
                     Cyprus, Greece and Barbados are the countries with
                     the best tendencies.
@@ -106,10 +124,13 @@
                     STORY MISSING <br/>
                 </div>
             </div>
-            <div id="worst-timeline" class="story">
-                <h2>Who is changing too -
+        </div>        
+        <div id="container" class="legend">
+            <div id="graph"></div>
+            <div id="sections" class="story">     
+                <div><h2>Who is changing too -
                     in a not so good direction?
-                </h2>
+                </h2></div>
                 <div id="worst-timeline-content" class="description">
                     Timor-Leste, Djibouti and Fiji are the countries
                     with the worst trends.
@@ -122,8 +143,11 @@
                     STORY MISSING <br/>
                 </div>
             </div>
-            <div id="what-about-you" class="story">
-                <h2>And what about you? 
+        </div>
+        <div id="container" class="legend">
+            <div id="graph"></div>
+            <div id="sections" class="story">    
+                <div><h2>And what about you? </div>
                 </h2>
                 <div id="what-about-you-content" class="description">
                     How big is your footprint, what do you think?
@@ -132,8 +156,11 @@
                     how your country is doing.
                 </div>
             </div>
-             <div id="about-you" class="story">
-                <h2>Switzerland</h2>
+        </div>
+        <div id="container" class="legend">
+            <div id="graph"></div>
+            <div id="sections" class="story">   
+                <div><h2>Switzerland</h2></div>
                 <div id="about-you-content" class="description">
                     Your country has a footprint of 5.28 hectares and
                     only a biocapacity of 1.24 hectares. <br/>
@@ -152,4 +179,5 @@
             </div>
         </div>
     </body>
+    <script src="js/code.js"></script>
 </html>
