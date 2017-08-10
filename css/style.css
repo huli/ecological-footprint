@@ -3,14 +3,89 @@
     margin-bottom: 200px;
 }
 
-#graph{
-  margin-left: 40px;
-  width: 500px;
+
+#graph-introduction{
+  width: 900px;
+  height: 700px;
   position: absolute;
-  top: 0px;
-  margin-left: 380px;
-  background-color: grey;
+  top: 20px;
+  left: 700px;
+  background-color: ghostwhite;
 }
+
+#graph-overview{
+  width: 900px;
+  height: 700px;
+  position: absolute;
+  top: 300px;
+  left: 700px;
+  background-color: ghostwhite;
+}
+
+#graph-the-best{
+  width: 900px;
+  height: 700px;
+  position: absolute;
+  top: 300px;
+  left: 700px;
+  background-color: ghostwhite;
+}
+
+#graph-the-worst{
+  width: 900px;
+  height: 700px;
+  position: absolute;
+  top: 300px;
+  left: 700px;
+  background-color: ghostwhite;
+}
+
+#graph-global-timeline{
+  width: 900px;
+  height: 700px;
+  position: absolute;
+  top: 300px;
+  left: 700px;
+  background-color: ghostwhite;
+}
+
+#graph-worst-timeline{
+  width: 900px;
+  height: 700px;
+  position: absolute;
+  top: 300px;
+  left: 700px;
+  background-color: ghostwhite;
+}
+
+#graph-best-timeline{
+  width: 900px;
+  height: 700px;
+  position: absolute;
+  top: 300px;
+  left: 700px;
+  background-color: ghostwhite;
+}
+
+#graph-about-you{
+  width: 900px;
+  height: 700px;
+  position: absolute;
+  top: 300px;
+  left: 700px;
+  background-color: ghostwhite;
+}
+
+
+#graph-you{
+  width: 900px;
+  height: 700px;
+  position: absolute;
+  top: 350px;
+  left: 700px;
+  background-color: ghostwhite;
+}
+
 
 #container{
   position: relative;
