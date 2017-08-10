@@ -67,7 +67,7 @@
   background-color: ghostwhite;
 }
 
-#graph-about-you{
+#graph-what-about-you{
   width: 900px;
   height: 700px;
   position: absolute;
@@ -77,15 +77,15 @@
 }
 
 
-#graph-you{
+#graph-about-you{
   width: 900px;
   height: 700px;
   position: absolute;
   top: 350px;
   left: 700px;
+  margin-bottom: 50px;
   background-color: ghostwhite;
 }
-
 
 #container{
   position: relative;
