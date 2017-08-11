@@ -87,7 +87,10 @@ function draw_overview_bubble(data)
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0, "+ (div_rect.height -20) +")")
-        .call(xAxis);
+        .call(xAxis)
+        .transition()
+        .duration(5000)
+        .style("opacity", 0.6);
 
     // display y-axis
     var yScale = d3.scaleLinear()
@@ -101,7 +104,10 @@ function draw_overview_bubble(data)
     svg.append("g")
         .attr("class", "y axis")
         .attr("transform", "translate(20, 0)")
-        .call(yAxis);
+        .call(yAxis)
+        .transition()
+        .duration(5000)
+        .style("opacity", 0.6);
 
     // create scale for radius/population
     var rScale = d3.scaleLinear()

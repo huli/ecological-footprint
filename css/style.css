@@ -191,7 +191,7 @@ div.tooltip {
 
 .y.axis, .x.axis{            
     font-size: 10px;
-    opacity: 0.4;
+    opacity: 0.0;
 }
 
 .x.axis path, .y.axis path {
