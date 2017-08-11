@@ -19,7 +19,7 @@
   position: absolute;
   top: 300px;
   left: 700px;
-  background-color: ghostwhite;
+  /*background-color: ghostwhite;*/
 }
 
 #graph-timeline{
@@ -142,4 +142,58 @@ body{
 .arrows path.a3 {	
 	animation-delay:0s;
 	-webkit-animation-delay:0s; /* Safari and Chrome */
+}
+
+div.tooltip {	
+    position: absolute;			
+    text-align: center;		
+    padding-left: 5px;		
+    padding-right: 5px;
+    padding-top: 2px;		
+    padding-bottom: 2px;	
+    width: auto;					
+    height: auto;				
+    font: 12px sans-serif;	
+    color: lightblue;	
+    background: lightsteelblue;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}   
+
+
+.bubble:hover {
+    fill: #3ca1c3;
+    cursor: pointer;
+}
+
+.axis {
+    font-size: 12px;
+}
+
+.bubble {
+    opacity: 0.4;
+    fill:#76bdd5;
+}
+
+.high-development-border, .world-biocapacity-border {
+    opacity: 0;
+    stroke:  #246175;
+    stroke-dasharray: 3, 3;
+}
+
+.annotation-text {
+    font-size: 14px;
+    font-family: 'Average', serif;
+    opacity: 0;
+    fill: #76bdd5;
+}
+
+.y.axis, .x.axis{            
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+.x.axis path, .y.axis path {
+    display: none;
 }
