@@ -15,13 +15,16 @@ function render(){
         .on('active', function(i)
             { 
                 console.log(i + 'th section active') ;
-                if(i == 3)
+                switch(i)
                 {
-                    start_overview();
-                }
-                if(i == 4)
-                {
-                    fix_bubble();
+                    case 3:
+                        start_overview();
+                        break;
+                    case 4:
+                        fix_bubble();
+                    case 7:
+                        break;
+                    default:
                 }
             });
 }
@@ -51,6 +54,10 @@ function draw_overview_bubble(data)
 
     var div_rect = d3.select(bubble_chart_div).node().getBoundingClientRect();
 
+    d3.select(bubble_chart_div)
+            .select("svg")
+            .remove();
+
     var svg = d3.select(bubble_chart_div)
         .append("svg")
         .attr("width", div_rect.width)
@@ -79,19 +86,21 @@ function draw_overview_bubble(data)
 
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0, "+div_rect.height+")")
+        .attr("transform", "translate(0, "+ (div_rect.height -20) +")")
         .call(xAxis);
 
     // display y-axis
     var yScale = d3.scaleLinear()
                     .range([div_rect.height, 0])
                     .domain([0, 15]);
+                    
     var yAxis = d3.axisLeft()
                     .scale(yScale)
                     .ticks(5);
-    
+
     svg.append("g")
         .attr("class", "y axis")
+        .attr("transform", "translate(20, 0)")
         .call(yAxis);
 
     // create scale for radius/population
