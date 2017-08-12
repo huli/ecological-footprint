@@ -149,7 +149,7 @@ function draw_overview_bubble(data)
         .call(xAxis)
         .transition()
         .duration(5000)
-        .style("opacity", 0.6);
+        .style("opacity", 0.4);
 
     // display y-axis
     var yScale = d3.scaleLinear()
@@ -165,7 +165,7 @@ function draw_overview_bubble(data)
         .call(yAxis)
         .transition()
         .duration(5000)
-        .style("opacity", 0.6);
+        .style("opacity", 0.4);
 
     // create scale for radius/population
     var rScale = d3.scaleLinear()

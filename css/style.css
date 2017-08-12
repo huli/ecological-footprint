@@ -84,7 +84,7 @@
 }
 
 .description {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 h1 {
@@ -196,5 +196,5 @@ div.tooltip {
 
 .x.axis path, .y.axis path {
     /*display: none;*/
-    stroke-dasharray: 2,2
+    stroke:  #9dd0e1;
 }
