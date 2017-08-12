@@ -156,12 +156,13 @@ function draw_overview_bubble(data)
                     .range([height, 0])
                     .domain([0, 13.2]);
                     
-    var yAxis = d3.axisLeft()
+    var yAxis = d3.axisRight()
                     .scale(yScale)
                     .ticks(5);
 
     svg.append("g")
         .attr("class", "y axis")
+        .attr("transform", "translate("+ width +", 0)")
         .call(yAxis)
         .transition()
         .duration(5000)
@@ -255,8 +256,8 @@ function draw_overview_bubble(data)
                 svg.append("text")
                     .attr("class", "annotation-text")
                     .text("World Biocapacity per Person (1.7 hectares)")
-                    .attr("x", 100)
-                    .attr("y", yScale(1.74) -5)
+                    .attr("x", 270)
+                    .attr("y", yScale(1.74) -9)
                     .transition() 
                     .duration(2000)
                     .style("opacity", 0.8);

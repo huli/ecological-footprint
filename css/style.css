@@ -14,11 +14,11 @@
 }
 
 #graph-bubble-chart{
-  width: 950px;
+  width: 1350px;
   height: 750px;
   position: absolute;
   top: 250px;
-  left: 700px;
+  left: 300px;
   /*background-color: ghostwhite;*/
 }
 
