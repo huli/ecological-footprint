@@ -106,7 +106,7 @@ function draw_overview_bubble(data)
     // display y-axis
     var yScale = d3.scaleLinear()
                     .range([height, 0])
-                    .domain([0, 15]);
+                    .domain([0, 13.2]);
                     
     var yAxis = d3.axisLeft()
                     .scale(yScale)
@@ -138,6 +138,20 @@ function draw_overview_bubble(data)
         .attr("cy", function(d){
             return yScale(0);
         })
+        .on("mouseover", function(d) {		
+                    div.transition()		
+                        .duration(300)		
+                        .style("opacity", .8);		
+                    div.html(d["Country Name"] + "<br/>" 
+                            + d.EFConsPerCap)	
+                        .style("left", (d3.event.pageX) + "px")		
+                        .style("top", (d3.event.pageY - 28) + "px");	
+                    })					
+                .on("mouseout", function(d) {		
+                    div.transition()		
+                        .duration(500)		
+                        .style("opacity", 0);	
+                })
         .style("opacity", 0)	
         .transition()
         .delay(function(d,i){ return 10 * (i)})
@@ -152,7 +166,8 @@ function draw_overview_bubble(data)
         .attr("r", function(d){
             return rScale(Math.sqrt(d.Population));
         })
-        .style("opacity", .7);
+        .style("opacity", .7)
+
 
     // draw hight development line 
     svg.append("line")
