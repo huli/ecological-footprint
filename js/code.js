@@ -48,11 +48,21 @@ function start_overview()
 
 function draw_overview_bubble(data)
 {
+    var div_rect = d3.select(bubble_chart_div).node().getBoundingClientRect();
+
+    var cover = {
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 40
+                },
+                width = div_rect.width - cover.left - cover.right,
+                height = div_rect.height - cover.top - cover.bottom;
+
     var div = d3.select("body").append("div")	
         .attr("class", "tooltip")				
         .style("opacity", 0);
 
-    var div_rect = d3.select(bubble_chart_div).node().getBoundingClientRect();
 
     d3.select(bubble_chart_div)
             .select("svg")
@@ -60,8 +70,9 @@ function draw_overview_bubble(data)
 
     var svg = d3.select(bubble_chart_div)
         .append("svg")
-        .attr("width", div_rect.width)
-        .attr("height", div_rect.height);
+        .style("padding-left", cover.left)        
+        .attr("width", width + cover.left + cover.right)
+        .attr("height", height + cover.top + cover.bottom);
 
     var maxEfPerCapita = d3.max(data, function(d){
         return +d.EFConsPerCap;
@@ -77,7 +88,7 @@ function draw_overview_bubble(data)
 
     // display x-axis
     var xScale = d3.scaleLinear()
-                .range([0, div_rect.width])
+                .range([0, width])
                 .domain([0, 1.0]);
 
     var xAxis = d3.axisBottom()
@@ -86,7 +97,7 @@ function draw_overview_bubble(data)
 
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0, "+ (div_rect.height -20) +")")
+        .attr("transform", "translate(0, "+ height +")")
         .call(xAxis)
         .transition()
         .duration(5000)
@@ -94,7 +105,7 @@ function draw_overview_bubble(data)
 
     // display y-axis
     var yScale = d3.scaleLinear()
-                    .range([div_rect.height, 0])
+                    .range([height, 0])
                     .domain([0, 15]);
                     
     var yAxis = d3.axisLeft()
@@ -103,7 +114,6 @@ function draw_overview_bubble(data)
 
     svg.append("g")
         .attr("class", "y axis")
-        .attr("transform", "translate(20, 0)")
         .call(yAxis)
         .transition()
         .duration(5000)
@@ -148,7 +158,7 @@ function draw_overview_bubble(data)
     svg.append("line")
         .attr("class", "high-development-border")
         .attr("x1", xScale(0.7))
-        .attr("y1", div_rect.height)
+        .attr("y1", height)
         .attr("x2", xScale(0.7))
         .attr("y2", 0)
         .transition() 
@@ -172,7 +182,7 @@ function draw_overview_bubble(data)
         .attr("class", "world-biocapacity-border")
         .attr("x1", 0)
         .attr("y1", yScale(1.74))
-        .attr("x2", div_rect.width)
+        .attr("x2", width)
         .attr("y2", yScale(1.74))
         .transition() 
         .duration(2000)
