@@ -3,6 +3,7 @@
 "use strict";
 
 var bubble_chart_div = "#graph-bubble-chart";
+var country_metrics_data;
 
 // Rendering of page
 var oldWidth = 0;
@@ -22,11 +23,56 @@ function render(){
                         break;
                     case 4:
                         fix_bubble();
+                        break;
                     case 7:
+                        start_best();
                         break;
                     default:
                 }
             });
+}
+
+function start_best()
+{
+    function key_func(d){
+        return d['Country Name'];
+    }
+
+    var svg = d3.select(bubble_chart_div)
+        .select("svg")
+
+    var svg_height = svg.node().getBoundingClientRect().height;
+    
+    var filtered = country_metrics_data.filter(function(d){
+                        switch(d["Country Name"])
+                        {
+                            case "Haiti":
+                            case "Burundi":
+                            case "Eritrea":
+                                return false;
+                                break;
+                            default:
+                                return true;
+                        }
+                    });
+
+    var filtered_circles = svg.selectAll("circle")
+                        .data(filtered, key_func);
+
+    filtered_circles.transition()
+                    .delay(function(d,i){ return 10 * (i)})
+                    .duration(1000) 
+                    .ease(d3.easePolyIn)
+                    .attr("cy", function(d){
+                        return svg_height;
+                    })
+                    .style("opacity", 0)
+                    .attr("r", function(d){
+                        return 0;
+                    });
+
+    filtered_circles.exit()
+                .style("opacity", 0.9)
 }
 
 function fix_bubble()
@@ -48,6 +94,8 @@ function start_overview()
 
 function draw_overview_bubble(data)
 {
+    country_metrics_data = data;
+
     var div_rect = d3.select(bubble_chart_div).node().getBoundingClientRect();
 
     var cover = {
