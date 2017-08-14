@@ -2,8 +2,14 @@
 
 "use strict";
 
+
+var bubble_opacity = .7;
 var bubble_chart_div = "#graph-bubble-chart";
+
 var country_metrics_data;
+var y_scale;
+var r_scale;
+
 
 // Rendering of page
 var oldWidth = 0;
@@ -27,23 +33,53 @@ function render(){
                     case 7:
                         start_best();
                         break;
+                    case 10:
+                        start_worst();
                     default:
                 }
             });
 }
 
-function start_best()
-{
-    function key_func(d){
-        return d['Country Name'];
-    }
 
+
+function start_worst()
+{
     var svg = d3.select(bubble_chart_div)
         .select("svg")
 
     var svg_height = svg.node().getBoundingClientRect().height;
-    
-    var filtered = country_metrics_data.filter(function(d){
+
+    // reposition the others circle to their default
+    var filtered = get_all_but_best();
+    var filtered_circles = svg.selectAll("circle")
+                        .data(filtered, key_func);
+
+    //var index = filtered_circles.length;
+
+    filtered_circles.transition()
+        .delay(function(d,i){ return 10 * (i)})
+        .duration(1000) 
+        .ease(d3.easePolyInOut)
+        .attr("cy", function(d){
+            return y_scale(d.EFConsPerCap);
+        })
+        .style("opacity", bubble_opacity)
+        .attr("r", function(d){
+            return r_scale(Math.sqrt(d.Population));
+        })
+        .on("end", function() {
+
+       //     // show the worsts bubbles. resp. hide others
+       //     var filtered = get_all_but_worst();
+
+       //     hide_bubbles(filtered);
+        });
+}
+
+
+function get_all_but_best()
+{
+    return country_metrics_data.filter(function(d){
                         switch(d["Country Name"])
                         {
                             case "Haiti":
@@ -55,9 +91,38 @@ function start_best()
                                 return true;
                         }
                     });
+}
+
+function get_all_but_worst()
+{
+    return country_metrics_data.filter(function(d){
+                        switch(d["Country Name"])
+                        {
+                            case "Luxembourg":
+                            case "Canada":
+                            case "Australia":
+                                return false;
+                                break;
+                            default:
+                                return true;
+                        }
+                    });
+}
+
+
+function key_func(d){
+    return d['Country Name'];
+}
+
+function hide_bubbles(bubbles)
+{
+    var svg = d3.select(bubble_chart_div)
+        .select("svg")
+
+    var svg_height = svg.node().getBoundingClientRect().height;
 
     var filtered_circles = svg.selectAll("circle")
-                        .data(filtered, key_func);
+                        .data(bubbles, key_func);
 
     filtered_circles.transition()
                     .delay(function(d,i){ return 10 * (i)})
@@ -72,7 +137,16 @@ function start_best()
                     });
 
     filtered_circles.exit()
-                .style("opacity", 0.9)
+                .style("opacity", 0.8)    
+}
+
+
+
+function start_best()
+{
+    var filtered = get_all_but_best();
+
+    hide_bubbles(filtered);
 }
 
 function fix_bubble()
@@ -152,12 +226,12 @@ function draw_overview_bubble(data)
         .style("opacity", 0.4);
 
     // display y-axis
-    var yScale = d3.scaleLinear()
+    y_scale = d3.scaleLinear()
                     .range([height, 0])
                     .domain([0, 13.2]);
                     
     var yAxis = d3.axisRight()
-                    .scale(yScale)
+                    .scale(y_scale)
                     .ticks(5);
 
     svg.append("g")
@@ -169,7 +243,7 @@ function draw_overview_bubble(data)
         .style("opacity", 0.4);
 
     // create scale for radius/population
-    var rScale = d3.scaleLinear()
+    r_scale = d3.scaleLinear()
         .range([3, 50])
         .domain([0, Math.sqrt(maxPopulation)]);
 
@@ -185,7 +259,7 @@ function draw_overview_bubble(data)
             return xScale(d.HDI);
         })
         .attr("cy", function(d){
-            return yScale(0);
+            return y_scale(0);
         })
         .on("mouseover", function(d) {		
                     div.transition()		
@@ -210,12 +284,12 @@ function draw_overview_bubble(data)
             return xScale(d.HDI);
         })
         .attr("cy", function(d){
-            return yScale(d.EFConsPerCap);
+            return y_scale(d.EFConsPerCap);
         })
         .attr("r", function(d){
-            return rScale(Math.sqrt(d.Population));
+            return r_scale(Math.sqrt(d.Population));
         })
-        .style("opacity", .7)
+        .style("opacity", bubble_opacity)
 
 
     // draw hight development line 
@@ -245,9 +319,9 @@ function draw_overview_bubble(data)
     svg.append("line")
         .attr("class", "world-biocapacity-border")
         .attr("x1", 0)
-        .attr("y1", yScale(1.74))
+        .attr("y1", y_scale(1.74))
         .attr("x2", width)
-        .attr("y2", yScale(1.74))
+        .attr("y2", y_scale(1.74))
         .transition() 
         .duration(2000)
         .style("opacity", 0.3)        
@@ -257,7 +331,7 @@ function draw_overview_bubble(data)
                     .attr("class", "annotation-text")
                     .text("World Biocapacity per Person (1.7 hectares)")
                     .attr("x", 270)
-                    .attr("y", yScale(1.74) -9)
+                    .attr("y", y_scale(1.74) -9)
                     .transition() 
                     .duration(2000)
                     .style("opacity", 0.8);
