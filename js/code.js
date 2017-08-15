@@ -75,6 +75,8 @@ function start_worst()
                 var filtered = get_all_but_worst();
 
                 hide_bubbles(filtered);
+
+                unfix_bubble()
             }
         })
         .style("opacity", bubble_opacity)
@@ -171,8 +173,10 @@ function fix_bubble()
 function unfix_bubble()
 {
     var div_top = d3.select(bubble_chart_div).node().getBoundingClientRect();
-    
-    d3.select(bubble_chart_div)
+
+    d3.select(bubble_chart_div)    
+        //.style("top", (div_top.top + window.scrollY) +  "px")
+        .style("top", (window.pageYOffset - 500) +  "px")
         .style("position", "absolute");
 
     hideOthers(bubble_chart_div); 
