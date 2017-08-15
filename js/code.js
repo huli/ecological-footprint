@@ -54,8 +54,7 @@ function start_worst()
     var filtered_circles = svg.selectAll("circle")
                         .data(filtered, key_func);
 
-    //var index = filtered_circles.length;
-
+    var transitions = 0;
     filtered_circles.transition()
         .delay(function(d,i){ return 10 * (i)})
         .duration(1000) 
@@ -63,16 +62,24 @@ function start_worst()
         .attr("cy", function(d){
             return y_scale(d.EFConsPerCap);
         })
+        .on("start", function() 
+            {
+                transitions++;
+            }  
+        )
+        .on("end", function() 
+        {
+            if( --transitions === 0 ) 
+            {
+                // show the worsts bubbles. resp. hide others
+                var filtered = get_all_but_worst();
+
+                hide_bubbles(filtered);
+            }
+        })
         .style("opacity", bubble_opacity)
         .attr("r", function(d){
             return r_scale(Math.sqrt(d.Population));
-        })
-        .on("end", function() {
-
-       //     // show the worsts bubbles. resp. hide others
-       //     var filtered = get_all_but_worst();
-
-       //     hide_bubbles(filtered);
         });
 }
 
@@ -159,6 +166,16 @@ function fix_bubble()
         .style("position", "fixed");
 
     hideOthers(bubble_chart_div);
+}
+
+function unfix_bubble()
+{
+    var div_top = d3.select(bubble_chart_div).node().getBoundingClientRect();
+    
+    d3.select(bubble_chart_div)
+        .style("position", "absolute");
+
+    hideOthers(bubble_chart_div); 
 }
 
 function start_overview()
