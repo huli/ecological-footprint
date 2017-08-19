@@ -10,9 +10,19 @@ var timeline_div = "#graph-timeline";
 var country_metrics_data;
 var timeline_metrics_data;
 
+
+var animation_time = 1000;
+var animation_overlap = 500;
+
 var y_scale;
 var r_scale;
 
+var x_timeline;
+var world_biocap;
+var world_footprint;
+var y_timeline;
+var line;
+var zero_line; 
 
 // Rendering of page
 var oldWidth = 0;
@@ -48,6 +58,9 @@ function render(){
                     case 15:
                         fix_timeline();
                         break;
+                    case 17:
+                        show_best_timeline();
+                        break;
                     default:
                 }
             });
@@ -68,6 +81,63 @@ function fix_timeline()
 function draw_timeline(data)
 {
     timeline_metrics_data = data;
+}
+
+function show_best_timeline()
+{
+    var svg = d3.select(timeline_div)
+        .select("svg");
+    
+    svg.selectAll("path")
+        .transition()
+        .duration(animation_time)
+        .attr("stroke-opacity", 0.1);
+
+    var cyprus_biocap = timeline_metrics_data.filter(function (d){
+        return d.record == "BiocapPerCap" &&
+                d.country == "Cyprus";
+    });
+
+    var cyprus_footprint = timeline_metrics_data.filter(function (d){
+        return d.record == "EFConsPerCap" &&
+                d.country == "Cyprus";
+    });
+
+    // Show biocapacity of world and country
+    svg.append("path")
+        .datum(cyprus_biocap)
+        .attr("fill", "none")
+        .attr("stroke", "#5ab4ac")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1)
+        .attr("stroke-opacity", 0.1)
+        .attr("d", zero_line)
+        .transition()
+        .duration(animation_time) 
+        .ease(d3.easePolyInOut)
+        .attr("d", line)
+        .attr("stroke-opacity", .8)
+        .attr("stroke-width", 2);
+    
+    // Show footprint of world and country
+    svg.append("path")
+        .datum(cyprus_footprint)
+        .attr("class", ".reference")
+        .attr("fill", "none")
+        .attr("stroke", "#d8b365")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1)
+        .attr("stroke-opacity", 0.1)
+        .attr("d", zero_line)
+        .transition()
+        .delay(2* (animation_time - animation_overlap))
+        .duration(animation_time) 
+        .ease(d3.easePolyInOut)
+        .attr("d", line)
+        .attr("stroke-opacity", .8)
+        .attr("stroke-width", 2);
 }
 
 function show_global_timeline()
@@ -94,94 +164,88 @@ function show_global_timeline()
         .attr("width", width + cover.left + cover.right)
         .attr("height", height + cover.top + cover.bottom);
 
-        var x = d3.scaleTime()
-            .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
-            .rangeRound([0, width]);
+    x_timeline = d3.scaleTime()
+        .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
+        .rangeRound([0, width]);
 
-        var animation_time = 1000;
-        var animation_overlap = 500;
+    world_biocap = timeline_metrics_data.filter(function (d){
+        return d.record == "BiocapPerCap" &&
+                d.country == "World";
+    });
 
-        var world_biocap = timeline_metrics_data.filter(function (d){
-            return d.record == "BiocapPerCap" &&
-                    d.country == "World";
-        });
+    world_footprint = timeline_metrics_data.filter(function (d){
+        return d.record == "EFConsPerCap" &&
+                d.country == "World";
+    });
 
-        var world_footprint = timeline_metrics_data.filter(function (d){
-            return d.record == "EFConsPerCap" &&
-                    d.country == "World";
-        });
+    y_timeline = d3.scaleLinear()
+        .domain([0, 13.2])
+        .rangeRound([height, 0]);
 
-        var maxFootprint = d3.max(world_footprint, function(d) {return d.total});
-        var maxBiocap = d3.max(world_biocap, function(d) {return d.total});
+    line = d3.line()
+        .x(function(d) { return x_timeline(d.year); })
+        .y(function(d) { return y_timeline(d.total); });
 
-        var maxScale = Math.ceil(d3.max([maxFootprint, maxBiocap]));
+    zero_line = d3.line()
+        .x(function(d) { return x_timeline(d.year); })
+        .y(function(d) { return y_timeline(0); });
 
-        var y = d3.scaleLinear()
-            .domain([0, maxScale])
-            .rangeRound([height, 0]);
     
-        var line = d3.line()
-            .x(function(d) { return x(d.year); })
-            .y(function(d) { return y(d.total); });
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x_timeline))
+        .style("opacity", .4)
+        .attr("stroke-opacity", 0.1)
+        .select(".domain")
+        .remove();
 
-        var zero_line = d3.line()
-            .x(function(d) { return x(d.year); })
-            .y(function(d) { return y(0); });
+    svg.append("g")
+        .attr("transform", "translate(" + width + ", 0)")
+        .call(d3.axisRight(y_timeline))
+        .style("opacity", .4)
+        .attr("stroke-opacity", 0.1)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "end");    
+        //.text("ef per capita");
 
-        
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x))
-            .style("opacity", .4)
-            .select(".domain")
-            .remove();
-
-        svg.append("g")
-            .attr("transform", "translate(" + width + ", 0)")
-            .call(d3.axisRight(y))
-            .style("opacity", .4)
-            .append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", "0.71em")
-            .attr("text-anchor", "end");    
-            //.text("ef per capita");
-
-        // Show biocapacity of world and country
-        svg.append("path")
-            .datum(world_biocap)
-            .attr("fill", "none")
-            .attr("stroke", "#5ab4ac")
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round")
-            .attr("stroke-width", 1)
-            .attr("stroke-opacity", 0.1)
-            .attr("d", zero_line)
-            .transition()
-            .duration(animation_time) 
-            .ease(d3.easePolyInOut)
-            .attr("d", line)
-            .attr("stroke-opacity", .8)
-            .attr("stroke-width", 2);
-        
-        // Show footprint of world and country
-        svg.append("path")
-            .datum(world_footprint)
-            .attr("class", ".reference")
-            .attr("fill", "none")
-            .attr("stroke", "#d8b365")
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round")
-            .attr("stroke-width", 1)
-            .attr("stroke-opacity", 0.1)
-            .attr("d", zero_line)
-            .transition()
-            .delay(2* (animation_time - animation_overlap))
-            .duration(animation_time) 
-            .ease(d3.easePolyInOut)
-            .attr("d", line)
-            .attr("stroke-opacity", .8)
-            .attr("stroke-width", 2);
+    // Show biocapacity of world and country
+    svg.append("path")
+        .datum(world_biocap)
+        .attr("fill", "none")
+        .attr("stroke", "#5ab4ac")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1)
+        .attr("stroke-opacity", 0.1)
+        .attr("d", zero_line)
+        .transition()
+        .duration(animation_time) 
+        .ease(d3.easePolyInOut)
+        .attr("d", line)
+        .attr("stroke-opacity", .8)
+        .attr("stroke-width", 2);
+    
+    // Show footprint of world and country
+    svg.append("path")
+        .datum(world_footprint)
+        .attr("class", ".reference")
+        .attr("fill", "none")
+        .attr("stroke", "#d8b365")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1)
+        .attr("stroke-opacity", 0.1)
+        .attr("d", zero_line)
+        .transition()
+        .delay(2* (animation_time - animation_overlap))
+        .duration(animation_time) 
+        .ease(d3.easePolyInOut)
+        .attr("d", line)
+        .attr("stroke-opacity", .8)
+        .attr("stroke-width", 2);
 }
 
 function start_worst()
