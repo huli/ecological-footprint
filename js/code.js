@@ -5,8 +5,11 @@
 
 var bubble_opacity = .7;
 var bubble_chart_div = "#graph-bubble-chart";
+var timeline_div = "#graph-timeline";
 
 var country_metrics_data;
+var timeline_metrics_data;
+
 var y_scale;
 var r_scale;
 
@@ -35,12 +38,151 @@ function render(){
                         break;
                     case 10:
                         start_worst();
+                        break;
+                    case 11:
+                        unfix_bubble();
+                        break;
+                    case 13:
+                        show_global_timeline();
+                        break;
+                    case 15:
+                        fix_timeline();
+                        break;
                     default:
                 }
             });
 }
 
+function fix_timeline()
+{
+    var div_top = d3.select(timeline_div).node().getBoundingClientRect();
+    
+    d3.select(timeline_div)
+        .style("top", div_top.top + "px")        
+        .style("left", div_top.left + "px")
+        .style("position", "fixed");
 
+    hideOthers(timeline_div);
+}
+
+function draw_timeline(data)
+{
+    timeline_metrics_data = data;
+}
+
+function show_global_timeline()
+{    
+    var div_rect = d3.select(timeline_div).node().getBoundingClientRect();
+
+    var cover = {
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 40
+                },
+                width = div_rect.width - cover.left - cover.right,
+                height = div_rect.height - cover.top - cover.bottom;
+
+    d3.select(timeline_div)
+            .select("svg")
+            .remove();
+
+    var svg = d3.select(timeline_div)
+        .append("svg")
+        .style("padding-left", cover.left)  
+        .style("padding-top", cover.top)        
+        .attr("width", width + cover.left + cover.right)
+        .attr("height", height + cover.top + cover.bottom);
+
+        var x = d3.scaleTime()
+            .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
+            .rangeRound([0, width]);
+
+        var animation_time = 1000;
+        var animation_overlap = 500;
+
+        var world_biocap = timeline_metrics_data.filter(function (d){
+            return d.record == "BiocapPerCap" &&
+                    d.country == "World";
+        });
+
+        var world_footprint = timeline_metrics_data.filter(function (d){
+            return d.record == "EFConsPerCap" &&
+                    d.country == "World";
+        });
+
+        var maxFootprint = d3.max(world_footprint, function(d) {return d.total});
+        var maxBiocap = d3.max(world_biocap, function(d) {return d.total});
+
+        var maxScale = Math.ceil(d3.max([maxFootprint, maxBiocap]));
+
+        var y = d3.scaleLinear()
+            .domain([0, maxScale])
+            .rangeRound([height, 0]);
+    
+        var line = d3.line()
+            .x(function(d) { return x(d.year); })
+            .y(function(d) { return y(d.total); });
+
+        var zero_line = d3.line()
+            .x(function(d) { return x(d.year); })
+            .y(function(d) { return y(0); });
+
+        
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x))
+            .style("opacity", .4)
+            .select(".domain")
+            .remove();
+
+        svg.append("g")
+            .attr("transform", "translate(" + width + ", 0)")
+            .call(d3.axisRight(y))
+            .style("opacity", .4)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", "0.71em")
+            .attr("text-anchor", "end");    
+            //.text("ef per capita");
+
+        // Show biocapacity of world and country
+        svg.append("path")
+            .datum(world_biocap)
+            .attr("fill", "none")
+            .attr("stroke", "#5ab4ac")
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 1)
+            .attr("stroke-opacity", 0.1)
+            .attr("d", zero_line)
+            .transition()
+            .duration(animation_time) 
+            .ease(d3.easePolyInOut)
+            .attr("d", line)
+            .attr("stroke-opacity", .8)
+            .attr("stroke-width", 2);
+        
+        // Show footprint of world and country
+        svg.append("path")
+            .datum(world_footprint)
+            .attr("class", ".reference")
+            .attr("fill", "none")
+            .attr("stroke", "#d8b365")
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 1)
+            .attr("stroke-opacity", 0.1)
+            .attr("d", zero_line)
+            .transition()
+            .delay(2* (animation_time - animation_overlap))
+            .duration(animation_time) 
+            .ease(d3.easePolyInOut)
+            .attr("d", line)
+            .attr("stroke-opacity", .8)
+            .attr("stroke-width", 2);
+}
 
 function start_worst()
 {
@@ -75,8 +217,6 @@ function start_worst()
                 var filtered = get_all_but_worst();
 
                 hide_bubbles(filtered);
-
-                unfix_bubble()
             }
         })
         .style("opacity", bubble_opacity)

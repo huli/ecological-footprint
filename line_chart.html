@@ -83,7 +83,7 @@
            var maxScale = Math.ceil(d3.max([maxFootprint, maxBiocap]));
 
             var y = d3.scaleLinear()
-                .domain([0, maxScale])
+                .domain([0, maxScale + .3])
                 .rangeRound([height, 0]);
         
             var line = d3.line()
@@ -103,6 +103,7 @@
 
             svg.append("g")
                 .call(d3.axisLeft(y))
+                .style("opacity", .3)
                 .append("text")
                 .attr("fill", "#000")
                 .attr("transform", "rotate(-90)")

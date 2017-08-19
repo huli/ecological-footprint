@@ -84,9 +84,13 @@
                 <div id="the-worst-hint" class="hint">
                     STORY MISSING <br/>
                 </div>
+                <div id="the-worst-spacer">
+
+                </div>
             </div>
         </div>        
         <div id="container" class="legend">
+            <div />
             <div id="graph-timeline"></div>
             <div id="sections" class="story">      
                 <div><h2>How has the global footprint changed over time</h2></div>
@@ -177,4 +181,11 @@
     <script type="text/javascript">
         d3.json("world_countries.json", draw_map);
     </script>
+    <script>
+        d3.csv("NFA 2017 Edition.csv",  function(d) {
+            d.year = new Date(d.year,1,1);
+            d.total = +d.total;
+            return d;
+            },  draw_timeline);
+    </script>    
 </html>
