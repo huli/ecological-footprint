@@ -61,6 +61,9 @@ function render(){
                     case 17:
                         show_best_timeline();
                         break;
+                    case 20:
+                        show_worst_timeline();
+                        break;
                     default:
                 }
             });
@@ -81,6 +84,17 @@ function fix_timeline()
 function draw_timeline(data)
 {
     timeline_metrics_data = data;
+}
+
+function show_worst_timeline()
+{
+    var svg = d3.select(timeline_div)
+        .select("svg"); 
+    
+    svg.selectAll("path")
+        .transition()
+        .duration(animation_time)
+        .attr("stroke-opacity", 0.1);
 }
 
 function show_best_timeline()
@@ -105,14 +119,15 @@ function show_best_timeline()
 
     // Show biocapacity of world and country
     svg.append("path")
-        .datum(cyprus_biocap)
+        .datum(world_biocap)
         .attr("fill", "none")
         .attr("stroke", "#5ab4ac")
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1)
         .attr("stroke-opacity", 0.1)
-        .attr("d", zero_line)
+        .attr("d", line)
+        .datum(cyprus_biocap)
         .transition()
         .duration(animation_time) 
         .ease(d3.easePolyInOut)
@@ -122,7 +137,7 @@ function show_best_timeline()
     
     // Show footprint of world and country
     svg.append("path")
-        .datum(cyprus_footprint)
+        .datum(world_footprint)
         .attr("class", ".reference")
         .attr("fill", "none")
         .attr("stroke", "#d8b365")
@@ -130,7 +145,8 @@ function show_best_timeline()
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1)
         .attr("stroke-opacity", 0.1)
-        .attr("d", zero_line)
+        .attr("d", line)
+        .datum(cyprus_footprint)
         .transition()
         .delay(2* (animation_time - animation_overlap))
         .duration(animation_time) 
