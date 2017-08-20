@@ -73,6 +73,7 @@ function render(){
                         break;
                     case 24:
                         show_closing();
+                        break;
                     case 27:
                         show_chloropleth();
                     default:
@@ -82,7 +83,176 @@ function render(){
 
 function show_chloropleth()
 {
-    
+    var margin = 75,
+        width = 1920 -margin,
+        height = 1080 -margin;
+
+    var svg = d3.select("#graph-about-you")
+        .select("svg");
+
+    function highlight_country(){
+        var selectedCountry = this.value;
+
+        svg.selectAll('path')
+            .transition()
+            .duration(600)
+            .style('fill', function (d){
+                        if(selectedCountry.indexOf(d.properties.name) !== -1)
+                        {
+                            return "#BDBD8F";
+                        }
+                        else
+                        {
+                            return "#ffffbf";
+                        }
+                    });
+    }
+
+    d3.select('select')
+        .attr('id','xSelect')
+        .on('change', highlight_country)
+        .selectAll('option')
+        .data(geo_data.features)
+        .enter()
+        .append('option')
+        .attr('value', function (feature) { return feature.properties.name })
+        .text(function (feature) { return feature.properties.name ;});
+
+
+    var colors = ["#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850"];
+
+    function draw_legend()
+    {
+
+            d3.select("body")
+            .append("div")
+            .style("position", "absolute")
+            .style("top", "0px")
+            .style("left", width - 400 + "px")
+            .append("svg")
+            .attr("height", 1000)
+            .attr("width", 50)
+            .selectAll("circle")
+            .data(colors)
+            .enter()
+            .append("circle")
+            .attr("r", 20)
+            .attr("cx", 20)
+            .attr("cy", function(c,i ) { return 100 + (i * 80)})
+            .attr("fill", function(c) {return c;})
+
+        var legend = ["> 150%", 
+                        "150% > 100%", 
+                        "100% > 50%",
+                        "50% > 0%",
+                        "0% < 50%",
+                        "50% < 100%",
+                        "100% < 150%",
+                        "150% <"];
+        d3.select("div")
+            .style("width", "200px")
+            .selectAll("h1")
+            .data(legend)
+            .enter()
+            .append("h3")
+            .style("position", "absolute")
+            .style("top", function(d, i) { return 70 + (i * 80) + "px";})
+            .style("left", "50px")
+            .text(function(d) {return d});
+    }
+
+    function color_countries(data)
+    {
+        var capacity_and_prints = data
+                                    .filter(function(d) 
+                                    { 
+                                        return d.record == "BiocapPerCap" 
+                                        || d.record == "EFConsPerCap"; 
+                                        });
+
+        var biocapacity_metrics = d3.nest()
+                        .key(function(d) { return d.country; })
+                        .rollup(function(v) { 
+                            
+                            var last_year_of_country = d3.max(v, function(d) {return d.year;});
+
+                            var biocap_entry = v.filter(function(iv){
+                                return iv.year == last_year_of_country && iv.record == "BiocapPerCap";
+                            });
+
+                            var footprint_entry = v.filter(function(iv){
+                                return iv.year == last_year_of_country && iv.record == "EFConsPerCap";
+                            });
+
+                            var country_metric;
+                            if(biocap_entry.length < 1 || footprint_entry < 1)
+                            {
+                                return  {
+                                    max_year: last_year_of_country,
+                                    biocap: 0,
+                                    footprint: 0,
+                                    metric: 0
+                                }
+                            }
+
+                            var biocap = biocap_entry[0].total;
+                            var footprint = footprint_entry[0].total;
+
+                            var result;
+                            if(biocap > footprint)
+                            {
+                                result = 1.0000 * biocap / footprint;
+                            }
+                            else{
+                                
+                                result = -(1.0000 * footprint / biocap);
+                            }
+
+                            return {
+                                    max_year: last_year_of_country,
+                                    biocap: biocap,
+                                    footprint: footprint,
+                                    metric: result
+                            }})
+                        .entries(capacity_and_prints);
+
+            svg.selectAll('path')
+            .transition()
+            .duration(600)
+            .style('fill', function (d){
+
+                        var record = biocapacity_metrics.filter(function(f) 
+                            { 
+                                return f.key == d.properties.name; 
+                            });
+                    
+                        if(record.length < 1)
+                        {
+                            console.log(d.properties.name);
+                            return "white";
+                        }
+
+
+                        var val = record[0].values.metric;
+                        var color_index = 0;
+
+                        switch (true) {
+                            case (val < -1.5): color_index = 1; break;
+                            case (val < -1): color_index = 2; break;
+                            case (val < -0.5): color_index = 3; break;
+                            case (val < 0.0): color_index = 4; break;
+                            case (val < 0.5): color_index = 5; break;
+                            case (val < 1.0): color_index = 6; break;
+                            case (val < 1.5): color_index = 7; break;
+                            case (val >= 1.5): color_index = 8; break;
+                        }
+
+
+                        return colors[color_index-1];
+                    });
+
+        draw_legend();
+    }
 }
 
 function show_closing()
