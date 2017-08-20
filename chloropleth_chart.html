@@ -145,6 +145,8 @@
                                                 || d.record == "EFConsPerCap"; 
                                                 });
 
+                // Hier werden immer die leeren metrics erzeugt
+                debugger;
                 var biocapacity_metrics = d3.nest()
                                 .key(function(d) { return d.country; })
                                 .rollup(function(v) { 
