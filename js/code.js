@@ -9,6 +9,7 @@ var timeline_div = "#graph-timeline";
 var timeline_opacity = 1;
 var timeline_stroke = 3;
 var timeline_inactive_opacity = .2;
+var colors = ["#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850"];
 
 var country_metrics_data;
 var timeline_metrics_data;
@@ -84,6 +85,9 @@ function render(){
 function highlight_country()
 {
     var selectedCountry = this.value;
+
+    var svg = d3.select("#graph-about-you")
+        .select("svg"); 
 
     svg.selectAll('path')
         .transition()
@@ -164,14 +168,9 @@ function show_chloropleth()
 
 function color_countries()
 {
-
-    return;
-    debugger; // the metrics are allways 0
-
     var svg = d3.select("#graph-about-you")
         .select("svg");
 
-    var colors = ["#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850"];
     var capacity_and_prints = timeline_metrics_data.filter(function(d) 
                                 { 
                                     return d.record == "BiocapPerCap" 
@@ -183,14 +182,14 @@ function color_countries()
                     .key(function(d) { return d.country; })
                     .rollup(function(v) 
                     { 
-                        var last_year_of_country = d3.max(v, function(d) {return d.year;});
+                        var last_year_of_country = d3.max(v, function(d) {return d.year;}).getFullYear();
 
                         var biocap_entry = v.filter(function(iv){
-                            return iv.year == last_year_of_country && iv.record == "BiocapPerCap";
+                            return iv.year.getFullYear() == last_year_of_country && iv.record == "BiocapPerCap";
                         });
 
                         var footprint_entry = v.filter(function(iv){
-                            return iv.year == last_year_of_country && iv.record == "EFConsPerCap";
+                            return iv.year.getFullYear() == last_year_of_country && iv.record == "EFConsPerCap";
                         });
 
                         var country_metric;
@@ -231,7 +230,6 @@ function color_countries()
         .duration(600)
         .style('fill', function (d)
             {
-                debugger;
                 var record = biocapacity_metrics.filter(function(f) 
                     { 
                         return f.key == d.properties.name; 
@@ -239,7 +237,6 @@ function color_countries()
             
                 if(record.length < 1)
                 {
-                    debugger;
                     console.log(d.properties.name);
                     return "white";
                 }
