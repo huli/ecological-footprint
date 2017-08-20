@@ -3,6 +3,11 @@
     margin-bottom: 200px;
 }
 
+#about-you-content
+{
+    margin-bottom: 200px;
+}
+
 
 #graph-introduction{
   width: 100%;
@@ -40,7 +45,7 @@
   z-index: -1;
   top: 200px;
   left: 20px;
-  background-color: ghostwhite;
+  /* background-color: ghostwhite; */
 }
 
 

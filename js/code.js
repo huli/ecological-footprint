@@ -26,6 +26,7 @@ var world_footprint;
 var y_timeline;
 var line;
 var zero_line; 
+var geo_data;
 
 // Rendering of page
 var oldWidth = 0;
@@ -66,13 +67,69 @@ function render(){
                         break;
                     case 20:
                         show_worst_timeline();
+                        break;
+                    case 22:
                         unfix_timeline();
                         break;
+                    case 24:
+                        show_closing();
+                    case 27:
+                        show_chloropleth();
                     default:
                 }
             });
 }
 
+function show_chloropleth()
+{
+    
+}
+
+function show_closing()
+{
+     var margin = 75,
+            width = 1920 -margin,
+            height = 800 -margin;
+            
+    var done = d3.select("#graph-about-you")
+                .select("svg").node();
+    if(done != null)
+    {
+        return;
+    }
+
+    d3.select("#graph-about-you")
+        .style("top", "10px")
+        .style("position", "fixed");
+
+    var svg = d3.select("#graph-about-you")
+                .append("svg")
+                .attr("width", width + margin)
+                .attr("height", height + margin)
+                .append('g')
+                .attr('class', 'map');
+
+    var projection = d3.geoMercator()
+                    .scale(220)
+                    .translate([width / 2.5, height / 2]);
+
+    var path = d3.geoPath().projection(projection);
+
+    var map = svg.selectAll('path')
+                    .data(geo_data.features)
+                    .enter()
+                    .append('path')
+                    .attr('d', path)
+                    .style('fill',"white")
+                    .style('stroke', "white")
+                    .style('stroke-width',"0.3")
+                    .transition()
+                    .duration(animation_time)
+                    .attr('d', path)
+                    .style('fill',"#d8ecf3")
+                    .style('stroke', "white")
+                    .style('stroke-width',"0.3");
+}
 
 function unfix_timeline()
 {
@@ -650,8 +707,10 @@ function hideOthers(nottohide)
 }
 
 
-function draw_map(geo_data)
+function draw_map(data)
 {
+    geo_data = data;
+
     var margin = 75,
             width = 1920 -margin,
             height = 800 -margin;
