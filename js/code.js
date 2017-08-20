@@ -88,13 +88,61 @@ function draw_timeline(data)
 
 function show_worst_timeline()
 {
-    var svg = d3.select(timeline_div)
-        .select("svg"); 
+var svg = d3.select(timeline_div)
+        .select("svg");
     
     svg.selectAll("path")
         .transition()
         .duration(animation_time)
         .attr("stroke-opacity", 0.1);
+
+    var fiji_biocap = timeline_metrics_data.filter(function (d){
+        return d.record == "BiocapPerCap" &&
+                d.country == "Fiji";
+    });
+
+    var fiji_footprint = timeline_metrics_data.filter(function (d){
+        return d.record == "EFConsPerCap" &&
+                d.country == "Fiji";
+    });
+
+    // Show biocapacity of world and country
+    svg.append("path")
+        .datum(world_biocap)
+        .attr("fill", "none")
+        .attr("stroke", "#5ab4ac")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1)
+        .attr("stroke-opacity", 0.1)
+        .attr("d", line)
+        .datum(fiji_biocap)
+        .transition()
+        .duration(animation_time) 
+        .ease(d3.easePolyInOut)
+        .attr("d", line)
+        .attr("stroke-opacity", .8)
+        .attr("stroke-width", 2);
+    
+    // Show footprint of world and country
+    svg.append("path")
+        .datum(world_footprint)
+        .attr("class", ".reference")
+        .attr("fill", "none")
+        .attr("stroke", "#d8b365")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1)
+        .attr("stroke-opacity", 0.1)
+        .attr("d", line)
+        .datum(fiji_footprint)
+        .transition()
+        .delay(2* (animation_time - animation_overlap))
+        .duration(animation_time) 
+        .ease(d3.easePolyInOut)
+        .attr("d", line)
+        .attr("stroke-opacity", .8)
+        .attr("stroke-width", 2);
 }
 
 function show_best_timeline()
@@ -195,7 +243,7 @@ function show_global_timeline()
     });
 
     y_timeline = d3.scaleLinear()
-        .domain([0, 13.2])
+        .domain([0, 7.2])
         .rangeRound([height, 0]);
 
     line = d3.line()
