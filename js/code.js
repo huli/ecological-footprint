@@ -6,6 +6,9 @@
 var bubble_opacity = .7;
 var bubble_chart_div = "#graph-bubble-chart";
 var timeline_div = "#graph-timeline";
+var timeline_opacity = 1;
+var timeline_stroke = 3;
+var timeline_inactive_opacity = .2;
 
 var country_metrics_data;
 var timeline_metrics_data;
@@ -63,10 +66,23 @@ function render(){
                         break;
                     case 20:
                         show_worst_timeline();
+                        unfix_timeline();
                         break;
                     default:
                 }
             });
+}
+
+
+function unfix_timeline()
+{
+    var div_top = d3.select(timeline_div).node().getBoundingClientRect();
+
+    d3.select(timeline_div)    
+        .style("top", "1650px")
+        .style("position", "absolute");
+ 
+    hideOthers(timeline_div); 
 }
 
 function fix_timeline()
@@ -88,13 +104,13 @@ function draw_timeline(data)
 
 function show_worst_timeline()
 {
-var svg = d3.select(timeline_div)
+    var svg = d3.select(timeline_div)
         .select("svg");
     
     svg.selectAll("path")
         .transition()
         .duration(animation_time)
-        .attr("stroke-opacity", 0.1);
+        .attr("stroke-opacity", timeline_inactive_opacity);
 
     var fiji_biocap = timeline_metrics_data.filter(function (d){
         return d.record == "BiocapPerCap" &&
@@ -121,8 +137,8 @@ var svg = d3.select(timeline_div)
         .duration(animation_time) 
         .ease(d3.easePolyInOut)
         .attr("d", line)
-        .attr("stroke-opacity", .8)
-        .attr("stroke-width", 2);
+        .attr("stroke-opacity", timeline_opacity)
+        .attr("stroke-width", timeline_stroke);
     
     // Show footprint of world and country
     svg.append("path")
@@ -141,8 +157,8 @@ var svg = d3.select(timeline_div)
         .duration(animation_time) 
         .ease(d3.easePolyInOut)
         .attr("d", line)
-        .attr("stroke-opacity", .8)
-        .attr("stroke-width", 2);
+        .attr("stroke-opacity", timeline_opacity)
+        .attr("stroke-width", timeline_stroke);
 }
 
 function show_best_timeline()
@@ -153,7 +169,7 @@ function show_best_timeline()
     svg.selectAll("path")
         .transition()
         .duration(animation_time)
-        .attr("stroke-opacity", 0.1);
+        .attr("stroke-opacity", timeline_inactive_opacity);
 
     var cyprus_biocap = timeline_metrics_data.filter(function (d){
         return d.record == "BiocapPerCap" &&
@@ -180,8 +196,8 @@ function show_best_timeline()
         .duration(animation_time) 
         .ease(d3.easePolyInOut)
         .attr("d", line)
-        .attr("stroke-opacity", .8)
-        .attr("stroke-width", 2);
+        .attr("stroke-opacity", timeline_opacity)
+        .attr("stroke-width", timeline_stroke);
     
     // Show footprint of world and country
     svg.append("path")
@@ -200,8 +216,8 @@ function show_best_timeline()
         .duration(animation_time) 
         .ease(d3.easePolyInOut)
         .attr("d", line)
-        .attr("stroke-opacity", .8)
-        .attr("stroke-width", 2);
+        .attr("stroke-opacity", timeline_opacity)
+        .attr("stroke-width", timeline_stroke);
 }
 
 function show_global_timeline()
@@ -289,8 +305,8 @@ function show_global_timeline()
         .duration(animation_time) 
         .ease(d3.easePolyInOut)
         .attr("d", line)
-        .attr("stroke-opacity", .8)
-        .attr("stroke-width", 2);
+        .attr("stroke-opacity", timeline_opacity)
+        .attr("stroke-width", timeline_stroke);
     
     // Show footprint of world and country
     svg.append("path")
@@ -308,8 +324,8 @@ function show_global_timeline()
         .duration(animation_time) 
         .ease(d3.easePolyInOut)
         .attr("d", line)
-        .attr("stroke-opacity", .8)
-        .attr("stroke-width", 2);
+        .attr("stroke-opacity", timeline_opacity)
+        .attr("stroke-width", timeline_stroke);
 }
 
 function start_worst()
