@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>The ecological footprint of us</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Average" rel="stylesheet">
+        <script src="js/d3v4+jetpack.js"></script>
+        <script src="js/graph-scroll.js"></script>
+    </head>
+    <body>
+        <div id="container" class="legend">
+            <div id="graph-introduction"></div>
+            <div id="sections">
+                <div><h1>The ecological footprint<br /> of our world</h1></div>
+                <div id="introduction-content" class="description">
+                    The ecological footprint measures the amount
+                    of natural resources we use in one year.
+                    <p />
+                    If the demand we oppose to our nature exceeds the supply, 
+                    the world sooner or later will not be able to recover.
+                    <p />
+                </div>
+                <div id="scroll-hint" class="hint">
+                    Let's see, how we do.<br/> 
+                    <p />
+                    <svg class="arrows">
+                                <path class="a1" d="M0 0 L30 32 L60 0"></path>
+                                <path class="a2" d="M0 20 L30 52 L60 20"></path>
+                                <path class="a3" d="M0 40 L30 72 L60 40"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div id="container" class="legend">
+            <div id="graph-bubble-chart"></div>
+            <div id="sections" class="story">    
+                <div><h2>Human development drives footprint</h2></div>
+                <div id="overview-content" class="description">
+                    The further a country has developed, the higher the 
+                    footprint most often is.
+                    <p />
+                    With a global footprint of 2.9 hectares we are using more 
+                    than 1.5 times what our nature can regenerate.
+                    The world currently has a biocapacity of 1.7 hectares
+                    per capita. 
+                </div>
+                <br/>
+                <div id="overview-hint" class="hint">
+                    The Human Development Index (HDI) is a composite statistic of average 
+                    achievement in key dimensions of human development: a long and healthy life, 
+                    being knowledgeable and have a decent standard of living.
+                </div>
+            </div>
+        </div>
+        <div id="container" class="legend">
+            <div id="sections" class="story">                
+                <div id="graph"></div>
+                <div><h2>Who is doing well?</h2></div>
+                <div id="the-best-content" class="description">
+                    Haiti, Eritrea and Burundi are doing very well for example.
+                    <p/>
+                    Haiti has a ecological footprint of 0.6 hectares per capita
+                    and is therefore only using a third of the world populations
+                    mean.
+                </div>
+                <div id="the-best-hint" class="hint">
+                    STORY MISSING <br/>
+                </div>
+            </div>
+        </div>        
+        <div id="container" class="legend">
+            <div id="sections" class="story">     
+                <div><h2>Who is not doing well, at all</h2></div>
+                <div id="the-worst-content" class="description">
+                    Luxembourg is the country with the highest footprint per
+                    per capita. Followed by Canada and Australia.
+                    <p/>
+                    Luxembourg has a footprint of enormous 13 hectares per capita
+                    and is therefore using more than 21 times the natural ressources
+                    of Haiti. 
+                </div>
+                <div id="the-worst-hint" class="hint">
+                    STORY MISSING <br/>
+                </div>
+                <div id="the-worst-spacer">
+                </div>
+            </div>
+        </div>        
+        <div id="container" class="legend">
+            <div />
+            <div id="graph-timeline"></div>
+            <div id="sections" class="story">      
+                <div><h2>How has the global footprint changed over time</h2></div>
+                <div id="global-timeline-content" class="description">
+                    Our global footprint is constantly growing while
+                    the biocapacity of our planet is decreasing.
+                    <p/>
+                    Between 1961 and the year 2013 the footprint has 
+                    grown from 2.27 hectares (PC) to 2.9 while the 
+                    biocapacity has shrunk from 3.1 to worrying 1.7
+                </div>
+                <div id="global-timeline-content" class="hint">
+                    STORY MISSING <br/>
+                </div>
+            </div>
+        </div>        
+        <div id="container" class="legend">
+            <div id="sections" class="story">    
+                <div>
+                    <h2>Which country has made the biggest change 
+                    for the better?
+                </h2></div>
+                <div id="best-timeline-content" class="description">
+                    Cyprus, Greece and Barbados are the countries with
+                    the best tendencies.
+                    <p/>
+                    Cyprus has reduced its ressource consumption by
+                    a third in the last years.
+                </div>
+                <div id="best-timeline-hint" class="hint">
+                    STORY MISSING <br/>
+                </div>
+            </div>
+        </div>        
+        <div id="container" class="legend">
+            <div id="sections" class="story">     
+                <div><h2>Who is changing too -
+                    in a not so good direction?
+                </h2></div>
+                <div id="worst-timeline-content" class="description">
+                    Timor-Leste, Djibouti and Fiji are the countries
+                    with the worst trends.
+                    <p/>
+                    While Fiji has its footprint grown by frightening
+                    49 percent, the country today has still a smaller
+                    footprint that many others.
+                </div>
+                <div id="worst-timeline-hint" class="hint">
+                    STORY MISSING <br/>
+                </div>
+                <div id="the-worst-timeline-spacer">
+                </div>
+            </div>
+        </div>
+        <div id="container" class="legend">
+            <div id="graph-about-you"></div>
+            <div id="sections" class="story">    
+                <div><h2>And what about you? </div>
+                </h2>
+                <div id="what-about-you-content" class="description">
+                    How big is your footprint, what do you think?
+                    <p />
+                    We don't know how your are doing, but we know
+                    how your country is doing.
+                </div>
+            </div>
+        </div>
+        <div id="container" class="legend about-you">
+            <div id="sections" class="story">   
+                <div><h2>Your Country</h2></div>
+                <div id="about-you-content" class="description">
+                    <div id="select-country">
+                        <select>
+                        </select>
+                    </div>
+                    <p/>
+                    Your country has a footprint of 5.3 hectares and
+                    only a biocapacity of 1.2 hectares. <br/>
+                    That means, your country is one of the worlds 
+                    creditors - you are using more resources than you
+                    can build.
+                    <p/>
+                </div>
+                <div id="about-you-hint" class="hint">
+                    What do you think? Is this good or can you do better?
+                    We think everyone of us can do more.
+                    <p />
+                    Start now. Anywhere, or <a href="http://www.wikihow.com/Have-a-Smaller-Ecological-Footprint" 
+                    target="_blank">here</a>
+                </div>
+                <div id="about-you-hint-spacer">
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="js/code_test.js"></script>   
+</html>
