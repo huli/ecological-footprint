@@ -1,0 +1,42 @@
+
+Gebunden sind world_countries.json
+	er sucht sie in Metrics und das kommt von NFA 2017 Edition:
+	
+Vorgen: nur jene ersetzen, welche nicht passen
+
+
+United Arab Emirates   
+Antarctica
+French Southern and Antarctic Lands
+The Bahamas
+Belize
+Brunei
+Ivory Coast
+Democratic Republic of the Congo 	-> Congo, Democratic Republic of
+Republic of the Congo				-> Congo
+Northern Cyprus						-> Cyprus
+Falkland Islands
+England								-> United Kingdom
+Guinea Bissau
+Greenland
+Iran
+Iceland
+South Korea							-> Korea, Republic of
+Kosovo
+Laos
+Libya
+Macedonia
+Puerto Rico
+North Korea
+Russia								-> Russian Federation
+Western Sahara
+Somaliland
+Republic of Serbia
+Syria					-> Syrian Arab Republic
+East Timor
+Taiwan
+United Republic of Tanzania
+USA							-> United States of America
+Venezuela
+Vietnam
+West Bank
