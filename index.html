@@ -10,10 +10,10 @@
         <script src="js/graph-scroll.js"></script>
     </head>
     <body>
-        <div id="container" class="legend">
-            <div id="graph-introduction"></div>
+        <div class="legend"><h1>The ecological footprint<br /> of our world</h1></div>
+        <div id="container" class="container-introduction">
+            <div id="graph"></div>
             <div id="sections">
-                <div><h1>The ecological footprint<br /> of our world</h1></div>
                 <div id="introduction-content" class="description">
                     The ecological footprint measures the amount
                     of natural resources we use in one year.
@@ -31,12 +31,14 @@
                                 <path class="a3" d="M0 40 L30 72 L60 40"></path>
                     </svg>
                 </div>
+                <div id="bottom-spacer">
+                </div>
             </div>
         </div>
-        <div id="container" class="legend">
-            <div id="graph-bubble-chart"></div>
+        <h2>Human development drives footprint</h2>
+        <div id="container" class="container-bubble">
+            <div id="graph"></div>
             <div id="sections" class="story">    
-                <div><h2>Human development drives footprint</h2></div>
                 <div id="overview-content" class="description">
                     The further a country has developed, the higher the 
                     footprint most often is.
@@ -52,11 +54,6 @@
                     achievement in key dimensions of human development: a long and healthy life, 
                     being knowledgeable and have a decent standard of living.
                 </div>
-            </div>
-        </div>
-        <div id="container" class="legend">
-            <div id="sections" class="story">                
-                <div id="graph"></div>
                 <div><h2>Who is doing well?</h2></div>
                 <div id="the-best-content" class="description">
                     Haiti, Eritrea and Burundi are doing very well for example.
@@ -68,10 +65,6 @@
                 <div id="the-best-hint" class="hint">
                     STORY MISSING <br/>
                 </div>
-            </div>
-        </div>        
-        <div id="container" class="legend">
-            <div id="sections" class="story">     
                 <div><h2>Who is not doing well, at all</h2></div>
                 <div id="the-worst-content" class="description">
                     Luxembourg is the country with the highest footprint per
@@ -88,11 +81,10 @@
                 </div>
             </div>
         </div>        
-        <div id="container" class="legend">
-            <div />
-            <div id="graph-timeline"></div>
+        <h2>How has the global footprint changed over time</h2>
+        <div id="container" class="container-timeline">
+            <div id="graph"></div>
             <div id="sections" class="story">      
-                <div><h2>How has the global footprint changed over time</h2></div>
                 <div id="global-timeline-content" class="description">
                     Our global footprint is constantly growing while
                     the biocapacity of our planet is decreasing.
@@ -104,10 +96,6 @@
                 <div id="global-timeline-content" class="hint">
                     STORY MISSING <br/>
                 </div>
-            </div>
-        </div>        
-        <div id="container" class="legend">
-            <div id="sections" class="story">    
                 <div>
                     <h2>Which country has made the biggest change 
                     for the better?
@@ -122,10 +110,6 @@
                 <div id="best-timeline-hint" class="hint">
                     STORY MISSING <br/>
                 </div>
-            </div>
-        </div>        
-        <div id="container" class="legend">
-            <div id="sections" class="story">     
                 <div><h2>Who is changing too -
                     in a not so good direction?
                 </h2></div>
@@ -144,21 +128,16 @@
                 </div>
             </div>
         </div>
-        <div id="container" class="legend">
-            <div id="graph-about-you"></div>
+        <h2>And what about you?</h2>
+        <div id="container" class="container-closing">
+            <div id="graph"></div>
             <div id="sections" class="story">    
-                <div><h2>And what about you? </div>
-                </h2>
                 <div id="what-about-you-content" class="description">
                     How big is your footprint, what do you think?
                     <p />
                     We don't know how your are doing, but we know
                     how your country is doing.
                 </div>
-            </div>
-        </div>
-        <div id="container" class="legend about-you">
-            <div id="sections" class="story">   
                 <div><h2>Your Country</h2></div>
                 <div id="about-you-content" class="description">
                     <div id="select-country">
@@ -186,7 +165,7 @@
         </div>
     </body>
     <script src="js/code.js"></script>
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         d3.json("world_countries.json", draw_map);
     </script>
     <script>
@@ -195,5 +174,5 @@
             d.total = +d.total;
             return d;
             },  draw_timeline);
-    </script>    
+    </script>     -->
 </html>

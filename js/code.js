@@ -35,51 +35,112 @@ function render(){
     if (oldWidth == innerWidth) return
     oldWidth = innerWidth;
 
-    d3.graphScroll()
+    // Container Introduction
+    var width = d3.select('#graph').node().offsetWidth,
+        height = innerWidth > 925 ? width : innerHeight*.7,
+        r = 40;
+
+    var svg = d3.select('#graph').html('')
+        .append('svg')
+        .attrs({width: width, height: height});
+
+    var gs = d3.graphScroll()
+        .container(d3.select('#container'))
+        .graph(d3.selectAll('#graph'))
+        .eventId('uniqueId1')
         .sections(d3.selectAll('#sections > div'))
-        .on('active', function(i)
-            { 
-                console.log(i + 'th section active') ;
-                switch(i)
-                {
-                    case 3:
-                        start_overview();
-                        break;
-                    case 4:
-                        fix_bubble();
-                        break;
-                    case 7:
-                        start_best();
-                        break;
-                    case 10:
-                        start_worst();
-                        break;
-                    case 11:
-                        unfix_bubble();
-                        break;
-                    case 13:
-                        show_global_timeline();
-                        break;
-                    case 15:
-                        fix_timeline();
-                        break;
-                    case 17:
-                        show_best_timeline();
-                        break;
-                    case 20:
-                        show_worst_timeline();
-                        break;
-                    case 22:
-                        unfix_timeline();
-                        break;
-                    case 24:
-                        show_closing();
-                        break;
-                    case 27:
-                        show_chloropleth();
-                    default:
-                }
-            });
+        .on('active', function(i){
+            console.log("active");
+        })
+
+    // Container Bubble
+    var svg2 = d3.select('.container-bubble #graph').html('')
+    .append('svg')
+        .attrs({width: width, height: height})
+
+    var gs2 = d3.graphScroll()
+        .container(d3.select('.container-bubble'))
+        .graph(d3.selectAll('.container-bubble #graph'))
+        .eventId('uniqueId1')
+        .sections(d3.selectAll('.container-bubble #sections > div'))
+        .on('active', function(i){
+            console.log("active");
+        })
+
+    // Container Timeline
+    var svg3 = d3.select('.container-timeline #graph').html('')
+    .append('svg')
+        .attrs({width: width, height: height})
+
+    var gs3 = d3.graphScroll()
+        .container(d3.select('.container-timeline'))
+        .graph(d3.selectAll('.container-timeline #graph'))
+        .eventId('uniqueId1')
+        .sections(d3.selectAll('.container-timeline #sections > div'))
+        .on('active', function(i){
+            console.log("active");
+        })
+
+        
+    // Container Closing
+    var svg3 = d3.select('.container-closing #graph').html('')
+    .append('svg')
+        .attrs({width: width, height: height})
+
+    var gs3 = d3.graphScroll()
+        .container(d3.select('.container-closing'))
+        .graph(d3.selectAll('.container-closing #graph'))
+        .eventId('uniqueId1')
+        .sections(d3.selectAll('.container-closing #sections > div'))
+        .on('active', function(i){
+            console.log("active");
+        })
+        
+    // d3.graphScroll()
+    //     .sections(d3.selectAll('#sections > div'))
+    //     .on('active', function(i)
+    //         { 
+    //             console.log(i + 'th section active') ;
+    //             switch(i)
+    //             {
+    //                 // case 3:
+    //                 //     start_overview();
+    //                 //     break;
+    //                 // case 4:
+    //                 //     fix_bubble();
+    //                 //     break;
+    //                 // case 7:
+    //                 //     start_best();
+    //                 //     break;
+    //                 // case 10:
+    //                 //     start_worst();
+    //                 //     break;
+    //                 // case 11:
+    //                 //     unfix_bubble();
+    //                 //     break;
+    //                 // case 13:
+    //                 //     show_global_timeline();
+    //                 //     break;
+    //                 // case 15:
+    //                 //     fix_timeline();
+    //                 //     break;
+    //                 // case 17:
+    //                 //     show_best_timeline();
+    //                 //     break;
+    //                 // case 20:
+    //                 //     show_worst_timeline();
+    //                 //     break;
+    //                 // case 22:
+    //                 //     unfix_timeline();
+    //                 //     break;
+    //                 // case 24:
+    //                 //     show_closing();
+    //                 //     break;
+    //                 // case 27:
+    //                 //     show_chloropleth();
+    //                 // default:
+    //             }
+    //         });
 }
 
 function highlight_country()
