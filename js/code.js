@@ -733,6 +733,8 @@ function draw_overview_bubble(data)
         .attr("class", "tooltip")				
         .style("opacity", 0);
 
+    d3.select(bubble_chart_div)
+                .style("z-index", 1);
 
     d3.select(bubble_chart_div)
             .select("svg")
@@ -810,7 +812,7 @@ function draw_overview_bubble(data)
         .attr("cy", function(d){
             return y_scale(0);
         })
-        .on("mouseover", function(d) {		
+        .on("mouseover", function(d) {
                     div.transition()		
                         .duration(300)		
                         .style("opacity", .8);		
@@ -819,7 +821,7 @@ function draw_overview_bubble(data)
                         .style("left", (d3.event.pageX) + "px")		
                         .style("top", (d3.event.pageY - 28) + "px");	
                     })					
-                .on("mouseout", function(d) {		
+                .on("mouseout", function(d) {	
                     div.transition()		
                         .duration(500)		
                         .style("opacity", 0);	
@@ -929,6 +931,12 @@ function intialize_graph_scroll()
             {
                 case 0:
                     start_overview();
+                    break;
+                case 3:
+                    start_best();
+                    break;
+                case 5:
+                    start_worst();
                     break;
             }
         })
