@@ -1,15 +1,21 @@
 body{
-    margin-left: 50px;
-    margin-top: 50px;
+    margin-left: 0px;
+    margin-top: 0px;
     font-family: 'Average', serif;
   }
 
 h1 {
     font-size: 50px;
+    padding-left: 30px;
 }
 
 h2 {
     font-size: 38px;
+    padding-left: 30px;
+}
+
+h3 {
+    font-size: 32px;
 }
   
 .description {
@@ -55,12 +61,17 @@ h2 {
     height: 500px;
 }
 
+#what-about-you-content{
+    height: 500px;
+}
+
 #container{
     position: relative;
   }
   
 #sections{
     padding-top: 50px;
+    padding-left: 30px;
     padding-bottom: 100px;
     width: 500px;
 }
@@ -70,7 +81,7 @@ h2 {
 }
 
 #sections > div:last-child{
-    margin-bottom: 80px;    
+    margin-bottom: 80px;   
 }
   
 #sections > div.graph-scroll-active{
@@ -92,26 +103,6 @@ h2 {
 .graph-scroll-below #graph{
     bottom: 0px;
     top: auto;
-}
-
-@media (max-width: 925px)  {
-    #graph{
-        width: 100%;
-        transform: translate(-50%, 0);
-        margin-left: 50%;
-    }
-
-    #sections{
-        position: relative;
-        margin: 0px auto;
-        padding-top: 400px;
-    }
-
-    #sections div{
-        padding: 10px;
-        max-width: 400px;
-        margin-bottom: 500px;
-    }
 }
 
 svg{
