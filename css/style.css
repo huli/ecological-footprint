@@ -31,21 +31,46 @@ h2 {
     background: aliceblue;
 }
 
+#overview-content{
+    height: 500px;
+}
+
+#the-best-content{
+    height: 500px;
+}
+
+#the-worst-content{
+    height: 500px; 
+}
+
+#global-timeline-content{
+    height: 500px; 
+}
+
+#best-timeline-content{    
+    height: 500px; 
+}
+
+#worst-timeline-content{
+    height: 500px;
+}
+
 #container{
     position: relative;
   }
   
 #sections{
-    width: 400px;
+    padding-top: 50px;
+    padding-bottom: 100px;
+    width: 500px;
 }
   
 #sections > div{  
-    opacity: .2;
-    margin-bottom: 300px;
+    opacity: 1;
 }
 
 #sections > div:last-child{
-    margin-bottom: 30px;    
+    margin-bottom: 80px;    
 }
   
 #sections > div.graph-scroll-active{
