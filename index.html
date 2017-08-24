@@ -10,8 +10,8 @@
         <script src="js/graph-scroll.js"></script>
     </head>
     <body>
-        <div id="container" class="container-introduction">
-            <h1>The <br />ecological footprint<br /> of our world</h1>
+        <div id="container-fix" class="container-introduction">
+            <h1>The ecological footprint<br /> of our world</h1>
             <div id="graph"></div>
             <div id="sections">
                 <div id="introduction-content" class="description">
@@ -21,13 +21,15 @@
                     If the demand we oppose to our nature exceeds the supply, 
                     the world sooner or later will not be able to recover.
                     <p />
-                    Let's see, how we do.<br/> 
-                    <p />
-                    <svg class="arrows">
-                                <path class="a1" d="M0 0 L30 32 L60 0"></path>
-                                <path class="a2" d="M0 20 L30 52 L60 20"></path>
-                                <path class="a3" d="M0 40 L30 72 L60 40"></path>
-                    </svg>
+                    <div id="hint">
+                        Let's see, how we do.<br/> 
+                        <p />
+                        <svg class="arrows">
+                                    <path class="a1" d="M0 0 L30 32 L60 0"></path>
+                                    <path class="a2" d="M0 20 L30 52 L60 20"></path>
+                                    <path class="a3" d="M0 40 L30 72 L60 40"></path>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
@@ -153,10 +155,10 @@
         </div>
     </body>
     <script src="js/code.js"></script>
-    <!-- <script type="text/javascript">
+    <script type="text/javascript">
         d3.json("world_countries.json", draw_map);
     </script>
-    <script>
+    <!--<script>
         d3.csv("NFA 2017 Edition.csv",  function(d) {
             d.year = new Date(d.year,1,1);
             d.total = +d.total;

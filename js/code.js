@@ -29,73 +29,19 @@ var line;
 var zero_line; 
 var geo_data;
 
+var svg_worldmap;
+
 // Rendering of page
 var oldWidth = 0;
 function render(){
     if (oldWidth == innerWidth) return
     oldWidth = innerWidth;
 
-    // Container Introduction
-    var width = d3.select('#graph').node().offsetWidth,
-        height = innerWidth > 925 ? width : innerHeight*.7,
-        r = 40;
+    var margin = 75,
+    width = innerWidth -margin,
+    height = innerHeight -margin;
 
-    var svg = d3.select('#graph').html('')
-        .append('svg')
-        .attrs({width: width, height: height});
-
-    var gs = d3.graphScroll()
-        .container(d3.select('#container'))
-        .graph(d3.selectAll('#graph'))
-        .eventId('uniqueId1')
-        .sections(d3.selectAll('#sections > div'))
-        .on('active', function(i){
-            console.log("active");
-        })
-
-    // Container Bubble
-    var svg2 = d3.select('.container-bubble #graph').html('')
-    .append('svg')
-        .attrs({width: width, height: height})
-
-    var gs2 = d3.graphScroll()
-        .container(d3.select('.container-bubble'))
-        .graph(d3.selectAll('.container-bubble #graph'))
-        .eventId('uniqueId1')
-        .sections(d3.selectAll('.container-bubble #sections > div'))
-        .on('active', function(i){
-            console.log("active");
-        })
-
-    // Container Timeline
-    var svg3 = d3.select('.container-timeline #graph').html('')
-    .append('svg')
-        .attrs({width: width, height: height})
-
-    var gs3 = d3.graphScroll()
-        .container(d3.select('.container-timeline'))
-        .graph(d3.selectAll('.container-timeline #graph'))
-        .eventId('uniqueId1')
-        .sections(d3.selectAll('.container-timeline #sections > div'))
-        .on('active', function(i){
-            console.log("active");
-        })
-
-        
-    // Container Closing
-    var svg3 = d3.select('.container-closing #graph').html('')
-    .append('svg')
-        .attrs({width: width, height: height})
-
-    var gs3 = d3.graphScroll()
-        .container(d3.select('.container-closing'))
-        .graph(d3.selectAll('.container-closing #graph'))
-        .eventId('uniqueId1')
-        .sections(d3.selectAll('.container-closing #sections > div'))
-        .on('active', function(i){
-            console.log("active");
-        })
-        
+  
     // d3.graphScroll()
     //     .sections(d3.selectAll('#sections > div'))
     //     .on('active', function(i)
@@ -946,29 +892,90 @@ function hideOthers(nottohide)
     
 }
 
+function intialize_graph_scroll()
+{   
+    // Container Introduction    
+    svg_worldmap = d3.select('.container-introduction #graph').html('')
+        .append('svg');
+
+    var gs = d3.graphScroll()
+        .container(d3.select('#container'))
+        .graph(d3.selectAll('#graph'))
+        .eventId('uniqueId1')
+        .sections(d3.selectAll('#sections > div'))
+        .on('active', function(i){
+            console.log("active");
+        })
+
+    svg_worldmap.attr("width", width)
+                .attr("height", height + margin -20)
+                .append('g')
+                .attr('class', 'map');
+
+    // Container Bubble
+    var svg2 = d3.select('.container-bubble #graph').html('')
+    .append('svg')
+        .attrs({width: width, height: height})
+
+    var gs2 = d3.graphScroll()
+        .container(d3.select('.container-bubble'))
+        .graph(d3.selectAll('.container-bubble #graph'))
+        .eventId('uniqueId1')
+        .sections(d3.selectAll('.container-bubble #sections > div'))
+        .on('active', function(i){
+            console.log("active");
+        })
+  
+    // Container Timeline
+    var svg3 = d3.select('.container-timeline #graph').html('')
+    .append('svg')
+        .attrs({width: width, height: height})
+
+    var gs3 = d3.graphScroll()
+        .container(d3.select('.container-timeline'))
+        .graph(d3.selectAll('.container-timeline #graph'))
+        .eventId('uniqueId1')
+        .sections(d3.selectAll('.container-timeline #sections > div'))
+        .on('active', function(i){
+            console.log("active");
+        })
+  
+          
+    // Container Closing
+    var svg3 = d3.select('.container-closing #graph').html('')
+    .append('svg')
+        .attrs({width: width, height: height})
+
+    var gs3 = d3.graphScroll()
+        .container(d3.select('.container-closing'))
+        .graph(d3.selectAll('.container-closing #graph'))
+        .eventId('uniqueId1')
+        .sections(d3.selectAll('.container-closing #sections > div'))
+        .on('active', function(i){
+            console.log("active");
+        })
+          
+}
+
+
+var margin = 50,
+    width = innerWidth -margin,
+    height = innerHeight -margin;
+
 function draw_map(data)
 {
     geo_data = data;
 
-    var margin = 75,
-            width = 1920 -margin,
-            height = 800 -margin;
-            
-    var svg = d3.select("#graph-introduction")
-                .append("svg")
-                .attr("width", width + margin)
-                .attr("height", height + margin)
-                .append('g')
-                .attr('class', 'map');
+    intialize_graph_scroll();
 
 
     var projection = d3.geoMercator()
                     .scale(220)
-                    .translate([width / 2.5, height / 2]);
+                    .translate([width / 1.9, height / 2.3]);
 
     var path = d3.geoPath().projection(projection);
 
-    var map = svg.selectAll('path')
+    var map = svg_worldmap.selectAll('path')
                     .data(geo_data.features)
                     .enter()
                     .append('path')

@@ -5,6 +5,7 @@ body{
   }
 
 h1 {
+    margin-top: 0px;
     font-size: 50px;
     padding-left: 30px;
 }
@@ -22,7 +23,7 @@ h3 {
     font-size: 20px;
 }
 .container-introduction {
-    background: aliceblue;
+    padding-top: 100px;
 }
 
 .container-bubble {
@@ -73,7 +74,7 @@ h3 {
     padding-top: 50px;
     padding-left: 30px;
     padding-bottom: 100px;
-    width: 500px;
+    width: 550px;
 }
   
 #sections > div{  
@@ -89,10 +90,10 @@ h3 {
 }
 
 #graph{
-    width: 600px;
     position: absolute;
-    top: 0px;
-    margin-left: 500px;
+    top: 10px;
+    left: 10px;
+    z-index: -2;
 }
 
 .graph-scroll-fixed #graph{
@@ -106,7 +107,17 @@ h3 {
 }
 
 svg{
-    background-color: #eee;
+    /* z-index: 5; */
+}
+
+#hint
+{
+    margin-top: 50px;
+    margin-left: 30px;
+    align-content:center;
+    text-align: center;
+    width: 300px;
+    font-size: 16px;
 }
 
 .arrows {
@@ -152,5 +163,61 @@ svg{
 .arrows path.a3 {	
 	animation-delay:0s;
 	-webkit-animation-delay:0s; /* Safari and Chrome */
+}
+
+
+div.tooltip {	
+    position: absolute;			
+    text-align: center;		
+    padding-left: 5px;		
+    padding-right: 5px;
+    padding-top: 2px;		
+    padding-bottom: 2px;	
+    width: auto;					
+    height: auto;				
+    font: 12px sans-serif;	
+    color: white;	
+    background:#9dd0e1;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}   
+
+
+.bubble:hover {
+    fill: #3ca1c3;
+    cursor: pointer;
+}
+
+.axis {
+    font-size: 12px;
+}
+
+.bubble {
+    opacity: 0.4;
+    fill:#76bdd5;
+}
+
+.high-development-border, .world-biocapacity-border {
+    opacity: 0;
+    stroke:  #246175;
+    stroke-dasharray: 3, 3;
+}
+
+.annotation-text {
+    font-size: 14px;
+    font-family: 'Average', serif;
+    opacity: 0.8;
+    fill: #76bdd5;
+}
+
+.y.axis, .x.axis{            
+    font-size: 10px;
+    opacity: 0.0;
+}
+
+.x.axis path, .y.axis path {
+    /*display: none;*/
+    stroke:  #9dd0e1;
 }
   
