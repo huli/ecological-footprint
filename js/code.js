@@ -10,7 +10,7 @@ var closing_div = ".container-closing #graph";
 var timeline_opacity = 1;
 var timeline_stroke = 3;
 var timeline_inactive_opacity = .1;
-var colors = ["#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850"];
+var colors = ['#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e'];
 
 var country_metrics_data;
 var timeline_metrics_data;
@@ -52,10 +52,12 @@ function highlight_country()
         .style('fill', function (d){
                     if(selectedCountry.indexOf(d.properties.name) !== -1)
                     {
-                        return darkslategray;
+                        return "darkred";
                     }
-                    return get_color(d);
+                    return get_color(d.properties.name);
                 });
+
+    change_text(selectedCountry);
 }
 
  function draw_legend()
@@ -182,26 +184,81 @@ function color_countries()
         svg.selectAll('path')
         .transition()
         .duration(600)
+        .style("opacity", .7)
         .style('fill', function (d)
             {
-                return get_color(d);
+                return get_color(d.properties.name);
             });
 }
 
-function get_color(d)
+var creditor_text = "Your country has a footprint of {fp} hectares and  "+
+                    "only a biocapacity of {bc} hectares. <br/>"+
+                    "That means, your country is one of the worlds "+ 
+                    "<br>creditors</br> - <br/>you are using more resources than you "+
+                    "can build."
+var debitor_text = "Your country has a footprint of {fp} hectares and "+
+                    "only a biocapacity of {bc} hectares. <br/>"+
+                    "That means, your country is one of the worlds "+ 
+                    "<br>debitors</br> - <br/>you build more ressource than you "+
+                    "use. Great!"
+var no_information_text = "Your country has provided no information<br/>" +
+                          " to the Global Footprint Network. <br/>" +
+                          "Sorry."
+
+function roundToOne(num) {    
+    return +(Math.round(num + "e+1")  + "e-1");
+}
+
+function change_text(selectedCountry)
+{
+    var value = get_metric(selectedCountry);
+    var text = "";
+    if(value == null)
+    {    
+        d3.select("#you-text")
+            .html(no_information_text);
+        return;
+    }
+    else if(value.metric > 0)
+    {
+        text = debitor_text
+    }
+    else
+    {
+        text = creditor_text;
+    }
+    
+    text = text
+        .replace("{bc}", roundToOne(value.biocap))
+        .replace("{fp}", roundToOne(value.footprint))
+
+    d3.select("#you-text")
+        .html(text);
+}
+
+function get_metric(name)
 {
     var record = biocapacity_metrics.filter(function(f) 
     { 
-        return f.key == d.properties.name; 
+        return f.key == name; 
     });
 
     if(record.length < 1)
     {
-        return "white";
+        return null;
     }
 
 
-    var val = record[0].value.metric;
+    return record[0].value;
+}
+
+function get_color(d)
+{
+    var node = get_metric(d); 
+    if(node == null)
+        return "#f5f5f5";
+
+    var val = node.metric;
     var color_index = 0;
 
     switch (true) {
