@@ -32,62 +32,10 @@ var geo_data;
 
 var svg_worldmap;
 
-// Rendering of page
-var oldWidth = 0;
-function render(){
-    if (oldWidth == innerWidth) return
-    oldWidth = innerWidth;
 
-    var margin = 75,
-    width = innerWidth -margin,
-    height = innerHeight -margin;
+function render()
+{
 
-  
-    // d3.graphScroll()
-    //     .sections(d3.selectAll('#sections > div'))
-    //     .on('active', function(i)
-    //         { 
-    //             console.log(i + 'th section active') ;
-    //             switch(i)
-    //             {
-    //                 // case 3:
-    //                 //     start_overview();
-    //                 //     break;
-    //                 // case 4:
-    //                 //     fix_bubble();
-    //                 //     break;
-    //                 // case 7:
-    //                 //     start_best();
-    //                 //     break;
-    //                 // case 10:
-    //                 //     start_worst();
-    //                 //     break;
-    //                 // case 11:
-    //                 //     unfix_bubble();
-    //                 //     break;
-    //                 // case 13:
-    //                 //     show_global_timeline();
-    //                 //     break;
-    //                 // case 15:
-    //                 //     fix_timeline();
-    //                 //     break;
-    //                 // case 17:
-    //                 //     show_best_timeline();
-    //                 //     break;
-    //                 // case 20:
-    //                 //     show_worst_timeline();
-    //                 //     break;
-    //                 // case 22:
-    //                 //     unfix_timeline();
-    //                 //     break;
-    //                 // case 24:
-    //                 //     show_closing();
-    //                 //     break;
-    //                 // case 27:
-    //                 //     show_chloropleth();
-    //                 // default:
-    //             }
-    //         });
 }
 
 function highlight_country()
@@ -157,7 +105,7 @@ function show_chloropleth()
         width = 1920 -margin,
         height = 1080 -margin;
 
-    var svg = d3.select("#graph-about-you")
+    var svg = d3.select(closing_div)
         .select("svg");
 
     
@@ -176,7 +124,7 @@ function show_chloropleth()
 
 function color_countries()
 {
-    var svg = d3.select("#graph-about-you")
+    var svg = d3.select(closing_div)
         .select("svg");
 
     var capacity_and_prints = timeline_metrics_data.filter(function(d) 
@@ -268,7 +216,6 @@ function color_countries()
                 return colors[color_index-1];
             });
 
-    draw_legend();
 }
 
 
@@ -290,10 +237,14 @@ function show_closing()
                 .append('g')
                 .attr('class', 'map');
 
+    var margin = 50,
+    width = innerWidth -margin,
+    height = innerHeight -margin;
+
     var projection = d3.geoMercator()
                     .scale(220)
-                    .translate([width / 2.5, height / 2]);
-
+                    .translate([width / 1.9, height / 2.3]);
+            
     var path = d3.geoPath().projection(projection);
 
     var map = svg.selectAll('path')
@@ -310,29 +261,6 @@ function show_closing()
                     .style('fill',"#d8ecf3")
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
-}
-
-function unfix_timeline()
-{
-    var div_top = d3.select(timeline_div).node().getBoundingClientRect();
-
-    d3.select(timeline_div)    
-        .style("top", "1650px")
-        .style("position", "absolute");
- 
-    hideOthers(timeline_div); 
-}
-
-function fix_timeline()
-{
-    var div_top = d3.select(timeline_div).node().getBoundingClientRect();
-    
-    d3.select(timeline_div)
-        .style("top", div_top.top + "px")        
-        .style("left", div_top.left + "px")
-        .style("position", "fixed");
-
-    hideOthers(timeline_div);
 }
 
 function draw_timeline(data)
@@ -684,30 +612,6 @@ function start_best()
     hide_bubbles(filtered);
 }
 
-function fix_bubble()
-{
-    var div_top = d3.select(bubble_chart_div).node().getBoundingClientRect();
-    
-    d3.select(bubble_chart_div)
-        .style("top", div_top.top + "px")        
-        .style("left", div_top.left + "px")
-        .style("position", "fixed");
-
-    hideOthers(bubble_chart_div);
-}
-
-function unfix_bubble()
-{
-    var div_top = d3.select(bubble_chart_div).node().getBoundingClientRect();
-
-    d3.select(bubble_chart_div)    
-        //.style("top", (div_top.top + window.scrollY) +  "px")
-        .style("top", (window.pageYOffset - 500) +  "px")
-        .style("position", "absolute");
-
-    hideOthers(bubble_chart_div); 
-}
-
 function start_overview()
 {
     d3.csv('country_metrics.csv', draw_overview_bubble)
@@ -992,6 +896,9 @@ function intialize_graph_scroll()
             {                
                 case 1:
                     show_closing();
+                    break;
+                case 5:
+                    show_chloropleth();
                     break;
             }
         })
