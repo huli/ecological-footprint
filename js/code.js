@@ -14,6 +14,7 @@ var colors = ["#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd
 
 var country_metrics_data;
 var timeline_metrics_data;
+var biocapacity_metrics;
 
 
 var animation_time = 1000;
@@ -42,21 +43,18 @@ function highlight_country()
 {
     var selectedCountry = this.value;
 
-    var svg = d3.select("#graph-about-you")
+    var svg = d3.select(closing_div)
         .select("svg"); 
 
     svg.selectAll('path')
         .transition()
-        .duration(600)
+        .duration(animation_time)
         .style('fill', function (d){
                     if(selectedCountry.indexOf(d.properties.name) !== -1)
                     {
-                        return "#BDBD8F";
+                        return darkslategray;
                     }
-                    else
-                    {
-                        return "#ffffbf";
-                    }
+                    return get_color(d);
                 });
 }
 
@@ -134,7 +132,7 @@ function color_countries()
                                     });
 
     
-    var biocapacity_metrics = d3.nest()
+    biocapacity_metrics = d3.nest()
                     .key(function(d) { return d.country; })
                     .rollup(function(v) 
                     { 
@@ -186,38 +184,40 @@ function color_countries()
         .duration(600)
         .style('fill', function (d)
             {
-                var record = biocapacity_metrics.filter(function(f) 
-                    { 
-                        return f.key == d.properties.name; 
-                    });
-            
-                if(record.length < 1)
-                {
-                    console.log(d.properties.name);
-                    return "white";
-                }
-
-
-                var val = record[0].value.metric;
-                var color_index = 0;
-
-                switch (true) {
-                    case (val < -1.5): color_index = 1; break;
-                    case (val < -1): color_index = 2; break;
-                    case (val < -0.5): color_index = 3; break;
-                    case (val < 0.0): color_index = 4; break;
-                    case (val < 0.5): color_index = 5; break;
-                    case (val < 1.0): color_index = 6; break;
-                    case (val < 1.5): color_index = 7; break;
-                    case (val >= 1.5): color_index = 8; break;
-                }
-
-
-                return colors[color_index-1];
+                return get_color(d);
             });
-
 }
 
+function get_color(d)
+{
+    var record = biocapacity_metrics.filter(function(f) 
+    { 
+        return f.key == d.properties.name; 
+    });
+
+    if(record.length < 1)
+    {
+        return "white";
+    }
+
+
+    var val = record[0].value.metric;
+    var color_index = 0;
+
+    switch (true) {
+        case (val < -1.5): color_index = 1; break;
+        case (val < -1): color_index = 2; break;
+        case (val < -0.5): color_index = 3; break;
+        case (val < 0.0): color_index = 4; break;
+        case (val < 0.5): color_index = 5; break;
+        case (val < 1.0): color_index = 6; break;
+        case (val < 1.5): color_index = 7; break;
+        case (val >= 1.5): color_index = 8; break;
+    }
+
+
+    return colors[color_index-1];
+}
 
 var isClosingShown = false;
 
