@@ -4,8 +4,8 @@
 
 
 var bubble_opacity = .7;
-var bubble_chart_div = "#graph-bubble-chart";
-var timeline_div = "#graph-timeline";
+var bubble_chart_div = ".container-bubble #graph";
+var timeline_div = ".container-timeline";
 var timeline_opacity = 1;
 var timeline_stroke = 3;
 var timeline_inactive_opacity = .2;
@@ -724,7 +724,7 @@ function draw_overview_bubble(data)
                     top: 20,
                     right: 20,
                     bottom: 20,
-                    left: 40
+                    left: 140
                 },
                 width = div_rect.width - cover.left - cover.right,
                 height = div_rect.height - cover.top - cover.bottom;
@@ -740,6 +740,7 @@ function draw_overview_bubble(data)
 
     var svg = d3.select(bubble_chart_div)
         .append("svg")
+        .style("padding-top", cover.top)    
         .style("padding-left", cover.left)        
         .attr("width", width + cover.left + cover.right)
         .attr("height", height + cover.top + cover.bottom);
@@ -904,7 +905,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('#sections > div'))
         .on('active', function(i){
-            console.log("active");
+            // nothing to do
         })
 
     svg_worldmap.attr("width", width)
@@ -923,7 +924,13 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-bubble #sections > div'))
         .on('active', function(i){
-            console.log("active");
+            console.log("bubble " + i);
+            switch(i)
+            {
+                case 0:
+                    start_overview();
+                    break;
+            }
         })
   
     // Container Timeline
@@ -937,7 +944,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-timeline #sections > div'))
         .on('active', function(i){
-            console.log("active");
+            console.log("active" + i);
         })
   
           
@@ -952,7 +959,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-closing #sections > div'))
         .on('active', function(i){
-            console.log("active");
+            console.log("active" + i);
         })
           
 }
@@ -967,7 +974,6 @@ function draw_map(data)
     geo_data = data;
 
     intialize_graph_scroll();
-
 
     var projection = d3.geoMercator()
                     .scale(220)

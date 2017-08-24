@@ -27,7 +27,6 @@ h3 {
 }
 
 .container-bubble {
-    background: aliceblue;
 }
   
 .container-timeline {
@@ -39,7 +38,6 @@ h3 {
 }
 
 #overview-content{
-    height: 500px;
 }
 
 #the-best-content{
@@ -221,3 +219,14 @@ div.tooltip {
     stroke:  #9dd0e1;
 }
   
+
+#top-spacer {
+    padding-top: 50px;
+}
+
+#middle-spacer {
+    padding-top: 100px;
+}
+#bottom-spacer {
+    padding-top: 500px;
+}

@@ -33,20 +33,22 @@
                 </div>
             </div>
         </div>
+        <div id="top-spacer"></div>
         <div id="container" class="container-bubble">
             <h2>Human development drives footprint</h2>
             <div id="graph"></div>
             <div id="sections" class="story">    
+                <div id="top-spacer"></div>
                 <div id="overview-content" class="description">
                     The further a country has developed, the higher the 
                     footprint most often is.
-                    <p />
+                    <p/>
                     With a global footprint of 2.9 hectares we are using more 
                     than 1.5 times what our nature can regenerate.
                     The world currently has a biocapacity of 1.7 hectares
                     per capita. 
                 </div>
-                <br/>
+                <div id="bottom-spacer"></div>
                 <h3>Who is doing well?</h3>
                 <div id="the-best-content" class="description">
                     Haiti, Eritrea and Burundi are doing very well for example.
@@ -55,6 +57,7 @@
                     and is therefore only using a third of the world populations
                     mean.
                 </div>
+                <div id="middle-spacer"></div>
                 <div id="the-best-hint" class="hint">
                 </div>
                 <h3>Who is not doing well, at all</h3>
@@ -68,8 +71,6 @@
                 </div>
                 <div id="the-worst-hint" class="hint">
                     STORY MISSING <br/>
-                </div>
-                <div id="bottom-spacer">
                 </div>
             </div>
         </div>        
@@ -158,11 +159,11 @@
     <script type="text/javascript">
         d3.json("world_countries.json", draw_map);
     </script>
-    <!--<script>
+    <script>
         d3.csv("NFA 2017 Edition.csv",  function(d) {
             d.year = new Date(d.year,1,1);
             d.total = +d.total;
             return d;
             },  draw_timeline);
-    </script>     -->
+    </script>
 </html>
