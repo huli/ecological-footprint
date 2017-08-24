@@ -6,6 +6,7 @@
 var bubble_opacity = .7;
 var bubble_chart_div = ".container-bubble #graph";
 var timeline_div = ".container-timeline #graph";
+var closing_div = ".container-closing #graph";
 var timeline_opacity = 1;
 var timeline_stroke = 3;
 var timeline_inactive_opacity = .1;
@@ -271,25 +272,19 @@ function color_countries()
 }
 
 
+var isClosingShown = false;
+
 function show_closing()
 {
-     var margin = 75,
-            width = 1920 -margin,
-            height = 800 -margin;
-            
-    var done = d3.select("#graph-about-you")
-                .select("svg").node();
-    if(done != null)
-    {
-        return;
-    }
+    if(isClosingShown) return;
+    isClosingShown = true;
 
-    d3.select("#graph-about-you")
-        .style("top", "10px")
-        .style("position", "fixed");
+    var margin = 50,
+        width = innerWidth -margin,
+        height = innerHeight -margin;
 
-    var svg = d3.select("#graph-about-you")
-                .append("svg")
+    var svg = d3.select(closing_div)
+                .select("svg")
                 .attr("width", width + margin)
                 .attr("height", height + margin)
                 .append('g')
@@ -310,7 +305,7 @@ function show_closing()
                     .style('stroke', "white")
                     .style('stroke-width',"0.3")
                     .transition()
-                    .duration(animation_time)
+                    .duration(animation_time * 1.5)
                     .attr('d', path)
                     .style('fill',"#d8ecf3")
                     .style('stroke', "white")
@@ -992,11 +987,12 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-closing #sections > div'))
         .on('active', function(i){
+            console.log("you " + i);
             switch(i)
-            {
-                // case 1:
-                //     show_global_timeline();
-                //     break;
+            {                
+                case 1:
+                    show_closing();
+                    break;
             }
         })
           
