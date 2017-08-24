@@ -30,7 +30,6 @@ h3 {
 }
   
 .container-timeline {
-    background: aliceblue;
 }
 
 .container-closing {
@@ -221,12 +220,17 @@ div.tooltip {
   
 
 #top-spacer {
-    padding-top: 50px;
+    padding-top: 150px;
 }
 
 #middle-spacer {
     padding-top: 100px;
 }
+
 #bottom-spacer {
     padding-top: 500px;
+}
+
+#small-spacer{
+    padding-top: 20px;
 }

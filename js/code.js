@@ -5,10 +5,10 @@
 
 var bubble_opacity = .7;
 var bubble_chart_div = ".container-bubble #graph";
-var timeline_div = ".container-timeline";
+var timeline_div = ".container-timeline #graph";
 var timeline_opacity = 1;
 var timeline_stroke = 3;
-var timeline_inactive_opacity = .2;
+var timeline_inactive_opacity = .1;
 var colors = ["#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850"];
 
 var country_metrics_data;
@@ -463,15 +463,19 @@ function show_best_timeline()
         .attr("stroke-width", timeline_stroke);
 }
 
+var isGlobalTimelineDefined = false;
 function show_global_timeline()
 {    
+    if(isGlobalTimelineDefined) return;
+    isGlobalTimelineDefined = true;
+
     var div_rect = d3.select(timeline_div).node().getBoundingClientRect();
 
     var cover = {
                     top: 20,
                     right: 20,
                     bottom: 20,
-                    left: 40
+                    left: 600
                 },
                 width = div_rect.width - cover.left - cover.right,
                 height = div_rect.height - cover.top - cover.bottom;
@@ -714,8 +718,14 @@ function start_overview()
     d3.csv('country_metrics.csv', draw_overview_bubble)
 }
 
+
+var isOverviewDrawn = false;
+
 function draw_overview_bubble(data)
 {
+    if(isOverviewDrawn) return;
+    isOverviewDrawn = true;
+    
     country_metrics_data = data;
 
     var div_rect = d3.select(bubble_chart_div).node().getBoundingClientRect();
@@ -734,11 +744,11 @@ function draw_overview_bubble(data)
         .style("opacity", 0);
 
     d3.select(bubble_chart_div)
-                .style("z-index", 1);
-
-    d3.select(bubble_chart_div)
             .select("svg")
             .remove();
+            
+    d3.select(bubble_chart_div)
+        .style("z-index", 1);
 
     var svg = d3.select(bubble_chart_div)
         .append("svg")
@@ -897,6 +907,10 @@ function hideOthers(nottohide)
 
 function intialize_graph_scroll()
 {   
+    var margin = 50,
+    width = innerWidth -margin,
+    height = innerHeight -margin;
+    
     // Container Introduction    
     svg_worldmap = d3.select('.container-introduction #graph').html('')
         .append('svg');
@@ -929,10 +943,10 @@ function intialize_graph_scroll()
             console.log("bubble " + i);
             switch(i)
             {
-                case 0:
+                case 1:
                     start_overview();
                     break;
-                case 3:
+                case 2:
                     start_best();
                     break;
                 case 5:
@@ -952,7 +966,18 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-timeline #sections > div'))
         .on('active', function(i){
-            console.log("active" + i);
+            console.log("timeline " + i);
+            switch(i)
+            {
+                case 1:
+                    show_global_timeline();
+                    break;
+                case 3:
+                    show_best_timeline();
+                    break;
+                case 4:
+                    show_worst_timeline();
+            }
         })
   
           
@@ -967,21 +992,28 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-closing #sections > div'))
         .on('active', function(i){
-            console.log("active" + i);
+            switch(i)
+            {
+                // case 1:
+                //     show_global_timeline();
+                //     break;
+            }
         })
           
 }
 
 
-var margin = 50,
-    width = innerWidth -margin,
-    height = innerHeight -margin;
+
 
 function draw_map(data)
 {
     geo_data = data;
 
     intialize_graph_scroll();
+
+    var margin = 50,
+    width = innerWidth -margin,
+    height = innerHeight -margin;
 
     var projection = d3.geoMercator()
                     .scale(220)
