@@ -60,42 +60,52 @@ function highlight_country()
     change_text(selectedCountry);
 }
 
- function draw_legend()
+function draw_legend()
 {
-    d3.select("body")
-    .append("div")
-    .style("position", "absolute")
-    .style("top", "0px")
-    .style("left", 400 + "px")
-    .append("svg")
-    .attr("height", 1000)
-    .attr("width", 50)
-    .selectAll("circle")
-    .data(colors)
-    .enter()
-    .append("circle")
-    .attr("r", 20)
-    .attr("cx", 20)
-    .attr("cy", function(c,i ) { return 100 + (i * 80)})
-    .attr("fill", function(c) {return c;})
+    var svg = d3.select(closing_div)
+        .select("svg")
+        .selectAll("circle")
+        .data(colors)
+        .enter()
+        .append("circle")
+        .attr("r", 10)
+        .attr("cx", function(c,i ) 
+            { 
+                return 600 + (i * 80);
+            }
+        )
+        .attr("cy", 700)
+        .attr("fill", function(c) {return c;})
 
-    var legend = ["> 150%", 
-                    "150% > 100%", 
-                    "100% > 50%",
-                    "50% > 0%",
-                    "0% < 50%",
-                    "50% < 100%",
-                    "100% < 150%",
-                    "150% <"];
-    d3.select("div")
-        .style("width", "200px")
-        .selectAll("h1")
+    // var legend = ["> 150%", 
+    //                 "150% - 100%", 
+    //                 "100% - 50%",
+    //                 "50% - 0%",
+    //                 "0% - 50%",
+    //                 "50% - 100%",
+    //                 "100% - 150%",
+    //                 "150% <"];
+    var legend = ["+150%", 
+                    "", 
+                    "",
+                    "",
+                    "+/- 0%",
+                    "",
+                    "",
+                    "-150%"];
+                    
+    d3.select(closing_div)
+        .append("div")
+        .selectAll("h5")
         .data(legend)
         .enter()
-        .append("h3")
+        .append("h5")
         .style("position", "absolute")
-        .style("top", function(d, i) { return 70 + (i * 80) + "px";})
-        .style("left", "50px")
+        .style("top", "690px")
+        .style("left", function(c, i) 
+        { 
+            return (585 + (i * 80)) + "px";
+        })
         .text(function(d) {return d});
 }
 
@@ -120,6 +130,7 @@ function show_chloropleth()
         .text(function (feature) { return feature.properties.name ;});
 
     color_countries();
+    draw_legend();
 }
 
 function color_countries()
