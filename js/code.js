@@ -746,6 +746,19 @@ function draw_overview_bubble(data)
     y_scale = d3.scaleLinear()
                     .range([height, 0])
                     .domain([0, 13.2]);
+
+    var maxCrossProduct = d3.max(data, function(d){
+        return (+d.EFConsPerCap * d.Population);
+    });
+    
+    var minCrossProduct = d3.min(data, function(d){
+        return (+d.EFConsPerCap * d.Population);
+    });
+    
+
+    var colorScale = d3.scaleLog()
+        .range([0, 7])
+        .domain([maxCrossProduct, minCrossProduct]);
                     
     var yAxis = d3.axisRight()
                     .scale(y_scale)
@@ -805,6 +818,9 @@ function draw_overview_bubble(data)
         })
         .attr("r", function(d){
             return r_scale(Math.sqrt(d.Population));
+        })                
+        .style("fill", function(d){
+            return colors[Math.round(colorScale(+d.Population * d.EFConsPerCap))];
         })
         .style("opacity", bubble_opacity)
 

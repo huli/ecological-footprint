@@ -150,9 +150,9 @@
             //colors = ['#eff3ff','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'];
             //colors = ['#d0d1e6','#a6bddb','#74a9cf','#3690c0','#0570b0','#045a8d','#023858']
 
-            var colorScale = d3.scaleOrdinal()
-                .range(d3.range(0,7))
-                .domain([minCrossProduct, maxCrossProduct]);
+            var colorScale = d3.scaleLog()
+                .range([0, 7])
+                .domain([maxCrossProduct, minCrossProduct]);
 
             // colorScale = d3.scaleLinear().domain([minCrossProduct, maxCrossProduct])
             //     .interpolate(d3.interpolateHcl)
@@ -184,7 +184,7 @@
                 })
                 .style("fill", function(d){
                     console.log(d["Country Name"] + ": " + colorScale(+d.Population * d.EFConsPerCap));
-                    return colors[colorScale(+d.Population * d.EFConsPerCap)];
+                    return colors[Math.round(colorScale(+d.Population * d.EFConsPerCap))];
                 })
                 .on("mouseover", function(d) {		
                     div.transition()		
