@@ -892,7 +892,23 @@ function draw_overview_bubble(data)
         .attr("class", "axis-label")
         .text("HUMAN DEVELOPMENT")                    
         .attr("x", 550)
-        .attr("y", height + 35);
+        .attr("y", height + 35)
+        .style("opacity", 0.1)
+        .transition() 
+        .duration(2000)
+        .style("opacity", 0.8);
+
+    svg.append("text")
+        .attr("class", "axis-label")
+        .text("ECOLOGICAL FOOTPRINT")  
+        //.attr("transform", "translate(400, 400)")
+        .attr("transform", "rotate(270, "+ (width + 40) +  " , 450)")
+        .attr("x", width + 40)
+        .attr("y", 450)
+        .style("opacity", 0.1)
+        .transition() 
+        .duration(2000)
+        .style("opacity", 0.8);
 }
 
 

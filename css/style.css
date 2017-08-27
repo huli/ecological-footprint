@@ -159,12 +159,13 @@ div.tooltip {
     padding-bottom: 2px;	
     width: auto;					
     height: auto;				
-    font: 12px sans-serif;	
+    font: 10px sans-serif;	
     color: white;	
     background:#9dd0e1;	
     border: 0px;		
     border-radius: 8px;			
-    pointer-events: none;			
+    pointer-events: none;	
+    z-index: 5;		
 }   
 
 
