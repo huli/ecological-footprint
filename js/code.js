@@ -85,14 +85,14 @@ function draw_legend()
     //                 "50% - 100%",
     //                 "100% - 150%",
     //                 "150% <"];
-    var legend = ["+150%", 
+    var legend = ["-150%", 
                     "", 
                     "",
                     "",
                     "+/- 0%",
                     "",
                     "",
-                    "-150%"];
+                    "+150%"];
                     
     d3.select(closing_div)
         .append("div")
@@ -287,6 +287,17 @@ function get_color(d)
     return colors[color_index-1];
 }
 
+function GetProjection()
+{
+    var margin = 50,
+    width = innerWidth -2*margin,
+    height = innerHeight -2*margin;
+
+    return d3.geoMercator()
+        .scale(200)
+        .translate([width / 1.7, height / 1.6]);
+}
+
 var isClosingShown = false;
 
 function show_closing()
@@ -304,14 +315,8 @@ function show_closing()
                 .attr("height", height + margin)
                 .append('g')
                 .attr('class', 'map');
-
-    var margin = 50,
-    width = innerWidth -margin,
-    height = innerHeight -margin;
-
-    var projection = d3.geoMercator()
-                    .scale(220)
-                    .translate([width / 1.9, height / 2.3]);
+    
+    var projection = GetProjection();
             
     var path = d3.geoPath().projection(projection);
 
@@ -999,12 +1004,10 @@ function draw_map(data)
     intialize_graph_scroll();
 
     var margin = 50,
-    width = innerWidth -margin,
-    height = innerHeight -margin;
+    width = innerWidth -2*margin,
+    height = innerHeight -2*margin;
 
-    var projection = d3.geoMercator()
-                    .scale(220)
-                    .translate([width / 1.9, height / 2.3]);
+    var projection = GetProjection();
 
     var path = d3.geoPath().projection(projection);
 
