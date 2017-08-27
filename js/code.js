@@ -290,7 +290,7 @@ function get_color(d)
 function GetProjection()
 {
     var margin = 50,
-    width = innerWidth -2*margin,
+    width = innerWidth -margin,
     height = innerHeight -2*margin;
 
     return d3.geoMercator()
@@ -704,9 +704,9 @@ function draw_overview_bubble(data)
 
     var cover = {
                     top: 20,
-                    right: 20,
+                    right: 50,
                     bottom: 20,
-                    left: 140
+                    left: 180
                 },
                 width = div_rect.width - cover.left - cover.right,
                 height = div_rect.height - cover.top - cover.bottom;
@@ -757,7 +757,7 @@ function draw_overview_bubble(data)
         .transition()
         .duration(5000)
         .style("opacity", 0.4);
-
+    
     // display y-axis
     y_scale = d3.scaleLinear()
                     .range([height, 0])
@@ -885,6 +885,14 @@ function draw_overview_bubble(data)
                     .duration(2000)
                     .style("opacity", 0.8);
             });
+    
+    // draw axis labels
+    
+    svg.append("text")
+        .attr("class", "axis-label")
+        .text("HUMAN DEVELOPMENT")                    
+        .attr("x", 550)
+        .attr("y", height + 35);
 }
 
 
@@ -934,7 +942,7 @@ function intialize_graph_scroll()
                 case 1:
                     start_overview();
                     break;
-                case 2:
+                case 4:
                     start_best();
                     break;
                 case 5:
