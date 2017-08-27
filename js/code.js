@@ -855,9 +855,10 @@ function draw_overview_bubble(data)
             {
                 svg.append("text")
                     .attr("class", "annotation-text")
-                    .text("High human development")
+                    .text("HIGH HUMAN DEVELOPMENT")
                     .attr("x", xScale(0.7) + 10)
                     .attr("y", 100)
+                    .style("opacity", 0)
                     .transition() 
                     .duration(2000)
                     .style("opacity", 0.8);
@@ -878,9 +879,10 @@ function draw_overview_bubble(data)
             {
                 svg.append("text")
                     .attr("class", "annotation-text")
-                    .text("World Biocapacity per Person (1.7 hectares)")
+                    .text("WORLD BIOCAPACITY PER CAPITA (1.7 h)")
                     .attr("x", 270)
                     .attr("y", y_scale(1.74) -9)
+                    .style("opacity", 0)
                     .transition() 
                     .duration(2000)
                     .style("opacity", 0.8);
