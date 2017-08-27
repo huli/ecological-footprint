@@ -916,6 +916,155 @@ function draw_overview_bubble(data)
         .transition() 
         .duration(2000)
         .style("opacity", 0.8);
+
+
+    // Legend ---------------------
+    // Legend Size
+    var biggest = 1000000000;
+    var medium = 100000000;
+    var smallest = 1000000;
+
+    var legendX = 550;
+    var legendY = 95;
+
+    var legendGroup = svg
+        .append("g");
+
+    legendGroup
+        .append("text")
+            .attr("class", "legend-title")
+            .text("POPULATION SIZE")                
+            .attr("x", legendX)
+            .attr("y", legendY + 10);
+    
+    legendGroup
+        .append("text")
+            .attr("class", "legend-subtitle")
+            .text("NUMBER OF LIVING PEOPLES")                
+            .attr("x", legendX)
+            .attr("y", legendY + 20);
+    
+    legendGroup
+        .append("circle")
+        .attr("cx", legendX + 50)
+        .attr("cy", legendY + 70)
+        .attr("r", r_scale(Math.sqrt(biggest)))
+        .style("fill", "transparent")
+        .style("stroke", "black")
+        .style("stroke-opacity", .5);
+
+    legendGroup
+        .append("text")
+        .attr("class", "legend-text")
+        .text(Number(biggest/1000000).toLocaleString("en") + " M")
+        .attr("x", legendX + 100)
+        .attr("y", legendY + 70);
+        
+    legendGroup
+        .append("circle")
+        .attr("cx", legendX + 50)
+        .attr("cy", legendY + 140)
+        .attr("r", r_scale(Math.sqrt(medium)))
+        .style("fill", "transparent")
+        .style("stroke", "black")
+        .style("stroke-opacity", .5);
+
+    legendGroup
+        .append("text")
+        .attr("class", "legend-text")
+        .text(Number(medium/1000000).toLocaleString("en") + " M")
+        .attr("x", legendX + 100)
+        .attr("y", legendY + 145);
+        
+    legendGroup
+        .append("g")
+        .append("circle")
+        .attr("cx", legendX + 50)
+        .attr("cy", legendY + 180)
+        .attr("r", r_scale(Math.sqrt(smallest)))
+        .style("fill", "transparent")
+        .style("stroke", "black")
+        .style("stroke-opacity", .5);
+
+    legendGroup
+        .append("text")
+        .attr("class", "legend-text")
+        .text(Number(smallest/1000000).toLocaleString("en") + " M")
+        .attr("x", legendX + 100)
+        .attr("y", legendY + 185);
+
+    // Legend Impact
+    var biggestImpact = 5000000000;
+    var medianImpact = 50000000;
+    var smallestImpact = 500000;
+
+    var legendImpactX = 720;
+    var legendImpactY = 95;
+
+    var legendImpactGroup = svg
+        .append("g");
+
+    legendImpactGroup
+        .append("text")
+            .attr("class", "legend-title")
+            .text("IMPACT SIZE")                
+            .attr("x", legendImpactX)
+            .attr("y", legendImpactY + 10);
+    legendImpactGroup
+        .append("text")
+            .attr("class", "legend-subtitle")
+            .text("PEOPLE * FOOTPRINT PER CAPITA")                
+            .attr("x", legendImpactX)
+            .attr("y", legendImpactY + 20);
+    
+    legendImpactGroup
+        .append("rect")
+        .attr("x", legendImpactX + 10)
+        .attr("y", legendImpactY + 30)
+        .attr("width", 40)
+        .attr("height", 20)
+        .style("fill", colors[Math.round(colorScale(5000000000))])
+        .style("opacity", .6);
+
+    legendImpactGroup
+        .append("text")
+        .attr("class", "legend-text")
+        .text(Number(biggestImpact).toLocaleString("en"))
+        .attr("x", legendImpactX + 60)
+        .attr("y", legendImpactY + 45);
+        
+    legendImpactGroup
+        .append("rect")
+        .attr("x", legendImpactX + 10)
+        .attr("y", legendImpactY + 60)
+        .attr("width", 40)
+        .attr("height", 20)
+        .style("fill", colors[Math.round(colorScale(50000000))])
+        .style("opacity", .6);
+
+    legendImpactGroup
+        .append("text")
+        .attr("class", "legend-text")
+        .text(Number(medianImpact).toLocaleString("en"))
+        .attr("x", legendImpactX + 60)
+        .attr("y", legendImpactY + 75);
+        
+    legendImpactGroup
+        .append("g")
+        .append("rect")
+        .attr("x", legendImpactX + 10)
+        .attr("y", legendImpactY + 90)
+        .attr("width", 40)
+        .attr("height", 20)
+        .style("fill", colors[Math.round(colorScale(500000))])
+        .style("opacity", .6);
+
+    legendImpactGroup
+        .append("text")
+        .attr("class", "legend-text")
+        .text(Number(smallestImpact).toLocaleString("en"))
+        .attr("x", legendImpactX + 60)
+        .attr("y", legendImpactY + 105);
 }
 
 
