@@ -271,12 +271,33 @@
                 .attr("r", rScale(Math.sqrt(biggest)))
                 .style("fill", "transparent")
                 .style("stroke", "black")
-            svg.append("g")
-                .append("text")
+
+            var legend = svg.append("g");
+
+            legend.append("text")
+                    .attr("class", "legend-title")
+                    .text("POPULATION SIZE")                
+                    .attr("x", 260)
+                    .attr("y", 205);
+
+            legend.append("text")
                 .attr("class", "legend-text")
                 .text(Number(biggest).toLocaleString("en"))
-                .attr("x", 250)
-                .attr("y", 210);
+                .attr("x", 260)
+                .attr("y", 205);
+                
+            legend.append("text")
+                .attr("class", "legend-text")
+                .text(Number(medium).toLocaleString("en"))
+                .attr("x", 260)
+                .attr("y", 275)
+
+            legend.append("text")
+                .attr("class", "legend-text")
+                .text(Number(smallest).toLocaleString("en"))
+                .attr("x", 260)
+                .attr("y", 312);;
+
             svg.append("g")
                 .append("circle")
                 .attr("cx", 200)
@@ -285,25 +306,12 @@
                 .style("fill", "transparent")
                 .style("stroke", "black")
             svg.append("g")
-                .append("text")
-                .attr("class", "legend-text")
-                .text(Number(medium).toLocaleString("en"))
-                .attr("x", 250)
-                .attr("y", 275);;
-            svg.append("g")
                 .append("circle")
                 .attr("cx", 200)
                 .attr("cy", 310)
                 .attr("r", rScale(Math.sqrt(smallest)))
                 .style("fill", "transparent")
                 .style("stroke", "black")
-            svg.append("g")
-                .append("text")
-                .attr("class", "legend-text")
-                .text(Number(medium).toLocaleString("en"))
-                .attr("x", 250)
-                .attr("y", 312);
-
         }
 
         function resetAndRedraw()
