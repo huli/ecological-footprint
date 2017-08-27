@@ -811,10 +811,15 @@ function draw_overview_bubble(data)
                     div.transition()		
                         .duration(300)		
                         .style("opacity", .8);		
-                    div.html(d["Country Name"] + "<br/>" 
-                            + d.EFConsPerCap)	
+                    div.html("<b>"+ d["Country Name"] + "</b><br/>EF: " 
+                            + d.EFConsPerCap + "<br/>HDI: " 
+                            + d.HDI+ "<br/>People: " 
+                            + Number(d.Population).toLocaleString('en'))	
                         .style("left", (d3.event.pageX) + "px")		
-                        .style("top", (d3.event.pageY - 28) + "px");	
+                        .style("top", (d3.event.pageY - 28) + "px")
+                        .style("background", function(d){
+                            return colors[Math.round(colorScale(+d.Population * d.EFConsPerCap))];
+                        })	
                     })					
                 .on("mouseout", function(d) {	
                     div.transition()		
