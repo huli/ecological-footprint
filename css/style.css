@@ -183,6 +183,11 @@ div.tooltip {
     fill:#246175;
 }
 
+.axis-sublabel {
+    font-size: 12px;
+    fill:#3C8EA9;
+}
+
 .bubble {
     opacity: 0.4;
     fill:#76bdd5;

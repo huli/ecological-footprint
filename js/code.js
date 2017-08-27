@@ -581,6 +581,10 @@ function start_worst()
     // reposition the others circle to their default
     var filtered = get_all_but_best();
     var filtered_circles = svg.selectAll("circle")
+                        .filter(function(d) 
+                        { 
+                            return d != undefined;
+                        })
                         .data(filtered, key_func);
 
     var transitions = 0;
@@ -657,7 +661,12 @@ function hide_bubbles(bubbles)
 
     var svg_height = svg.node().getBoundingClientRect().height;
 
+    debugger;
     var filtered_circles = svg.selectAll("circle")
+                        .filter(function(d) 
+                        { 
+                            return d != undefined;
+                        })
                         .data(bubbles, key_func);
 
     filtered_circles.transition()
@@ -897,8 +906,8 @@ function draw_overview_bubble(data)
     
     svg.append("text")
         .attr("class", "axis-label")
-        .text("HUMAN DEVELOPMENT")                    
-        .attr("x", 550)
+        .text("HUMAN DEVELOPMENT INDEX")                    
+        .attr("x", 530)
         .attr("y", height + 35)
         .style("opacity", 0.1)
         .transition() 
@@ -908,7 +917,6 @@ function draw_overview_bubble(data)
     svg.append("text")
         .attr("class", "axis-label")
         .text("ECOLOGICAL FOOTPRINT")  
-        //.attr("transform", "translate(400, 400)")
         .attr("transform", "rotate(270, "+ (width + 40) +  " , 450)")
         .attr("x", width + 40)
         .attr("y", 450)
@@ -917,9 +925,19 @@ function draw_overview_bubble(data)
         .duration(2000)
         .style("opacity", 0.8);
 
+    svg.append("text")
+        .attr("class", "axis-sublabel")
+        .text("IN HECTARES PER CAPITA")  
+        .attr("transform", "rotate(270, "+ (width + 52) +  " , 430)")
+        .attr("x", width + 52)
+        .attr("y", 430)
+        .style("opacity", 0.1)
+        .transition() 
+        .duration(2000)
+        .style("opacity", 0.8);
+
 
     // Legend ---------------------
-    // Legend Size
     var biggest = 1000000000;
     var medium = 100000000;
     var smallest = 1000000;
@@ -945,12 +963,13 @@ function draw_overview_bubble(data)
             .attr("y", legendY + 20);
     
     legendGroup
+        .append("svg")
         .append("circle")
         .attr("cx", legendX + 50)
         .attr("cy", legendY + 70)
         .attr("r", r_scale(Math.sqrt(biggest)))
         .style("fill", "transparent")
-        .style("stroke", "black")
+        .style("stroke", "#246175")
         .style("stroke-opacity", .5);
 
     legendGroup
@@ -966,7 +985,7 @@ function draw_overview_bubble(data)
         .attr("cy", legendY + 140)
         .attr("r", r_scale(Math.sqrt(medium)))
         .style("fill", "transparent")
-        .style("stroke", "black")
+        .style("stroke", "#246175")
         .style("stroke-opacity", .5);
 
     legendGroup
@@ -983,7 +1002,7 @@ function draw_overview_bubble(data)
         .attr("cy", legendY + 180)
         .attr("r", r_scale(Math.sqrt(smallest)))
         .style("fill", "transparent")
-        .style("stroke", "black")
+        .style("stroke", "#246175")
         .style("stroke-opacity", .5);
 
     legendGroup
@@ -1029,7 +1048,7 @@ function draw_overview_bubble(data)
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(biggestImpact).toLocaleString("en"))
+        .text(Number(biggestImpact/1000000).toLocaleString("en") + "M ha")
         .attr("x", legendImpactX + 60)
         .attr("y", legendImpactY + 45);
         
@@ -1045,7 +1064,7 @@ function draw_overview_bubble(data)
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(medianImpact).toLocaleString("en"))
+        .text(Number(medianImpact/1000000).toLocaleString("en") + "M ha")
         .attr("x", legendImpactX + 60)
         .attr("y", legendImpactY + 75);
         
@@ -1062,16 +1081,11 @@ function draw_overview_bubble(data)
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(smallestImpact).toLocaleString("en"))
+        .text(Number(smallestImpact/1000000).toLocaleString("en") + "M ha")
         .attr("x", legendImpactX + 60)
         .attr("y", legendImpactY + 105);
 }
 
-
-function hideOthers(nottohide)
-{
-    
-}
 
 function intialize_graph_scroll()
 {   
