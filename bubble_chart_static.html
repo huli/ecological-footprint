@@ -50,6 +50,13 @@
             fill: cornflowerblue;
         }
 
+        .legend-text {
+            font-size: 10px;
+            opacity: 0.8;
+            fill: cornflowerblue;
+            color: cornflowerblue;
+        }
+
         .y.axis, .x.axis{            
             font-size: 10px;
             opacity: 0.8;
@@ -250,6 +257,52 @@
                 .text("World Biocapacity per Person (1.74)")
                 .attr("x", 100)
                 .attr("y", yScale(1.74) -5);
+
+            // Legend
+
+            var biggest = 1000000000;
+            var medium = 100000000;
+            var smallest = 1000000;
+            var distance = 80;
+            svg.append("g")
+                .append("circle")
+                .attr("cx", 200)
+                .attr("cy", 200)
+                .attr("r", rScale(Math.sqrt(biggest)))
+                .style("fill", "transparent")
+                .style("stroke", "black")
+            svg.append("g")
+                .append("text")
+                .attr("class", "legend-text")
+                .text(Number(biggest).toLocaleString("en"))
+                .attr("x", 250)
+                .attr("y", 210);
+            svg.append("g")
+                .append("circle")
+                .attr("cx", 200)
+                .attr("cy", 270)
+                .attr("r", rScale(Math.sqrt(medium)))
+                .style("fill", "transparent")
+                .style("stroke", "black")
+            svg.append("g")
+                .append("text")
+                .attr("class", "legend-text")
+                .text(Number(medium).toLocaleString("en"))
+                .attr("x", 250)
+                .attr("y", 275);;
+            svg.append("g")
+                .append("circle")
+                .attr("cx", 200)
+                .attr("cy", 310)
+                .attr("r", rScale(Math.sqrt(smallest)))
+                .style("fill", "transparent")
+                .style("stroke", "black")
+            svg.append("g")
+                .append("text")
+                .attr("class", "legend-text")
+                .text(Number(medium).toLocaleString("en"))
+                .attr("x", 250)
+                .attr("y", 312);
 
         }
 
