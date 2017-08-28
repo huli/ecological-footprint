@@ -404,6 +404,12 @@ function show_best_timeline()
 {
     var svg = d3.select(timeline_div)
         .select("svg");
+
+    // Remove annotations
+    svg.selectAll("g > text").filter(".timeline-annotation")
+        .transition()
+        .duration(animation_time/2)
+        .style("opacity", 0);
     
     svg.selectAll("path")
         .transition()
