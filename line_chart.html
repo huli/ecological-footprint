@@ -167,7 +167,6 @@
                 .attr("stroke-opacity", .3)
                 .attr("stroke-width", 2);
 
-
             svg.append("path")
                 .datum(world_footprint)
                 .attr("fill", "none")
@@ -186,6 +185,25 @@
                 .attr("d", line)
                 .attr("stroke-opacity", 1)
                 .attr("stroke-width", 3);
+
+            ShowLegend(svg, y, world_footprint, world_biocap);
+        }
+
+        function ShowLegend(svg, y, footprint, biocapacity)
+        {
+            var legendX = 400;
+            var legendY = 100;
+            var legend = svg.append("g");
+
+            legend.append("text")
+                .attr("x", legendX)
+                .attr("y", y(footprint[10].total))
+                .text("Biocapacity")
+
+            legend.append("text")
+                .attr("x", legendX)
+                .attr("y", y(biocapacity[20].total))
+                .text("Footprint");
         }
 
     </script>

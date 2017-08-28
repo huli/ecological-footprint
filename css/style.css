@@ -232,6 +232,11 @@ div.tooltip {
     opacity: 0.8;
     font-size: 8px;
 }
+
+.timeline-annotation {
+    opacity: 0.8;
+    font-size: 10px;
+}
   
 
 #top-spacer {

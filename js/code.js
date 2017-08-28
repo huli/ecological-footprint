@@ -569,6 +569,25 @@ function show_global_timeline()
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
         .attr("stroke-width", timeline_stroke);
+
+    // Show legend
+    var legendX = 450;
+    var legendY = 100;
+    var legend = svg.append("g");
+
+    legend.append("text")
+        .attr("class", "timeline-annotation")
+        .style("fill", "#d8b365")
+        .attr("x", legendX)
+        .attr("y", 420)
+        .text("WORLD FOOTPRINT")
+
+    legend.append("text")
+        .attr("class", "timeline-annotation")
+        .style("fill", "#5ab4ac")
+        .attr("x", legendX + 40)
+        .attr("y", 514)
+        .text("WORLD BIOCAPACITY");
 }
 
 function start_worst()
@@ -661,7 +680,6 @@ function hide_bubbles(bubbles)
 
     var svg_height = svg.node().getBoundingClientRect().height;
 
-    debugger;
     var filtered_circles = svg.selectAll("circle")
                         .filter(function(d) 
                         { 
@@ -975,7 +993,7 @@ function draw_overview_bubble(data)
     legendGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(biggest/1000000).toLocaleString("en") + " M")
+        .text(Number(biggest/1000000).toLocaleString("en") + "M")
         .attr("x", legendX + 100)
         .attr("y", legendY + 70);
         
@@ -991,7 +1009,7 @@ function draw_overview_bubble(data)
     legendGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(medium/1000000).toLocaleString("en") + " M")
+        .text(Number(medium/1000000).toLocaleString("en") + "M")
         .attr("x", legendX + 100)
         .attr("y", legendY + 145);
         
@@ -1008,7 +1026,7 @@ function draw_overview_bubble(data)
     legendGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(smallest/1000000).toLocaleString("en") + " M")
+        .text(Number(smallest/1000000).toLocaleString("en") + "M")
         .attr("x", legendX + 100)
         .attr("y", legendY + 185);
 
