@@ -469,8 +469,8 @@ function show_global_timeline()
 
     var cover = {
                     top: 20,
-                    right: 20,
-                    bottom: 20,
+                    right: 50,
+                    bottom: 40,
                     left: 600
                 },
                 width = div_rect.width - cover.left - cover.right,
@@ -518,7 +518,7 @@ function show_global_timeline()
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x_timeline))
         .style("opacity", .4)
-        .attr("stroke-opacity", 0.1)
+        .attr("stroke-opacity", 0.2)
         .select(".domain")
         .remove();
 
@@ -570,6 +570,39 @@ function show_global_timeline()
         .attr("stroke-opacity", timeline_opacity)
         .attr("stroke-width", timeline_stroke);
 
+    // draw axis labels    
+    svg.append("text")
+        .attr("class", "axis-label")
+        .text("YEAR")                    
+        .attr("x", 440)
+        .attr("y", height + 38)
+        .style("opacity", 0.1)
+        .transition() 
+        .duration(2000)
+        .style("opacity", 0.8);
+
+    svg.append("text")
+        .attr("class", "axis-label")
+        .text("ECOLOGICAL FOOTPRINT")  
+        .attr("transform", "rotate(270, "+ (width + 40) +  " , 450)")
+        .attr("x", width + 40)
+        .attr("y", 450)
+        .style("opacity", 0.1)
+        .transition() 
+        .duration(2000)
+        .style("opacity", 0.8);
+
+    svg.append("text")
+        .attr("class", "axis-sublabel")
+        .text("IN HECTARES PER CAPITA")  
+        .attr("transform", "rotate(270, "+ (width + 52) +  " , 430)")
+        .attr("x", width + 52)
+        .attr("y", 430)
+        .style("opacity", 0.1)
+        .transition() 
+        .duration(2000)
+        .style("opacity", 0.8);
+
     // Show legend
     var legendX = 450;
     var legendY = 100;
@@ -579,14 +612,14 @@ function show_global_timeline()
         .attr("class", "timeline-annotation")
         .style("fill", "#d8b365")
         .attr("x", legendX)
-        .attr("y", 420)
+        .attr("y", 405)
         .text("WORLD FOOTPRINT")
 
     legend.append("text")
         .attr("class", "timeline-annotation")
         .style("fill", "#5ab4ac")
         .attr("x", legendX + 40)
-        .attr("y", 514)
+        .attr("y", 504)
         .text("WORLD BIOCAPACITY");
 }
 
@@ -920,8 +953,7 @@ function draw_overview_bubble(data)
                     .style("opacity", 0.8);
             });
     
-    // draw axis labels
-    
+    // draw axis labels    
     svg.append("text")
         .attr("class", "axis-label")
         .text("HUMAN DEVELOPMENT INDEX")                    
