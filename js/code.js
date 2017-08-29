@@ -9,7 +9,7 @@ var timeline_div = ".container-timeline #graph";
 var closing_div = ".container-closing #graph";
 var timeline_opacity = 1;
 var timeline_stroke = 3;
-var timeline_inactive_opacity = .1;
+var timeline_inactive_opacity = .3;
 var colors = ['#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e'];
 
 var country_metrics_data;
@@ -409,7 +409,7 @@ function show_best_timeline()
     svg.selectAll("g > text").filter(".timeline-annotation")
         .transition()
         .duration(animation_time/2)
-        .style("opacity", 0);
+        .style("opacity", timeline_inactive_opacity);
     
     svg.selectAll("path")
         .transition()
@@ -463,6 +463,30 @@ function show_best_timeline()
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
         .attr("stroke-width", timeline_stroke);
+
+        // Show legend
+        var legendX = 550;
+        var legend = svg.append("g");
+
+        legend.append("text")
+            .attr("class", "timeline-annotation")
+            .style("fill", "#d8b365")
+            .attr("x", legendX)
+            .attr("y", 150)
+            .text("CYPRUS FOOTPRINT")
+            .transition()
+            .duration(animation_time*3)
+            .style("opacity", .7)
+
+        legend.append("text")
+            .attr("class", "timeline-annotation")
+            .style("fill", "#5ab4ac")
+            .attr("x", legendX + 40)
+            .attr("y", 600)
+            .text("CYPRUS BIOCAPACITY")
+            .transition()
+            .duration(animation_time*3)
+            .style("opacity", .7);
 }
 
 var isGlobalTimelineDefined = false;
@@ -620,13 +644,19 @@ function show_global_timeline()
         .attr("x", legendX)
         .attr("y", 405)
         .text("WORLD FOOTPRINT")
+        .transition()
+        .duration(animation_time*3)
+        .style("opacity", .7)
 
     legend.append("text")
         .attr("class", "timeline-annotation")
         .style("fill", "#5ab4ac")
         .attr("x", legendX + 40)
         .attr("y", 504)
-        .text("WORLD BIOCAPACITY");
+        .text("WORLD BIOCAPACITY")
+        .transition()
+        .duration(animation_time*3)
+        .style("opacity", .7);
 }
 
 function start_worst()
