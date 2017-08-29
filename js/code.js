@@ -346,10 +346,16 @@ function show_worst_timeline()
     var svg = d3.select(timeline_div)
         .select("svg");
     
+    // Remove annotations
+    svg.selectAll("g > text").filter(".timeline-annotation")
+        .transition()
+        .duration(animation_time/2)
+        .style("opacity", 0);
+
     svg.selectAll("path")
         .transition()
         .duration(animation_time)
-        .attr("stroke-opacity", timeline_inactive_opacity);
+        .attr("stroke-opacity", 0);
 
     var fiji_biocap = timeline_metrics_data.filter(function (d){
         return d.record == "BiocapPerCap" &&
@@ -398,6 +404,30 @@ function show_worst_timeline()
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
         .attr("stroke-width", timeline_stroke);
+
+    // Show legend
+    var legendX = 210;
+    var legend = svg.append("g");
+
+    legend.append("text")
+        .attr("class", "timeline-annotation")
+        .style("fill", "#d8b365")
+        .attr("x", legendX)
+        .attr("y", 540)
+        .text("FIJI FOOTPRINT")
+        .transition()
+        .duration(animation_time*3)
+        .style("opacity", .7)
+
+    legend.append("text")
+        .attr("class", "timeline-annotation")
+        .style("fill", "#5ab4ac")
+        .attr("x", legendX + 40)
+        .attr("y", 320)
+        .text("FIJI BIOCAPACITY")
+        .transition()
+        .duration(animation_time*3)
+        .style("opacity", .7);
 }
 
 function show_best_timeline()
@@ -409,12 +439,12 @@ function show_best_timeline()
     svg.selectAll("g > text").filter(".timeline-annotation")
         .transition()
         .duration(animation_time/2)
-        .style("opacity", timeline_inactive_opacity);
+        .style("opacity", 0);
     
     svg.selectAll("path")
         .transition()
         .duration(animation_time)
-        .attr("stroke-opacity", timeline_inactive_opacity);
+        .attr("stroke-opacity", 0);
 
     var cyprus_biocap = timeline_metrics_data.filter(function (d){
         return d.record == "BiocapPerCap" &&
@@ -426,7 +456,7 @@ function show_best_timeline()
                 d.country == "Cyprus";
     });
 
-    // Show biocapacity of world and country
+    // Show biocapacity of world
     svg.append("path")
         .datum(world_biocap)
         .attr("fill", "none")
@@ -444,7 +474,7 @@ function show_best_timeline()
         .attr("stroke-opacity", timeline_opacity)
         .attr("stroke-width", timeline_stroke);
     
-    // Show footprint of world and country
+    // Show footprint of world
     svg.append("path")
         .datum(world_footprint)
         .attr("class", ".reference")
