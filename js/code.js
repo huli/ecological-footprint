@@ -150,6 +150,7 @@ function color_countries()
                     .rollup(function(v) 
                     { 
                         var last_year_of_country = d3.max(v, function(d) {return d.year;}).getFullYear();
+                        var country_name = v[0].country;
 
                         var biocap_entry = v.filter(function(iv){
                             return iv.year.getFullYear() == last_year_of_country && iv.record == "BiocapPerCap";
@@ -163,6 +164,7 @@ function color_countries()
                         if(biocap_entry.length < 1 || footprint_entry < 1)
                         {
                             return  {
+                                country: country_name,
                                 max_year: last_year_of_country,
                                 biocap: 0,
                                 footprint: 0,
@@ -184,6 +186,7 @@ function color_countries()
                         }
 
                         return {
+                                country: country_name,
                                 max_year: last_year_of_country,
                                 biocap: biocap,
                                 footprint: footprint,
@@ -285,24 +288,24 @@ function get_color(d)
 {
     var node = get_metric(d); 
     if(node == null)
-        return "#f5f5f5";
+        return "lightgray";
 
     var val = node.metric;
     var color_index = 0;
 
     switch (true) {
-        case (val < -1.5): color_index = 1; break;
-        case (val < -1): color_index = 2; break;
-        case (val < -0.5): color_index = 3; break;
-        case (val < 0.0): color_index = 4; break;
-        case (val < 0.5): color_index = 5; break;
-        case (val < 1.0): color_index = 6; break;
-        case (val < 1.5): color_index = 7; break;
-        case (val >= 1.5): color_index = 8; break;
+        case (val < -2.0): color_index = 0; break;
+        case (val < -1.75): color_index = 1; break;
+        case (val < -1.5): color_index = 2; break;
+        case (val < -1.25): color_index = 3; break;
+        case (val < 1.25): color_index = 4; break;
+        case (val < 1.5): color_index = 5; break;
+        case (val < 1.75): color_index = 6; break;
+        case (val >= 2.0): color_index = 7; break;
     }
 
 
-    return colors[color_index-1];
+    return colors[color_index];
 }
 
 function GetProjection()
