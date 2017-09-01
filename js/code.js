@@ -249,6 +249,7 @@ function change_text(selectedCountry)
 
 function get_metric(name)
 {
+    name = CorrectCountryNames(name);
     var record = biocapacity_metrics.filter(function(f) 
     { 
         return f.key == name; 
@@ -258,9 +259,26 @@ function get_metric(name)
     {
         return null;
     }
-
-
     return record[0].value;
+}
+
+function CorrectCountryNames(name)
+{
+    var mappings = {
+        "USA": "United States of America",
+        "Democratic Republic of the Congo": "Congo, Democratic Republic of",
+        "Republic of the Congo": "Congo",
+        "Northern Cyprus": "Cyprus",
+        "England": "United Kingdom",
+        "South Korea": "Korea, Republic of",
+        "Russia": "Russian Federation",
+        "Syria": "Syrian Arab Republic",
+        "Libya": "Libyan Arab Jamahiriya"
+    }
+    if(!(name in mappings))
+        return name;
+
+    return mappings[name];
 }
 
 function get_color(d)
