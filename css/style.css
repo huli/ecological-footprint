@@ -219,8 +219,22 @@ div.tooltip {
 .legend-text {
     font-size: 10px;
     opacity: 0.8;
-    color:#76bdd5;
+    color: lightslategray;
+    fill:  lightslategray;
 }
+
+.legend-title{
+    opacity: 0.8;
+    font-size: 12px;
+    color: lightslategray;
+    fill:  lightslategray;
+}
+
+.legend-subtitle {
+    opacity: 0.8;
+    font-size: 8px;
+}
+
 
 .legend-text-map {
     font-size: 10px;
@@ -232,16 +246,6 @@ div.tooltip {
     opacity: 0.8;
     font-size: 12px;
     color: "lightgray";
-}
-
-.legend-title{
-    opacity: 0.8;
-    font-size: 12px;
-}
-
-.legend-subtitle {
-    opacity: 0.8;
-    font-size: 8px;
 }
 
 .timeline-annotation {

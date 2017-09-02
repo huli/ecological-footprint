@@ -1076,7 +1076,8 @@ function draw_overview_bubble(data)
     // Population size                
     var legendGroup = svg
         .append("g")
-        .attr("transform", "translate(590, 260)");
+        .attr("transform", "translate(590, 140)")
+        .style("opacity", 0);
 
     var biggest = 100000000;
     var medium = 10000000;
@@ -1094,7 +1095,7 @@ function draw_overview_bubble(data)
         .attr("cy", 30)
         .attr("r", r_scale(Math.sqrt(biggest)))
         .style("fill", "transparent")
-        .style("stroke", "black")
+        .style("stroke", "lightslategray")
         .style("opacity", .6);
 
     legendGroup
@@ -1110,7 +1111,7 @@ function draw_overview_bubble(data)
         .attr("cy", 30)
         .attr("r", r_scale(Math.sqrt(medium)))
         .style("fill", "transparent")
-        .style("stroke", "black")
+        .style("stroke", "lightslategray")
         .style("opacity", .6);
 
     legendGroup
@@ -1129,7 +1130,8 @@ function draw_overview_bubble(data)
 
     var legendImpactGroup = svg
         .append("g")
-        .attr("transform", "translate(600, 200)");
+        .attr("transform", "translate(600, 200)")
+        .style("opacity", 0);;
 
     legendImpactGroup
         .append("text")
@@ -1171,6 +1173,16 @@ function draw_overview_bubble(data)
         .text(Number(sizes[sizes.length-1]/1000000).toLocaleString("en") + "Mha")
         .attr("x",  legend_width - 15)
         .attr("y", 40);
+
+    legendGroup
+        .transition()
+        .duration(animation_time*3)
+        .style("opacity", 1);
+
+    legendImpactGroup
+        .transition()
+        .duration(animation_time*3)
+        .style("opacity", 1);
 }
 
 
