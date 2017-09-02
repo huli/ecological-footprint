@@ -268,7 +268,8 @@ function CorrectCountryNames(name)
         "South Korea": "Korea, Republic of",
         "Russia": "Russian Federation",
         "Syria": "Syrian Arab Republic",
-        "Libya": "Libyan Arab Jamahiriya"
+        "Libya": "Libyan Arab Jamahiriya",
+        "Iran": "Iran, Islamic Republic of"
     }
     if(!(name in mappings))
         return name;
