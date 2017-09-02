@@ -287,11 +287,11 @@ function get_color(d)
 
     switch (true) {
         case (val < 0.5): color_index = 7; break;
-        case (val < 0.333): color_index = 6; break;
-        case (val < 0.167): color_index = 5; break;
-        case (val < 0): color_index = 4; break;
-        case (val < 0.667): color_index = 3; break;
-        case (val < 1.332): color_index = 2; break;
+        case (val < 0.667): color_index = 6; break;
+        case (val < 0.833): color_index = 5; break;
+        case (val < 1): color_index = 4; break;
+        case (val < 1.333): color_index = 3; break;
+        case (val < 1.667): color_index = 2; break;
         case (val < 2.0): color_index = 1; break;
         case (val >= 2.0): color_index = 0; break;
         default:
