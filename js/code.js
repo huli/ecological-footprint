@@ -1071,153 +1071,106 @@ function draw_overview_bubble(data)
         .style("opacity", 0.8);
 
 
-    // Legend ---------------------
-    var biggest = 1000000000;
-    var medium = 100000000;
-    var smallest = 1000000;
+    // Draw legend ------------------------------------------
 
-    var legendX = 550;
-    var legendY = 95;
-
+    // Population size                
     var legendGroup = svg
-        .append("g");
+        .append("g")
+        .attr("transform", "translate(590, 260)");
+
+    var biggest = 100000000;
+    var medium = 10000000;
 
     legendGroup
         .append("text")
             .attr("class", "legend-title")
-            .text("POPULATION SIZE")                
-            .attr("x", legendX)
-            .attr("y", legendY + 10);
+            .text("Population")                
+            .attr("x", 2)
+            .attr("y", 8);
     
     legendGroup
-        .append("text")
-            .attr("class", "legend-subtitle")
-            .text("NUMBER OF LIVING PEOPLES")                
-            .attr("x", legendX)
-            .attr("y", legendY + 20);
-    
-    legendGroup
-        .append("svg")
         .append("circle")
-        .attr("cx", legendX + 50)
-        .attr("cy", legendY + 70)
+        .attr("cx", 20)
+        .attr("cy", 30)
         .attr("r", r_scale(Math.sqrt(biggest)))
         .style("fill", "transparent")
-        .style("stroke", "#246175")
-        .style("stroke-opacity", .5);
+        .style("stroke", "black")
+        .style("opacity", .6);
 
     legendGroup
         .append("text")
         .attr("class", "legend-text")
         .text(Number(biggest/1000000).toLocaleString("en") + "M")
-        .attr("x", legendX + 100)
-        .attr("y", legendY + 70);
+        .attr("x", 40)
+        .attr("y", 34);
         
     legendGroup
         .append("circle")
-        .attr("cx", legendX + 50)
-        .attr("cy", legendY + 140)
+        .attr("cx", 90)
+        .attr("cy", 30)
         .attr("r", r_scale(Math.sqrt(medium)))
         .style("fill", "transparent")
-        .style("stroke", "#246175")
-        .style("stroke-opacity", .5);
+        .style("stroke", "black")
+        .style("opacity", .6);
 
     legendGroup
         .append("text")
         .attr("class", "legend-text")
         .text(Number(medium/1000000).toLocaleString("en") + "M")
-        .attr("x", legendX + 100)
-        .attr("y", legendY + 145);
+        .attr("x", 100)
+        .attr("y", 34);
         
-    legendGroup
-        .append("g")
-        .append("circle")
-        .attr("cx", legendX + 50)
-        .attr("cy", legendY + 180)
-        .attr("r", r_scale(Math.sqrt(smallest)))
-        .style("fill", "transparent")
-        .style("stroke", "#246175")
-        .style("stroke-opacity", .5);
-
-    legendGroup
-        .append("text")
-        .attr("class", "legend-text")
-        .text(Number(smallest/1000000).toLocaleString("en") + "M")
-        .attr("x", legendX + 100)
-        .attr("y", legendY + 185);
-
-    // Legend Impact
+    // Impact size
     var biggestImpact = 5000000000;
     var medianImpact = 50000000;
     var smallestImpact = 500000;
 
-    var legendImpactX = 720;
-    var legendImpactY = 95;
+    var sizes = [500000, 5000000, 50000000, 500000000, 5000000000];
 
     var legendImpactGroup = svg
-        .append("g");
+        .append("g")
+        .attr("transform", "translate(600, 200)");
 
     legendImpactGroup
         .append("text")
             .attr("class", "legend-title")
-            .text("IMPACT SIZE")                
-            .attr("x", legendImpactX)
-            .attr("y", legendImpactY + 10);
+            .text("Impact (Footprint x Peoples)")    
+            .attr("x", -10)            
+            .attr("y", 10);
+
+    var legend_width = 0;
     legendImpactGroup
-        .append("text")
-            .attr("class", "legend-subtitle")
-            .text("PEOPLE * FOOTPRINT PER CAPITA")                
-            .attr("x", legendImpactX)
-            .attr("y", legendImpactY + 20);
-    
-    legendImpactGroup
+        .selectAll("rect")
+        .data(sizes)
+        .enter()
         .append("rect")
-        .attr("x", legendImpactX + 10)
-        .attr("y", legendImpactY + 30)
-        .attr("width", 40)
-        .attr("height", 20)
-        .style("fill", colors[Math.round(colorScale(5000000000))])
-        .style("opacity", .6);
+        .style("fill", function(d) {
+            return colors[Math.round(colorScale(d))];
+        })
+        .attr("width", 20)
+        .attr("height", 10)
+        .attr("x", function(d,i) 
+        {
+            var current_x = legend_width;
+            legend_width += 20; 
+            return current_x; 
+        })
+        .attr("y", 20)
+        .attr("opacity", .7);
 
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(biggestImpact/1000000).toLocaleString("en") + "M ha")
-        .attr("x", legendImpactX + 60)
-        .attr("y", legendImpactY + 45);
-        
-    legendImpactGroup
-        .append("rect")
-        .attr("x", legendImpactX + 10)
-        .attr("y", legendImpactY + 60)
-        .attr("width", 40)
-        .attr("height", 20)
-        .style("fill", colors[Math.round(colorScale(50000000))])
-        .style("opacity", .6);
+        .text(Number(sizes[0]/1000000).toLocaleString("en") + "Mha")
+        .attr("x", -10)
+        .attr("y", 40);
 
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(medianImpact/1000000).toLocaleString("en") + "M ha")
-        .attr("x", legendImpactX + 60)
-        .attr("y", legendImpactY + 75);
-        
-    legendImpactGroup
-        .append("g")
-        .append("rect")
-        .attr("x", legendImpactX + 10)
-        .attr("y", legendImpactY + 90)
-        .attr("width", 40)
-        .attr("height", 20)
-        .style("fill", colors[Math.round(colorScale(500000))])
-        .style("opacity", .6);
-
-    legendImpactGroup
-        .append("text")
-        .attr("class", "legend-text")
-        .text(Number(smallestImpact/1000000).toLocaleString("en") + "M ha")
-        .attr("x", legendImpactX + 60)
-        .attr("y", legendImpactY + 105);
+        .text(Number(sizes[sizes.length-1]/1000000).toLocaleString("en") + "Mha")
+        .attr("x",  legend_width - 15)
+        .attr("y", 40);
 }
 
 
