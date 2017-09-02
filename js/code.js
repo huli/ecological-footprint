@@ -1348,28 +1348,48 @@ function draw_map(data)
 
     // draw legend
     var legendGroup = svg_worldmap.append("g");
-
-        legendGroup
-            .attr("transform", "translate(200, 200)")
-            .selectAll("circle")
-            .data(colors)
-            .enter()
-            .append("rect")
-            .style("fill", function(d) {return d;})
-            .attr("width", 20)
-            .attr("height", 10)
-            .attr("x", function(d,i) { return i*20; })
-            .attr("y", 0)
-            .attr("opacity", .7)
+    var legend_width = 0;
+    legendGroup
+        .attr("transform", "translate(200, 200)")
+        .selectAll("circle")
+        .data(colors)
+        .enter()
+        .append("rect")
+        .style("fill", function(d) {return d;})
+        .attr("width", 20)
+        .attr("height", 10)
+        .attr("x", function(d,i) 
+        {
+            var current_x = legend_width;
+            legend_width += 20; 
+            return current_x; 
+        })
+        .attr("y", 0)
+        .attr("opacity", .7)
     legendGroup
         .append("text")
+        .attr("y", 20)
+        .attr("x",  - 5)
         .attr("class", "legend-text-map")
-        .text("-2x");
-
+        .text("0.5");
     legendGroup
         .append("text")
+        .attr("y", 20)
+        .attr("x",  legend_width/2 - 4)
         .attr("class", "legend-text-map")
-        .text("+2x");
+        .text("1.0");
+    legendGroup
+        .append("text")
+        .attr("y", 20)
+        .attr("x", legend_width - 5)
+        .attr("class", "legend-text-map")
+        .text("2.0");
+    legendGroup
+        .append("text")
+        .attr("y", -4)
+        .attr("x", -3)
+        .attr("class", "legend-title-map")
+        .text("Sustainability (Footp./Biocap.)")
 }
 
 

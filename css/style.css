@@ -229,6 +229,11 @@ div.tooltip {
     color: "black";
 }
 
+.legend-title-map{
+    opacity: 0.8;
+    font-size: 12px;
+}
+
 .legend-title{
     opacity: 0.8;
     font-size: 12px;
