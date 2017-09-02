@@ -223,6 +223,12 @@ div.tooltip {
     color:#76bdd5;
 }
 
+.legend-text-map {
+    font-size: 10px;
+    opacity: 0.8;
+    color: "black";
+}
+
 .legend-title{
     opacity: 0.8;
     font-size: 12px;

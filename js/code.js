@@ -175,15 +175,7 @@ function color_countries()
                         var biocap = biocap_entry[0].total;
                         var footprint = footprint_entry[0].total;
 
-                        var result;
-                        if(biocap > footprint)
-                        {
-                            result = 1.0000 * biocap / footprint;
-                        }
-                        else{
-                            
-                            result = -(1.0000 * footprint / biocap);
-                        }
+                        var result = footprint / biocap;
 
                         return {
                                 country: country_name,
@@ -294,14 +286,16 @@ function get_color(d)
     var color_index = 0;
 
     switch (true) {
-        case (val < -2.0): color_index = 0; break;
-        case (val < -1.75): color_index = 1; break;
-        case (val < -1.5): color_index = 2; break;
-        case (val < -1.25): color_index = 3; break;
-        case (val < 1.25): color_index = 4; break;
-        case (val < 1.5): color_index = 5; break;
-        case (val < 1.75): color_index = 6; break;
-        case (val >= 2.0): color_index = 7; break;
+        case (val < 0.5): color_index = 7; break;
+        case (val < 0.333): color_index = 6; break;
+        case (val < 0.167): color_index = 5; break;
+        case (val < 0): color_index = 4; break;
+        case (val < 0.667): color_index = 3; break;
+        case (val < 1.332): color_index = 2; break;
+        case (val < 2.0): color_index = 1; break;
+        case (val >= 2.0): color_index = 0; break;
+        default:
+            return "lightgray";
     }
 
 
@@ -1350,6 +1344,31 @@ function draw_map(data)
                     .style('fill',"#d8ecf3")
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
+
+    // draw legend
+    var legendGroup = svg_worldmap.append("g");
+
+        legendGroup
+            .attr("transform", "translate(200, 200)")
+            .selectAll("circle")
+            .data(colors)
+            .enter()
+            .append("rect")
+            .style("fill", function(d) {return d;})
+            .attr("width", 20)
+            .attr("height", 10)
+            .attr("x", function(d,i) { return i*20; })
+            .attr("y", 0)
+            .attr("opacity", .7)
+    legendGroup
+        .append("text")
+        .attr("class", "legend-text-map")
+        .text("-2x");
+
+    legendGroup
+        .append("text")
+        .attr("class", "legend-text-map")
+        .text("+2x");
 }
 
 
