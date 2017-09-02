@@ -62,51 +62,53 @@ function highlight_country()
 
 function draw_legend()
 {
-    var svg = d3.select(closing_div)
-        .select("svg")
-        .selectAll("circle")
+    var svg_worldmap = d3.select(closing_div)
+        .select("svg");
+    
+    // draw legend
+    var legendGroup = svg_worldmap.append("g");
+    var legend_width = 0;
+    legendGroup
+        .attr("transform", "translate(850, 650)")
+        .selectAll("rect")
         .data(colors)
         .enter()
-        .append("circle")
-        .attr("r", 10)
-        .attr("cx", function(c,i ) 
-            { 
-                return 600 + (i * 80);
-            }
-        )
-        .attr("cy", 700)
-        .attr("fill", function(c) {return c;})
-
-    // var legend = ["> 150%", 
-    //                 "150% - 100%", 
-    //                 "100% - 50%",
-    //                 "50% - 0%",
-    //                 "0% - 50%",
-    //                 "50% - 100%",
-    //                 "100% - 150%",
-    //                 "150% <"];
-    var legend = ["-150%", 
-                    "", 
-                    "",
-                    "",
-                    "+/- 0%",
-                    "",
-                    "",
-                    "+150%"];
-                    
-    d3.select(closing_div)
-        .append("div")
-        .selectAll("h5")
-        .data(legend)
-        .enter()
-        .append("h5")
-        .style("position", "absolute")
-        .style("top", "690px")
-        .style("left", function(c, i) 
-        { 
-            return (585 + (i * 80)) + "px";
+        .append("rect")
+        .style("fill", function(d) {return d;})
+        .attr("width", 20)
+        .attr("height", 10)
+        .attr("x", function(d,i) 
+        {
+            var current_x = legend_width;
+            legend_width += 20; 
+            return current_x; 
         })
-        .text(function(d) {return d});
+        .attr("y", 0)
+        .attr("opacity", .7);
+    legendGroup
+        .append("text")
+        .attr("y", 20)
+        .attr("x",  - 5)
+        .attr("class", "legend-text-map")
+        .text("0.5");
+    legendGroup
+        .append("text")
+        .attr("y", 20)
+        .attr("x",  legend_width/2 - 4)
+        .attr("class", "legend-text-map")
+        .text("1.0");
+    legendGroup
+        .append("text")
+        .attr("y", 20)
+        .attr("x", legend_width - 5)
+        .attr("class", "legend-text-map")
+        .text("2.0");
+    legendGroup
+        .append("text")
+        .attr("y", -4)
+        .attr("x", -3)
+        .attr("class", "legend-title-map")
+        .text("Sustainability (Footp./Biocap.)")
 }
 
 function show_chloropleth()
@@ -1345,51 +1347,6 @@ function draw_map(data)
                     .style('fill',"#d8ecf3")
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
-
-    // draw legend
-    var legendGroup = svg_worldmap.append("g");
-    var legend_width = 0;
-    legendGroup
-        .attr("transform", "translate(200, 200)")
-        .selectAll("circle")
-        .data(colors)
-        .enter()
-        .append("rect")
-        .style("fill", function(d) {return d;})
-        .attr("width", 20)
-        .attr("height", 10)
-        .attr("x", function(d,i) 
-        {
-            var current_x = legend_width;
-            legend_width += 20; 
-            return current_x; 
-        })
-        .attr("y", 0)
-        .attr("opacity", .7)
-    legendGroup
-        .append("text")
-        .attr("y", 20)
-        .attr("x",  - 5)
-        .attr("class", "legend-text-map")
-        .text("0.5");
-    legendGroup
-        .append("text")
-        .attr("y", 20)
-        .attr("x",  legend_width/2 - 4)
-        .attr("class", "legend-text-map")
-        .text("1.0");
-    legendGroup
-        .append("text")
-        .attr("y", 20)
-        .attr("x", legend_width - 5)
-        .attr("class", "legend-text-map")
-        .text("2.0");
-    legendGroup
-        .append("text")
-        .attr("y", -4)
-        .attr("x", -3)
-        .attr("class", "legend-title-map")
-        .text("Sustainability (Footp./Biocap.)")
 }
 
 
