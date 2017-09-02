@@ -53,12 +53,17 @@
         .legend-text {
             font-size: 10px;
             opacity: 0.8;
-            fill: cornflowerblue;
-            color: cornflowerblue;
+            color:#76bdd5;
         }
-
+        
+        .legend-title{
+            opacity: 0.8;
+            font-size: 12px;
+        }
+        
         .legend-subtitle {
-            font-size: 10px;
+            opacity: 0.8;
+            font-size: 8px;
         }
 
         .y.axis, .x.axis{            
@@ -262,55 +267,61 @@
                 .attr("x", 100)
                 .attr("y", yScale(1.74) -5);
 
-            // Legend Size
-            var biggest = 100000000;
-            var medium = 10000000;
+            // Draw legend -------
 
+            // Population size                
             var legendGroup = svg
                 .append("g")
-                .attr("transform", "translate(200,200)");
+                .attr("transform", "translate(387, 360)");
+
+            var biggest = 100000000;
+            var medium = 10000000;
 
             legendGroup
                 .append("text")
                     .attr("class", "legend-title")
                     .text("Population")                
-                    .attr("x", 0)
-                    .attr("y", 10);
+                    .attr("x", 2)
+                    .attr("y", 8);
             
             legendGroup
                 .append("circle")
-                .attr("cx", 50)
-                .attr("cy", 70)
+                .attr("cx", 20)
+                .attr("cy", 30)
                 .attr("r", rScale(Math.sqrt(biggest)))
                 .style("fill", "transparent")
                 .style("stroke", "black")
+                .style("opacity", .6);
 
             legendGroup
                 .append("text")
                 .attr("class", "legend-text")
                 .text(Number(biggest/1000000).toLocaleString("en") + "M")
-                .attr("x", 100)
-                .attr("y", 70);
+                .attr("x", 40)
+                .attr("y", 34);
                 
             legendGroup
                 .append("circle")
-                .attr("cx", 50)
-                .attr("cy", 140)
+                .attr("cx", 90)
+                .attr("cy", 30)
                 .attr("r", rScale(Math.sqrt(medium)))
                 .style("fill", "transparent")
                 .style("stroke", "black")
+                .style("opacity", .6);
 
             legendGroup
                 .append("text")
                 .attr("class", "legend-text")
                 .text(Number(medium/1000000).toLocaleString("en") + "M")
                 .attr("x", 100)
-                .attr("y", 145);
+                .attr("y", 34);
                 
-            // Legend Impact
+            // Impact size
             var biggestImpact = 5000000000;
             var medianImpact = 50000000;
             var smallestImpact = 500000;
+
+            var sizes = [500000, 5000000, 50000000, 500000000, 5000000000];
 
             var legendImpactGroup = svg
                 .append("g")
@@ -319,57 +330,43 @@
             legendImpactGroup
                 .append("text")
                     .attr("class", "legend-title")
-                    .text("Impact (Footprint x Peoples)")                
+                    .text("Impact (Footprint x Peoples)")    
+                    .attr("x", -10)            
                     .attr("y", 10);
 
+            var legend_width = 0;
             legendImpactGroup
+                .selectAll("rect")
+                .data(sizes)
+                .enter()
                 .append("rect")
-                .attr("x", 10)
-                .attr("y", 30)
-                .attr("width", 40)
-                .attr("height", 20)
-                .style("fill", colors[Math.round(colorScale(5000000000))])
-                .style("opacity", .6);
+                .style("fill", function(d) {
+                    return colors[Math.round(colorScale(d))];
+                })
+                .attr("width", 20)
+                .attr("height", 10)
+                .attr("x", function(d,i) 
+                {
+                    var current_x = legend_width;
+                    legend_width += 20; 
+                    return current_x; 
+                })
+                .attr("y", 20)
+                .attr("opacity", .7);
 
             legendImpactGroup
                 .append("text")
                 .attr("class", "legend-text")
-                .text(Number(biggestImpact/1000000).toLocaleString("en") + "M")
-                .attr("x", 60)
-                .attr("y", 45);
-                
-            legendImpactGroup
-                .append("rect")
-                .attr("x", 10)
-                .attr("y", 60)
-                .attr("width", 40)
-                .attr("height", 20)
-                .style("fill", colors[Math.round(colorScale(50000000))])
-                .style("opacity", .6);
+                .text(Number(sizes[0]/1000000).toLocaleString("en") + "Mha")
+                .attr("x", -10)
+                .attr("y", 40);
 
             legendImpactGroup
                 .append("text")
                 .attr("class", "legend-text")
-                .text(Number(medianImpact/1000000).toLocaleString("en") + "M")
-                .attr("x", 60)
-                .attr("y", 75);
-                
-            legendImpactGroup
-                .append("g")
-                .append("rect")
-                .attr("x", 10)
-                .attr("y", 90)
-                .attr("width", 40)
-                .attr("height", 20)
-                .style("fill", colors[Math.round(colorScale(500000))])
-                .style("opacity", .6);
-
-            legendImpactGroup
-                .append("text")
-                .attr("class", "legend-text")
-                .text(Number(smallestImpact/1000000).toLocaleString("en") + "M")
-                .attr("x", 60)
-                .attr("y", 105);
+                .text(Number(sizes[sizes.length-1]/1000000).toLocaleString("en") + "Mha")
+                .attr("x",  legend_width - 15)
+                .attr("y", 40);
 
         }
 
