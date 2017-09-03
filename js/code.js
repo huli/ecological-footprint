@@ -1289,7 +1289,19 @@ function draw_map(data)
                     .style('fill',"#d8ecf3")
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
+
+    AnnotateSource(svg_worldmap, 780, innerHeight - 25);
 }
+
+function AnnotateSource(svg, left, top)
+{
+    svg
+    .append("text")
+    .text("Source: http://www.footprintnetwork.org/")
+    .attr("class", "source-citation")
+    .attr("transform", "translate("+ left +","+ top +")")
+}
+
 
 
 render();
