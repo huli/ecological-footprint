@@ -140,6 +140,10 @@ function color_countries()
     var svg = d3.select(closing_div)
         .select("svg");
 
+    var div = d3.select("body").append("div")	
+        .attr("class", "tooltip")				
+        .style("opacity", 0);
+
     var capacity_and_prints = timeline_metrics_data.filter(function(d) 
                                 { 
                                     return d.record == "BiocapPerCap" 
@@ -190,6 +194,28 @@ function color_countries()
                     .entries(capacity_and_prints);
 
         svg.selectAll('path')
+        .on("mouseover", function(d) {
+            div.transition()		
+                .duration(300)		
+                .style("opacity", .8);		
+            div.html(function(){
+                var country_name = d.properties.name;                
+                var text = "<b>"+ country_name + "</b><br/>";
+                var value = GetPopulation(country_name);
+                if(value == null)
+                    return text + no_information_tooltip;
+                else{
+                    return text + "Population: " + Number(value).toLocaleString("en");
+                }
+            })	
+                .style("left", (d3.event.pageX + 10) + "px")		
+                .style("top", (d3.event.pageY - 10) + "px")
+        })					
+        .on("mouseout", function(d) {	
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        })
         .transition()
         .duration(600)
         .style("opacity", .7)
@@ -212,6 +238,8 @@ var debitor_text = "Your country has a footprint of {fp} hectares and "+
 var no_information_text = "Your country has provided no information<br/>" +
                           " to the Global Footprint Network. <br/>" +
                           "Sorry."
+
+var no_information_tooltip = "No information available";
 
 function roundToOne(num) {    
     return +(Math.round(num + "e+1")  + "e-1");
@@ -242,6 +270,21 @@ function change_text(selectedCountry)
 
     d3.select("#you-text")
         .html(text);
+}
+
+function GetPopulation(name)
+{
+    name = CorrectCountryNames(name);
+    var record = country_metrics_data.filter(function(f) 
+    { 
+        return f["Country Name"] == name; 
+    });
+
+    if(record.length < 1)
+    {
+        return null;
+    }
+    return record[0].Population;
 }
 
 function get_metric(name)

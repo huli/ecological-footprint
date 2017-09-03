@@ -8,15 +8,21 @@ h1 {
     margin-top: 0px;
     font-size: 50px;
     padding-left: 80px;
+    position: relative;
+    z-index: 5;
 }
 
 h2 {
     font-size: 38px;
     padding-left: 80px;
+    position: relative;
+    z-index: 5;
 }
 
 h3 {
     font-size: 32px;
+    position: relative;
+    z-index: 5;
 }
   
 .description {
@@ -63,6 +69,8 @@ h3 {
   
 #sections > div{  
     opacity: 1;
+    z-index: 5;
+    position: relative;
 }
 
 #sections > div:last-child{
@@ -77,7 +85,7 @@ h3 {
     position: absolute;
     top: 10px;
     left: 10px;
-    z-index: -2;
+    z-index: 1;
 }
 
 .graph-scroll-fixed #graph{
