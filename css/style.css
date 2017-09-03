@@ -161,7 +161,7 @@ div.tooltip {
     height: auto;				
     font: 10px sans-serif;	
     color: white;	
-    background:#9dd0e1;	
+    background:lightslategrey;	
     border: 0px;		
     border-radius: 8px;			
     pointer-events: none;	
@@ -202,8 +202,8 @@ div.tooltip {
 .annotation-text {
     font-size: 14px;
     font-family: 'Average', serif;
-    opacity: 0.8;
-    fill: #76bdd5;
+    opacity: 0.4;
+    fill: #9EA7AF;
 }
 
 .y.axis, .x.axis{            

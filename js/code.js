@@ -952,17 +952,14 @@ function draw_overview_bubble(data)
                             + d.EFConsPerCap + "<br/>HDI: " 
                             + d.HDI+ "<br/>People: " 
                             + Number(d.Population).toLocaleString('en'))	
-                        .style("left", (d3.event.pageX) + "px")		
-                        .style("top", (d3.event.pageY - 28) + "px")
-                        .style("background", function(d){
-                            return colors[Math.round(colorScale(+d.Population * d.EFConsPerCap))];
-                        })	
-                    })					
-                .on("mouseout", function(d) {	
-                    div.transition()		
-                        .duration(500)		
-                        .style("opacity", 0);	
-                })
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY - 38) + "px")
+        })					
+        .on("mouseout", function(d) {	
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        })
         .style("opacity", 0)	
         .transition()
         .delay(function(d,i){ return 10 * (i)})
@@ -1296,14 +1293,14 @@ function draw_map(data)
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
 
-    AnnotateSource(svg_worldmap, 780, innerHeight - 25);
+    AnnotateSource(svg_worldmap, 780, innerHeight - 35);
 }
 
 function AnnotateSource(svg, left, top)
 {
     svg
         .append("text")
-        .text("Source: http://www.footprintnetwork.org/")
+        .text("Source: http://www.footprintnetwork.org")
         .attr("class", "source-citation")
         .attr("transform", "translate("+ left +","+ top +")")
 }
