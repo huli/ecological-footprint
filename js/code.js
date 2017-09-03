@@ -352,6 +352,8 @@ function show_closing()
                     .style('fill',"#d8ecf3")
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
+
+    AnnotateSource(svg, 780, innerHeight - 25);
 }
 
 function draw_timeline(data)
@@ -694,6 +696,8 @@ function show_global_timeline()
         .transition()
         .duration(animation_time*3)
         .style("opacity", .7);
+
+    AnnotateSource(svg, 700 , 710);
 }
 
 function start_worst()
@@ -1160,6 +1164,8 @@ function draw_overview_bubble(data)
         .transition()
         .duration(animation_time*3)
         .style("opacity", 1);
+
+    AnnotateSource(svg, window.innerWidth - 480, window.innerHeight - 50)
 }
 
 
@@ -1296,10 +1302,10 @@ function draw_map(data)
 function AnnotateSource(svg, left, top)
 {
     svg
-    .append("text")
-    .text("Source: http://www.footprintnetwork.org/")
-    .attr("class", "source-citation")
-    .attr("transform", "translate("+ left +","+ top +")")
+        .append("text")
+        .text("Source: http://www.footprintnetwork.org/")
+        .attr("class", "source-citation")
+        .attr("transform", "translate("+ left +","+ top +")")
 }
 
 
