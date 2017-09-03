@@ -200,12 +200,19 @@ function color_countries()
                 .style("opacity", .8);		
             div.html(function(){
                 var country_name = d.properties.name;                
-                var text = "<b>"+ country_name + "</b><br/>";
-                var value = GetPopulation(country_name);
+                var text = "<b>"+ country_name + "</b>";
+                var value = GetCountryData(country_name);
                 if(value == null)
                     return text + no_information_tooltip;
                 else{
-                    return text + "Population: " + Number(value).toLocaleString("en");
+                    return "<table>"
+                        + "<tr><td colspan=2>"+ text +"</td></tr>"
+                        + "<tr><td>People: </td><td>" + Number(value.population).toLocaleString("en") + "</td></tr>"
+                        + "<tr><td>Footprint: </td><td>" + Number(value.footprint).toFixed(2).toLocaleString("en") + " ha</td></tr>"
+                        + "<tr><td>Biocapacity: </td><td>" + Number(value.biocap).toFixed(2).toLocaleString("en") + " ha</td></tr>"
+                        + "<tr><td>Sustainability: </td><td>" + Number(value.metric).toFixed(2).toLocaleString("en") + "</td></tr>"
+                        + "<tr><td>Status: </td><td>" + (value.metric >= 1 ? "Debitor" : "Creditor") + "</td></tr>"
+                        +"</table>";
                 }
             })	
                 .style("left", (d3.event.pageX + 10) + "px")		
@@ -272,19 +279,29 @@ function change_text(selectedCountry)
         .html(text);
 }
 
-function GetPopulation(name)
+function GetCountryData(name)
 {
     name = CorrectCountryNames(name);
     var record = country_metrics_data.filter(function(f) 
     { 
         return f["Country Name"] == name; 
     });
-
     if(record.length < 1)
     {
         return null;
     }
-    return record[0].Population;
+    var metric_record = get_metric(name);
+    if(metric_record.length < 1)
+    {
+        return null;
+    }
+    return {
+        population: record[0].Population,
+        hdi: record[0].HDI,
+        biocap: metric_record.biocap,
+        footprint: metric_record.footprint,
+        metric: metric_record.metric
+    };
 }
 
 function get_metric(name)
@@ -875,10 +892,10 @@ var isOverviewDrawn = false;
 
 function draw_overview_bubble(data)
 {
+    country_metrics_data = data;
+
     if(isOverviewDrawn) return;
     isOverviewDrawn = true;
-    
-    country_metrics_data = data;
 
     var div_rect = d3.select(bubble_chart_div).node().getBoundingClientRect();
 
