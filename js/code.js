@@ -933,7 +933,7 @@ function draw_overview_bubble(data)
     // draw bubbles
     svg.selectAll("bubble")
         .data(data.sort(function(x, y){
-            return 0; 
+            return x.Population > y.Population; 
             }))
         .enter()
         .append("circle")
