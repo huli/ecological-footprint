@@ -203,7 +203,7 @@ function color_countries()
                 var text = "<b>"+ country_name + "</b>";
                 var value = GetCountryData(country_name);
                 if(value == null)
-                    return text + no_information_tooltip;
+                    return text + "<br/>" + no_information_tooltip;
                 else{
                     return "<table>"
                         + "<tr><td colspan=2>"+ text +"</td></tr>"
