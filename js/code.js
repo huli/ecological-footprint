@@ -21,6 +21,7 @@ var animation_time = 1000;
 var animation_overlap = 500;
 
 var y_scale;
+var x_scale;
 var r_scale;
 
 var x_timeline;
@@ -31,6 +32,7 @@ var line;
 var zero_line; 
 var geo_data;
 
+var bubbleGroups;
 var svg_worldmap;
 
 
@@ -792,38 +794,73 @@ function start_worst()
         // show the worsts bubbles. resp. hide others
         var filtered = get_all_but_worst();
         hide_bubbles(filtered);
+
+    bubbleGroups.selectAll("text")
+            .remove();
+
+    bubbleGroups
+        .filter(function(d)
+        {
+            return !filterWorstFunc(d)
+        })
+        .append("text") 
+        .attr("class", "bubble-annotation")                   
+        .text(function (d) {
+            return d["Country Name"];
+        })
+        .attr("dx", function(d, i){
+            var xoffset = -45;
+            if(d["Country Name"] == "Australia")
+            {
+                xoffset = -15;
+            }
+            return x_scale(d.HDI) + xoffset;
+        })
+        .attr("dy", function(d){
+            return y_scale(d.EFConsPerCap) + 20;
+        });
 }
 
 
+function filterBestFunc(d)
+{
+    switch(d["Country Name"])
+    {
+        case "Haiti":
+        case "Burundi":
+        case "Eritrea":
+            return false;
+            break;
+        default:
+            return true;
+    }
+}
+
+function filterWorstFunc(d)
+{
+    switch(d["Country Name"])
+    {
+        case "Luxembourg":
+        case "Canada":
+        case "Australia":
+            return false;
+            break;
+        default:
+            return true;
+    }
+}
+
 function get_all_but_best()
 {
-    return country_metrics_data.filter(function(d){
-                        switch(d["Country Name"])
-                        {
-                            case "Haiti":
-                            case "Burundi":
-                            case "Eritrea":
-                                return false;
-                                break;
-                            default:
-                                return true;
-                        }
-                    });
+    return country_metrics_data.filter(function(d) {
+        return filterBestFunc(d);
+    });
 }
 
 function get_all_but_worst()
 {
     return country_metrics_data.filter(function(d){
-                        switch(d["Country Name"])
-                        {
-                            case "Luxembourg":
-                            case "Canada":
-                            case "Australia":
-                                return false;
-                                break;
-                            default:
-                                return true;
-                        }
+                        return filterWorstFunc(d);
                     });
 }
 
@@ -859,7 +896,7 @@ function hide_bubbles(bubbles)
                     });
 
     filtered_circles.exit()
-                .style("opacity", 0.8)    
+                .style("opacity", 0.8)  
 }
 
 
@@ -869,6 +906,24 @@ function start_best()
     var filtered = get_all_but_best();
 
     hide_bubbles(filtered);
+
+    
+    bubbleGroups
+        .filter(function(d)
+        {
+            return !filterBestFunc(d)
+        })
+        .append("text") 
+        .attr("class", "bubble-annotation")                   
+        .text(function (d) {
+            return d["Country Name"];
+        })
+        .attr("dx", function(d, i){
+            return x_scale(d.HDI) + 5;
+        })
+        .attr("dy", function(d){
+            return y_scale(d.EFConsPerCap) - 5;
+        });
 }
 
 function start_overview()
@@ -928,12 +983,12 @@ function draw_overview_bubble(data)
     });
 
     // display x-axis
-    var xScale = d3.scaleLinear()
+    x_scale = d3.scaleLinear()
                 .range([0, width])
                 .domain([0, 1.0]);
 
     var xAxis = d3.axisBottom()
-        .scale(xScale)
+        .scale(x_scale)
         .ticks(5);
 
     svg.append("g")
@@ -980,15 +1035,17 @@ function draw_overview_bubble(data)
         .domain([0, Math.sqrt(maxPopulation)]);
 
     // draw bubbles
-    svg.selectAll("bubble")
+    bubbleGroups = svg.selectAll("bubble")
         .data(data.sort(function(x, y){
             return x.Population > y.Population; 
             }))
         .enter()
-        .append("circle")
+        .append("g");
+
+    bubbleGroups.append("circle")
         .attr("class", "bubble")
         .attr("cx", function(d, i){
-            return xScale(d.HDI);
+            return x_scale(d.HDI);
         })
         .attr("cy", function(d){
             return y_scale(0);
@@ -1015,7 +1072,7 @@ function draw_overview_bubble(data)
         .duration(1000) 
         .ease(d3.easePolyOut)
         .attr("cx", function(d, i){
-            return xScale(d.HDI);
+            return x_scale(d.HDI);
         })
         .attr("cy", function(d){
             return y_scale(d.EFConsPerCap);
@@ -1028,13 +1085,12 @@ function draw_overview_bubble(data)
         })
         .style("opacity", bubble_opacity)
 
-
     // draw hight development line 
     svg.append("line")
         .attr("class", "high-development-border")
-        .attr("x1", xScale(0.7))
+        .attr("x1", x_scale(0.7))
         .attr("y1", height)
-        .attr("x2", xScale(0.7))
+        .attr("x2", x_scale(0.7))
         .attr("y2", 0)
         .transition() 
         .duration(2000)
@@ -1044,7 +1100,7 @@ function draw_overview_bubble(data)
                 svg.append("text")
                     .attr("class", "annotation-text")
                     .text("High human development")
-                    .attr("x", xScale(0.7) + 10)
+                    .attr("x", x_scale(0.7) + 10)
                     .attr("y", 100)
                     .style("opacity", 0)
                     .transition() 

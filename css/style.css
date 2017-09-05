@@ -219,6 +219,14 @@ div.tooltip {
     fill: #9EA7AF;
 }
 
+.bubble-annotation 
+{
+    font-size: 12px;
+    font-family: 'Average', serif;
+    opacity: 0.8;
+    fill: #9EA7AF;  
+}
+
 .y.axis, .x.axis{            
     font-size: 10px;
     opacity: 0.0;
