@@ -933,10 +933,20 @@ function start_best()
             return d["Country Name"];
         })
         .attr("dx", function(d, i){
-            return x_scale(d.HDI) + 5;
+            var yoffset = 5;
+            if(d["Country Name"] == "Burundi")
+            {
+                yoffset = -10;
+            }
+            return x_scale(d.HDI) + yoffset;
         })
         .attr("dy", function(d){
-            return y_scale(d.EFConsPerCap) - 5;
+            var yoffset = -5;
+            if(d["Country Name"] == "Burundi")
+            {
+                yoffset = -10;
+            }
+            return y_scale(d.EFConsPerCap) + yoffset;
         })        
         .transition()
         .duration(3000)
