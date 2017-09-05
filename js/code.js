@@ -779,30 +779,19 @@ function start_worst()
     var transitions = 0;
     filtered_circles.transition()
         .delay(function(d,i){ return 10 * (i)})
-        .duration(1000) 
+        .duration(2000) 
         .ease(d3.easePolyInOut)
         .attr("cy", function(d){
             return y_scale(d.EFConsPerCap);
-        })
-        .on("start", function() 
-            {
-                transitions++;
-            }  
-        )
-        .on("end", function() 
-        {
-            if( --transitions === 0 ) 
-            {
-                // show the worsts bubbles. resp. hide others
-                var filtered = get_all_but_worst();
-
-                hide_bubbles(filtered);
-            }
         })
         .style("opacity", bubble_opacity)
         .attr("r", function(d){
             return r_scale(Math.sqrt(d.Population));
         });
+
+        // show the worsts bubbles. resp. hide others
+        var filtered = get_all_but_worst();
+        hide_bubbles(filtered);
 }
 
 
