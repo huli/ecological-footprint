@@ -795,30 +795,44 @@ function start_worst()
         var filtered = get_all_but_worst();
         hide_bubbles(filtered);
 
+        
     bubbleGroups.selectAll("text")
+        .transition()
+        .duration(1000)
+        .style("opacity", 0)
+        .on("end", function(d)
+        {
+            bubbleGroups.selectAll("text")
             .remove();
 
-    bubbleGroups
-        .filter(function(d)
-        {
-            return !filterWorstFunc(d)
-        })
-        .append("text") 
-        .attr("class", "bubble-annotation")                   
-        .text(function (d) {
-            return d["Country Name"];
-        })
-        .attr("dx", function(d, i){
-            var xoffset = -45;
-            if(d["Country Name"] == "Australia")
+            
+            bubbleGroups
+            .filter(function(d)
             {
-                xoffset = -15;
-            }
-            return x_scale(d.HDI) + xoffset;
-        })
-        .attr("dy", function(d){
-            return y_scale(d.EFConsPerCap) + 20;
+                return !filterWorstFunc(d)
+            })
+            .append("text") 
+            .attr("class", "bubble-annotation")                   
+            .text(function (d) {
+                return d["Country Name"];
+            })
+            .attr("dx", function(d, i){
+                var xoffset = -45;
+                if(d["Country Name"] == "Australia")
+                {
+                    xoffset = -15;
+                }
+                return x_scale(d.HDI) + xoffset;
+            })
+            .attr("dy", function(d){
+                return y_scale(d.EFConsPerCap) + 20;
+            })
+            .transition()
+            .duration(3000)
+            .style("opacity", .8);
         });
+
+
 }
 
 
@@ -923,7 +937,11 @@ function start_best()
         })
         .attr("dy", function(d){
             return y_scale(d.EFConsPerCap) - 5;
-        });
+        })        
+        .transition()
+        .duration(3000)
+        .style("opacity", .8);
+
 }
 
 function start_overview()
