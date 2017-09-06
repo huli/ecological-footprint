@@ -213,7 +213,7 @@ function color_countries()
                         + "<tr><td>Footprint: </td><td>" + Number(value.footprint).toFixed(2).toLocaleString("en") + " ha</td></tr>"
                         + "<tr><td>Biocapacity: </td><td>" + Number(value.biocap).toFixed(2).toLocaleString("en") + " ha</td></tr>"
                         + "<tr><td>Sustainability: </td><td>" + Number(value.metric).toFixed(2).toLocaleString("en") + "</td></tr>"
-                        + "<tr><td>Status: </td><td>" + (value.metric >= 1 ? "Debitor" : "Creditor") + "</td></tr>"
+                        + "<tr><td>Status: </td><td>" + (value.metric < 1 ? "Debitor" : "Creditor") + "</td></tr>"
                         +"</table>";
                 }
             })	
@@ -264,7 +264,7 @@ function change_text(selectedCountry)
             .html(no_information_text);
         return;
     }
-    else if(value.metric > 0)
+    else if(value.metric < 1)
     {
         text = debitor_text
     }
