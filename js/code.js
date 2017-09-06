@@ -213,7 +213,7 @@ function color_countries()
                         + "<tr><td>Footprint: </td><td>" + Number(value.footprint).toFixed(2).toLocaleString("en") + " ha</td></tr>"
                         + "<tr><td>Biocapacity: </td><td>" + Number(value.biocap).toFixed(2).toLocaleString("en") + " ha</td></tr>"
                         + "<tr><td>Sustainability: </td><td>" + Number(value.metric).toFixed(2).toLocaleString("en") + "</td></tr>"
-                        + "<tr><td>Status: </td><td>" + (value.metric < 1 ? "Debitor" : "Creditor") + "</td></tr>"
+                        + "<tr><td>Status: </td><td>" + (value.metric > 1 ? "Debitor" : "Creditor") + "</td></tr>"
                         +"</table>";
                 }
             })	
@@ -235,15 +235,17 @@ function color_countries()
 }
 
 var creditor_text = "Your country has a footprint of {fp} hectares and  "+
-                    "only a biocapacity of {bc} hectares. <br/>"+
+                    "a biocapacity of {bc} hectares. <br/>"+
                     "That means, your country is one of the worlds "+ 
-                    "<br>creditors</br> - <br/>you are using more resources than you "+
-                    "can build."
+                    "<br>creditors</br> - <br/>you build more ressource than you "+
+                    "use. Great!"
+                    
 var debitor_text = "Your country has a footprint of {fp} hectares and "+
                     "only a biocapacity of {bc} hectares. <br/>"+
                     "That means, your country is one of the worlds "+ 
-                    "<br>debitors</br> - <br/>you build more ressource than you "+
-                    "use. Great!"
+                    "<br>debitors</br> - <br/>you are using more resources than you "+
+                    "can build."
+
 var no_information_text = "Your country has provided no information<br/>" +
                           " to the Global Footprint Network. <br/>" +
                           "Sorry."
@@ -264,7 +266,7 @@ function change_text(selectedCountry)
             .html(no_information_text);
         return;
     }
-    else if(value.metric < 1)
+    else if(value.metric > 1)
     {
         text = debitor_text
     }
