@@ -73,7 +73,7 @@
                 .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
                 .rangeRound([0, width]);
 
-            var animation_time = 1000;
+            var animation_time = 100;
             var animation_overlap = 500;
 
             var world_biocap = data.filter(function (d){
@@ -83,12 +83,12 @@
 
             swiss_biocap = data.filter(function (d){
                 return d.record == "BiocapPerCap" &&
-                        d.country == "Switzerland";
+                        d.country == "Cyprus";
             });
 
             var swiss_footprint = data.filter(function (d){
                 return d.record == "EFConsPerCap" &&
-                        d.country == "Switzerland";
+                        d.country == "Cyprus";
             });
 
             var world_footprint = data.filter(function (d){
@@ -212,6 +212,8 @@
                 .attr("stroke-opacity", 1)
                 .attr("stroke-width", 3);
 
+            showAnnotations();
+
         }
 
         function showAnnotations()
@@ -219,14 +221,22 @@
             const annotations = [
             {
                 note: {
-                    label: "Footprint is changing drastically",
-                    title: "2005 - 2015"
+                    label: "Cyprus decreases its footprint from 5.7 ha to 3.3 ha. ",
+                    title: "2008 - 2013"
                 },
-                // x: 50,
-                // y: 150,
-                data: { date: new Date(2005, 1, 1), value: 5.00 },
-                dy: 50,
-                dx: 50
+                data: { date: new Date(2011, 1, 1), value: 4.7 },
+                dy: 80,
+                dx: -130
+            },
+            {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "Cyprus adopts the euro",
+                    title: "2008"
+                },
+                data: { date: new Date(2008, 1, 1), value: 5.70 },
+                dy: -20,
+                dx: 30
             }].map(function(d){ d.color = "#E8336D"; return d})
 
             const makeAnnotations = d3.annotation()
