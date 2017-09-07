@@ -91,12 +91,12 @@
 
             swiss_biocap = data.filter(function (d){
                 return d.record == "BiocapPerCap" &&
-                        d.country == "Cyprus";
+                        d.country == "Fiji";
             });
 
             var swiss_footprint = data.filter(function (d){
                 return d.record == "EFConsPerCap" &&
-                        d.country == "Cyprus";
+                        d.country == "Fiji";
             });
 
             var world_footprint = data.filter(function (d){
@@ -268,12 +268,65 @@
             {
                 type: d3.annotationCalloutCircle,
                 note: {
-                    label: "Cyprus adopts the euro",
+                    label: "Cyprus adopts the euro.",
                     title: "2008"
                 },
                 data: { date: new Date(2008, 1, 1), value: 5.70 },
                 dy: -20,
                 dx: 30
+            }].map(function(d){ d.color = "#E8336D"; return d})
+
+            const fiji_annotations = [
+            {
+                note: {
+                    label: "The footprint rises from 2.1 ha to 3.6 h.a",
+                    title: "2008 - 2013"
+                },
+                data: { date: new Date(2011, 1, 1), value: 3.3 },
+                dy: -80,
+                dx: -80
+            }, 
+            {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "The British granted Fiji independence.",
+                    title: "1970"
+                },
+                data: { date: new Date(1970, 1, 1), value: 1.63 },
+                dy: 50,
+                dx: 80
+            }, 
+            {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "Fijian coup d'état.",
+                    title: "2006"
+                },
+                data: { date: new Date(2006, 1, 1), value: 2.8 },
+                dy: -50,
+                dx: -130
+            }, 
+            {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "Constitutional crysis in fiji.",
+                    title: "2006"
+                },
+                data: { date: new Date(2009, 1, 1), value: 2.3 },
+                subject: { radius: 40, radiusPadding: 10 },
+                dy: 80,
+                dx: -70
+            }, 
+            {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "Interruption of democratic rule by military coups",
+                    title: "1987"
+                },
+                data: { date: new Date(1987, 1, 1), value: 2.0 },
+                subject: { radius: 40, radiusPadding: 10 },
+                dy: 80,
+                dx: -70
             }].map(function(d){ d.color = "#E8336D"; return d})
 
             const makeAnnotations = d3.annotation()
@@ -286,7 +339,7 @@
                     date: d => x.invert(d.x),
                     value: d => y.invert(d.y)
                 })
-                .annotations(annotations)
+                .annotations(fiji_annotations)
 
             d3.select("svg")
                 .append("g")
