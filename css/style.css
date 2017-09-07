@@ -287,20 +287,23 @@ div.tooltip {
 
 .subject {
     stroke: lightslategray;
+    stroke-opacity: 0;
 }
 .connector {
     stroke: lightslategray;
-    stroke-opacity: .5;
+    stroke-opacity: 0;
 }
 
 .annotation-note-label{
     font-size: 10px;
     fill: lightslategray;
+    opacity: 0;
 }
 
 .annotation-note-title{
     font-size: 14px;
     fill: lightslategray;
+    opacity: 0;
 }
   
 #top-spacer {

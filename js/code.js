@@ -620,7 +620,7 @@ function show_best_timeline()
             },
             data: { date: new Date(1974, 1, 1), value: 2.6 },
             dy: 50,
-            dx: -20
+            dx: 40
         }, 
         {
             type: d3.annotationCalloutCircle,
@@ -669,7 +669,17 @@ function show_best_timeline()
         .select("svg")
         .append("g")
         .attr("class", "annotation-group")
-        .call(makeAnnotations)
+        .call(makeAnnotations);
+
+    d3.select(timeline_div).selectAll(".connector, .subject")
+        .transition()
+        .duration(animation_time * 5)
+        .style("stroke-opacity", .3)     
+
+    d3.select(timeline_div).selectAll(".annotation-note-label, .annotation-note-title")
+        .transition()
+        .duration(animation_time * 5)
+        .style("opacity", .7)  
 }
 
 var isGlobalTimelineDefined = false;
@@ -806,15 +816,13 @@ function show_global_timeline()
         .style("opacity", 0.8);
 
     // Show legend
-    var legendX = 450;
-    var legendY = 100;
     var legend = svg.append("g");
 
     legend.append("text")
         .attr("class", "timeline-annotation")
         .style("fill", "#d8b365")
-        .attr("x", legendX)
-        .attr("y", 405)
+        .attr("x", x_timeline(new Date(1985,1,1)))
+        .attr("y", y_timeline(2.9))
         .text("World Footprint")
         .transition()
         .duration(animation_time*3)
@@ -823,8 +831,8 @@ function show_global_timeline()
     legend.append("text")
         .attr("class", "timeline-annotation")
         .style("fill", "#5ab4ac")
-        .attr("x", legendX + 40)
-        .attr("y", 504)
+        .attr("x", x_timeline(new Date(1990,1,1)))
+        .attr("y", y_timeline(1.6))
         .text("World Biocapacity")
         .transition()
         .duration(animation_time*3)
