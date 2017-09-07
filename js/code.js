@@ -438,7 +438,7 @@ function show_worst_timeline()
 
     svg.selectAll("path")
         .transition()
-        .duration(animation_time)
+        .duration(animation_time/2)
         .attr("stroke-opacity", 0);
 
     var fiji_biocap = timeline_metrics_data.filter(function (d){
@@ -490,14 +490,13 @@ function show_worst_timeline()
         .attr("stroke-width", timeline_stroke);
 
     // Show legend
-    var legendX = 210;
     var legend = svg.append("g");
 
     legend.append("text")
         .attr("class", "timeline-annotation")
         .style("fill", "#d8b365")
-        .attr("x", legendX)
-        .attr("y", 540)
+        .attr("x", x_timeline(new Date(1973,1,1)))
+        .attr("y", y_timeline(2.3))
         .text("Footprint of Fiji")
         .transition()
         .duration(animation_time*3)
@@ -506,12 +505,124 @@ function show_worst_timeline()
     legend.append("text")
         .attr("class", "timeline-annotation")
         .style("fill", "#5ab4ac")
-        .attr("x", legendX + 40)
-        .attr("y", 320)
+        .attr("x", x_timeline(new Date(1977,1,1)))
+        .attr("y", y_timeline(3.5))
         .text("Biocapacity of Fiji")
         .transition()
         .duration(animation_time*3)
         .style("opacity", .7);
+
+    // Show Annotations
+    const annotations =  [
+        {
+            note: {
+                label: "The footprint rises from 2.1 ha to 3.6 h.a",
+                title: "2008 - 2013"
+            },
+            data: { date: new Date(2011, 1, 1), value: 3.3 },
+            dy: -80,
+            dx: -80
+        }, 
+        {
+            type: d3.annotationCalloutCircle,
+            note: {
+                label: "The British granted Fiji independence.",
+                title: "1970"
+            },
+            data: { date: new Date(1970, 1, 1), value: 1.63 },
+            dy: 50,
+            dx: 80
+        }, 
+        {
+            type: d3.annotationCalloutCircle,
+            note: {
+                label: "Fijian coup d'état.",
+                title: "2006"
+            },
+            data: { date: new Date(2006, 1, 1), value: 2.8 },
+            dy: -50,
+            dx: -130
+        }, 
+        {
+            type: d3.annotationCalloutCircle,
+            note: {
+                label: "Constitutional crysis in fiji.",
+                title: "2006"
+            },
+            data: { date: new Date(2009, 1, 1), value: 2.3 },
+            subject: { radius: 40, radiusPadding: 10 },
+            dy: 80,
+            dx: -70
+        }, 
+        {
+            type: d3.annotationCalloutCircle,
+            note: {
+                label: "Interruption of democratic rule by military coups",
+                title: "1987"
+            },
+            data: { date: new Date(1987, 1, 1), value: 2.0 },
+            subject: { radius: 40, radiusPadding: 10 },
+            dy: 80,
+            dx: 0
+        }].map(function(d){ d.color = "#E8336D"; return d})
+
+
+    d3.select(timeline_div)
+        .selectAll(".connector, .subject")
+        .transition()
+        .duration(animation_time/2)
+        .style("stroke-opacity", 0)     
+
+    var n = 0;
+    d3.select(timeline_div)
+        .selectAll(".annotation-note-label, .annotation-note-title")
+        .each(function() { 
+            n++;
+        })
+        .transition()
+        .on("end", function() {
+            n--;
+            if (!n) 
+            {
+                d3.select(timeline_div)
+                .selectAll(".connector, .subject")
+                .remove();
+            
+                d3.select(timeline_div)
+                    .selectAll(".annotation-note-label, .annotation-note-title")
+                    .remove();
+
+                const makeAnnotations = d3.annotation()
+                .type(d3.annotationLabel)
+                .accessors({
+                    x: d => x_timeline(d.date),
+                    y: d => y_timeline(d.value)
+                })
+                .accessorsInverse({
+                    date: d => x.invert(d.x),
+                    value: d => y.invert(d.y)
+                })
+                .annotations(annotations);
+        
+                d3.select(timeline_div)
+                    .select("svg")
+                    .append("g")
+                    .attr("class", "annotation-group")
+                    .call(makeAnnotations);
+            
+                d3.select(timeline_div).selectAll(".connector, .subject")
+                    .transition()
+                    .duration(animation_time * 3)
+                    .style("stroke-opacity", .3)     
+            
+                d3.select(timeline_div).selectAll(".annotation-note-label, .annotation-note-title")
+                    .transition()
+                    .duration(animation_time * 3)
+                    .style("opacity", .7)  
+                }
+            })
+            .duration(animation_time/2)
+            .style("opacity", 0) ;
 }
 
 function show_best_timeline()
