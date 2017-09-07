@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="/js/d3-annotation.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Average" rel="stylesheet">
     <style>
 
@@ -23,12 +24,30 @@
             font-size: 12px;
         }
 
+        .annotation {
+            font-family: 'Average', serif;
+        }
+
+        .annotation-note-label{
+            font-size: 10px;
+            fill: black;
+        }
+        
+        .annotation-note-title{
+            font-size: 14px;
+            fill: black;
+        }
+
         svg {
             padding-left: 50px;
             padding-right: 50px;
         }       
     </style>
     <script type="text/javascript">
+
+        var swiss_biocap;
+        var x;
+        var y;
 
         function draw(data) {
             "use strict";
@@ -50,7 +69,7 @@
                 .attr("width", width + cover.left + cover.right)
                 .attr("height", height + cover.top + cover.bottom);
 
-            var x = d3.scaleTime()
+            x = d3.scaleTime()
                 .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
                 .rangeRound([0, width]);
 
@@ -62,7 +81,7 @@
                         d.country == "World";
             });
 
-            var swiss_biocap = data.filter(function (d){
+            swiss_biocap = data.filter(function (d){
                 return d.record == "BiocapPerCap" &&
                         d.country == "Switzerland";
             });
@@ -82,7 +101,7 @@
 
            var maxScale = Math.ceil(d3.max([maxFootprint, maxBiocap]));
 
-            var y = d3.scaleLinear()
+            y = d3.scaleLinear()
                 .domain([0, maxScale + .3])
                 .rangeRound([height, 0]);
         
@@ -107,7 +126,8 @@
                 .append("text")
                 .on("click", function(d)
                 {
-                    doAnimation(width);
+                    //doAnimation(width, maxScale, height);
+                    showAnnotations();
                 })
                 .attr("fill", "#000")
                 .attr("transform", "rotate(-90)")
@@ -149,6 +169,7 @@
                 .duration(animation_time) 
                 .ease(d3.easePolyInOut)
                 .attr("d", line)
+                .attr("class", "biocap-switzerland")
                 .attr("stroke-opacity", 1)
                 .attr("stroke-width", 3);
 
@@ -186,20 +207,61 @@
                 .duration(animation_time) 
                 .ease(d3.easePolyInOut)
                 .delay(3* (animation_time  - animation_overlap))
+                .attr("class", "footprint-switzerland")
                 .attr("d", line)
                 .attr("stroke-opacity", 1)
                 .attr("stroke-width", 3);
 
         }
 
-        function doAnimation(width)
-        {           
-            var x = d3.scaleTime()
-                .domain([new Date(2005, 1, 1), new Date(2017, 1, 1)])
-                .rangeRound([0, width]);
-                
+        function showAnnotations()
+        {
+            const annotations = [
+            {
+                note: {
+                    label: "Footprint is changing drastically",
+                    title: "2005 - 2015"
+                },
+                // x: 50,
+                // y: 150,
+                data: { date: new Date(2005, 1, 1), value: 5.00 },
+                dy: 50,
+                dx: 50
+            }].map(function(d){ d.color = "#E8336D"; return d})
 
-            var svg = d3.select("svg")
+            const makeAnnotations = d3.annotation()
+                .type(d3.annotationLabel)
+                .accessors({
+                    x: d => x(d.date),
+                    y: d => y(d.value)
+                })
+                .accessorsInverse({
+                    date: d => x.invert(d.x),
+                    value: d => y.invert(d.y)
+                })
+                .annotations(annotations)
+
+            d3.select("svg")
+                .append("g")
+                .attr("class", "annotation-group")
+                .call(makeAnnotations)
+        }
+
+        function doAnimation(width, maxScale, height)
+        {           
+            x = d3.scaleTime()
+                .domain([new Date(2000, 1, 1), new Date(2005, 1, 1)])
+                .rangeRound([0, width]);
+
+            y = d3.scaleLinear()
+                .domain([0, maxScale + .3])
+                .rangeRound([height, 0]);
+        
+            var line = d3.line()
+                .x(function(d) { return x(d.year); })
+                .y(function(d) { return y(d.total); });
+                
+            d3.select("svg")
                         .select("g")
                         .attr("stroke-opacity", 0)
                         .attr("stroke-width", 0)
@@ -214,6 +276,14 @@
                             .attr("stroke-opacity", 1)
                             .attr("stroke-width", 1);
                         });
+
+            d3.select("svg")
+                .datum(swiss_biocap) 
+                .select(".biocap-switzerland")  
+                .transition()
+                .duration(2000)
+                .attr("d", line);
+                
         }
 
     </script>
