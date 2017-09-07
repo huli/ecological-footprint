@@ -105,6 +105,10 @@
                 .call(d3.axisLeft(y))
                 .style("opacity", .3)
                 .append("text")
+                .on("click", function(d)
+                {
+                    doAnimation(width);
+                })
                 .attr("fill", "#000")
                 .attr("transform", "rotate(-90)")
                 .attr("y", 6)
@@ -186,24 +190,30 @@
                 .attr("stroke-opacity", 1)
                 .attr("stroke-width", 3);
 
-            ShowLegend(svg, y, world_footprint, world_biocap);
         }
 
-        function ShowLegend(svg)
-        {
-            var legendX = 400;
-            var legendY = 100;
-            var legend = svg.append("g");
+        function doAnimation(width)
+        {           
+            var x = d3.scaleTime()
+                .domain([new Date(2005, 1, 1), new Date(2017, 1, 1)])
+                .rangeRound([0, width]);
+                
 
-            legend.append("text")
-                .attr("x", legendX)
-                .attr("y", y(footprint[10].total))
-                .text("Biocapacity")
-
-            legend.append("text")
-                .attr("x", legendX)
-                .attr("y", y(biocapacity[20].total))
-                .text("Footprint");
+            var svg = d3.select("svg")
+                        .select("g")
+                        .attr("stroke-opacity", 0)
+                        .attr("stroke-width", 0)
+                        .transition()
+                        .duration(2000)
+                        .call(d3.axisBottom(x))
+                        .select(".domain")
+                        .on("end", function(d) {
+                            d3.select("svg")
+                            .select("g")
+                            .selectAll("g .tick")
+                            .attr("stroke-opacity", 1)
+                            .attr("stroke-width", 1);
+                        });
         }
 
     </script>
