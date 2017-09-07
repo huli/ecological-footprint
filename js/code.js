@@ -579,14 +579,13 @@ function show_best_timeline()
         .attr("stroke-width", timeline_stroke);
 
         // Show legend
-        var legendX = 550;
         var legend = svg.append("g");
 
         legend.append("text")
             .attr("class", "timeline-annotation")
             .style("fill", "#d8b365")
-            .attr("x", legendX)
-            .attr("y", 150)
+            .attr("x", x_timeline(new Date(1990,1,1)))
+            .attr("y", y_timeline(5.5))
             .text("Footprint of Cyprus")
             .transition()
             .duration(animation_time*3)
@@ -595,12 +594,82 @@ function show_best_timeline()
         legend.append("text")
             .attr("class", "timeline-annotation")
             .style("fill", "#5ab4ac")
-            .attr("x", legendX + 40)
-            .attr("y", 600)
+            .attr("x", x_timeline(new Date(1990,1,1)))
+            .attr("y", y_timeline(1))
             .text("Biocapacity of Cyprus")
             .transition()
             .duration(animation_time*3)
             .style("opacity", .7);
+
+    // Show Annotations
+    const annotations = [
+        {
+            note: {
+                label: "The footprint of cyprus raises from 1.6 ha to 5.7 ha",
+                title: "1961 - 2008"
+            },
+            data: { date: new Date(1983, 1, 1), value: 3.5 },
+            dy: -60,
+            dx: -60
+        },
+        {
+            type: d3.annotationCalloutCircle,
+            note: {
+                label: "Coup d'état in cyprus. Turkish invasion and division",
+                title: "1974"
+            },
+            data: { date: new Date(1974, 1, 1), value: 2.6 },
+            dy: 50,
+            dx: -20
+        }, 
+        {
+            type: d3.annotationCalloutCircle,
+            note: {
+                label: "Cyprus joins the EU",
+                title: "2004"
+            },
+            data: { date: new Date(2004, 1, 1), value: 5.47 },
+            dy: -80,
+            dx: -130
+        }, 
+        {
+            note: {
+                label: "Cyprus decreases its footprint from 5.7 ha to 3.3 ha. ",
+                title: "2008 - 2013"
+            },
+            data: { date: new Date(2011, 1, 1), value: 4.7 },
+            dy: 80,
+            dx: -130
+        },
+        {
+            type: d3.annotationCalloutCircle,
+            note: {
+                label: "Cyprus adopts the euro.",
+                title: "2008"
+            },
+            data: { date: new Date(2008, 1, 1), value: 5.70 },
+            dy: -40,
+            dx: -10
+        }
+    ].map(function(d){ d.color = "#E8336D"; return d})
+
+    const makeAnnotations = d3.annotation()
+        .type(d3.annotationLabel)
+        .accessors({
+            x: d => x_timeline(d.date),
+            y: d => y_timeline(d.value)
+        })
+        .accessorsInverse({
+            date: d => x.invert(d.x),
+            value: d => y.invert(d.y)
+        })
+        .annotations(annotations)
+
+    d3.select(timeline_div)
+        .select("svg")
+        .append("g")
+        .attr("class", "annotation-group")
+        .call(makeAnnotations)
 }
 
 var isGlobalTimelineDefined = false;
@@ -1336,7 +1405,6 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-bubble #sections > div'))
         .on('active', function(i){
-            console.log("bubble " + i);
             switch(i)
             {
                 case 1:
@@ -1362,7 +1430,6 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-timeline #sections > div'))
         .on('active', function(i){
-            console.log("timeline " + i);
             switch(i)
             {
                 case 1:
@@ -1388,7 +1455,6 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-closing #sections > div'))
         .on('active', function(i){
-            console.log("you " + i);
             switch(i)
             {                
                 case 1:

@@ -280,8 +280,29 @@ div.tooltip {
     opacity: 0.8;
     fill:  lightslategray;
 }
-  
 
+.annotation {
+    font-family: 'Average', serif;
+}
+
+.subject {
+    stroke: lightslategray;
+}
+.connector {
+    stroke: lightslategray;
+    stroke-opacity: .5;
+}
+
+.annotation-note-label{
+    font-size: 10px;
+    fill: lightslategray;
+}
+
+.annotation-note-title{
+    font-size: 14px;
+    fill: lightslategray;
+}
+  
 #top-spacer {
     padding-top: 150px;
 }
