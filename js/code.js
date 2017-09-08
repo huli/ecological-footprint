@@ -1032,48 +1032,43 @@ function start_worst()
             return r_scale(Math.sqrt(d.Population));
         });
 
-        // show the worsts bubbles. resp. hide others
-        var filtered = get_all_but_worst();
-        hide_bubbles(filtered);
+    // show the worst bubbles. resp. hide others
+    var filtered = get_all_but_worst();
+    hide_bubbles(filtered);
 
         
     bubbleGroups.selectAll("text")
         .transition()
         .duration(1000)
         .style("opacity", 0)
-        .on("end", function(d)
+        .remove();
+
+    bubbleGroups
+        .filter(function(d)
         {
-            bubbleGroups.selectAll("text")
-            .remove();
-
+            return !filterWorstFunc(d)
+        })
+        .append("text") 
+        .attr("class", "bubble-annotation")                   
+        .text(function (d) {
             
-            bubbleGroups
-            .filter(function(d)
+            console.log("showing country: " + d["Country Name"])
+            return d["Country Name"];
+        })
+        .attr("dx", function(d, i){
+            var xoffset = -45;
+            if(d["Country Name"] == "Australia")
             {
-                return !filterWorstFunc(d)
-            })
-            .append("text") 
-            .attr("class", "bubble-annotation")                   
-            .text(function (d) {
-                return d["Country Name"];
-            })
-            .attr("dx", function(d, i){
-                var xoffset = -45;
-                if(d["Country Name"] == "Australia")
-                {
-                    xoffset = -15;
-                }
-                return x_scale(d.HDI) + xoffset;
-            })
-            .attr("dy", function(d){
-                return y_scale(d.EFConsPerCap) + 20;
-            })
-            .transition()
-            .duration(3000)
-            .style("opacity", .8);
-        });
-
-
+                xoffset = -15;
+            }
+            return x_scale(d.HDI) + xoffset;
+        })
+        .attr("dy", function(d){
+            return y_scale(d.EFConsPerCap) + 20;
+        })
+        .transition()
+        .duration(3000)
+        .style("opacity", .8);
 }
 
 
@@ -1156,13 +1151,46 @@ function hide_bubbles(bubbles)
 
 
 
+var isBestBubblesShown = false;
+
 function start_best()
 {
+    if(isBestBubblesShown)
+    {
+        var svg = d3.select(bubble_chart_div)
+                .select("svg");
+
+        // reposition the others circle to their default
+        var filtered = country_metrics_data;
+        var filtered_circles = svg.selectAll("circle")
+                            .filter(function(d) 
+                            { 
+                                return d != undefined;
+                            })
+                            .data(filtered, key_func);
+    
+        var transitions = 0;
+        filtered_circles.transition()
+            .delay(function(d,i){ return 10 * (i)})
+            .duration(2000) 
+            .ease(d3.easePolyInOut)
+            .attr("cy", function(d){
+                return y_scale(d.EFConsPerCap);
+            })
+            .style("opacity", bubble_opacity)
+            .attr("r", function(d){
+                return r_scale(Math.sqrt(d.Population));
+            });
+    }
+
     var filtered = get_all_but_best();
 
     hide_bubbles(filtered);
 
-    
+    bubbleGroups
+        .selectAll("text")
+        .remove();
+
     bubbleGroups
         .filter(function(d)
         {
@@ -1171,6 +1199,7 @@ function start_best()
         .append("text") 
         .attr("class", "bubble-annotation")                   
         .text(function (d) {
+            console.log("showing country: " + d["Country Name"])
             return d["Country Name"];
         })
         .attr("dx", function(d, i){
@@ -1191,8 +1220,10 @@ function start_best()
         })        
         .transition()
         .duration(3000)
+        .style("text-opacity", .8)
         .style("opacity", .8);
 
+    isBestBubblesShown = true;
 }
 
 function start_overview()
@@ -1575,6 +1606,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-bubble #sections > div'))
         .on('active', function(i){
+            console.log("active: " + i);
             switch(i)
             {
                 case 1:
