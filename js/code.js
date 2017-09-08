@@ -823,11 +823,6 @@ function show_best_timeline()
 var isGlobalTimelineDefined = false;
 function show_global_timeline()
 {    
-    if(isGlobalTimelineDefined) 
-        return;
-    
-    isGlobalTimelineDefined = true;
-
     var div_rect = d3.select(timeline_div).node().getBoundingClientRect();
 
     var cover = {
@@ -838,64 +833,84 @@ function show_global_timeline()
                 },
                 width = div_rect.width - cover.left - cover.right,
                 height = div_rect.height - cover.top - cover.bottom;
+          
+    if(!isGlobalTimelineDefined)
+    {
+        d3.select(timeline_div)
+                .select("svg")
+                .remove();
 
-    d3.select(timeline_div)
-            .select("svg")
-            .remove();
-
-    var svg = d3.select(timeline_div)
-        .append("svg")
-        .style("padding-left", cover.left)  
-        .style("padding-top", cover.top)        
-        .attr("width", width + cover.left + cover.right)
-        .attr("height", height + cover.top + cover.bottom);
-
-    x_timeline = d3.scaleTime()
-        .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
-        .rangeRound([0, width]);
-
-    world_biocap = timeline_metrics_data.filter(function (d){
-        return d.record == "BiocapPerCap" &&
-                d.country == "World";
-    });
-
-    world_footprint = timeline_metrics_data.filter(function (d){
-        return d.record == "EFConsPerCap" &&
-                d.country == "World";
-    });
-
-    y_timeline = d3.scaleLinear()
-        .domain([0, 7.2])
-        .rangeRound([height, 0]);
-
-    line = d3.line()
-        .x(function(d) { return x_timeline(d.year); })
-        .y(function(d) { return y_timeline(d.total); });
-
-    zero_line = d3.line()
-        .x(function(d) { return x_timeline(d.year); })
-        .y(function(d) { return y_timeline(0); });
-
+        var svg = d3.select(timeline_div)
+            .append("svg")
+            .style("padding-left", cover.left)  
+            .style("padding-top", cover.top)        
+            .attr("width", width + cover.left + cover.right)
+            .attr("height", height + cover.top + cover.bottom);
+            x_timeline = d3.scaleTime()
+            .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
+            .rangeRound([0, width]);
     
-    svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x_timeline))
-        .style("opacity", .4)
-        .attr("stroke-opacity", 0.2)
-        .select(".domain")
-        .remove();
+        world_biocap = timeline_metrics_data.filter(function (d){
+            return d.record == "BiocapPerCap" &&
+                    d.country == "World";
+        });
+    
+        world_footprint = timeline_metrics_data.filter(function (d){
+            return d.record == "EFConsPerCap" &&
+                    d.country == "World";
+        });
+    
+        y_timeline = d3.scaleLinear()
+            .domain([0, 7.2])
+            .rangeRound([height, 0]);
+    
+        line = d3.line()
+            .x(function(d) { return x_timeline(d.year); })
+            .y(function(d) { return y_timeline(d.total); });
+    
+        zero_line = d3.line()
+            .x(function(d) { return x_timeline(d.year); })
+            .y(function(d) { return y_timeline(0); });
+    
+        
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x_timeline))
+            .style("opacity", .4)
+            .attr("stroke-opacity", 0.2)
+            .select(".domain")
+            .remove();
+    
+        svg.append("g")
+            .attr("transform", "translate(" + width + ", 0)")
+            .call(d3.axisRight(y_timeline))
+            .style("opacity", .4)
+            .attr("stroke-opacity", 0.1)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", "0.71em")
+            .attr("text-anchor", "end");    
+    }
+    else
+    {
+        // Remove annotations
+        var svg = d3.select(timeline_div).select("svg");
 
-    svg.append("g")
-        .attr("transform", "translate(" + width + ", 0)")
-        .call(d3.axisRight(y_timeline))
-        .style("opacity", .4)
-        .attr("stroke-opacity", 0.1)
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", "0.71em")
-        .attr("text-anchor", "end");    
-        //.text("ef per capita");
+        svg.selectAll("g > text").filter(".timeline-annotation")
+            .transition()
+            .duration(animation_time/2)
+            .style("opacity", 0);
+
+        svg.selectAll("path")
+            .transition()
+            .duration(animation_time/2)
+            .attr("stroke-opacity", 0);
+
+        RemoveTimelineAnnotations(timeline_div);
+    }
+
+    var svg = d3.select(timeline_div).select("svg");
 
     // Show biocapacity of world and country
     svg.append("path")
@@ -933,27 +948,30 @@ function show_global_timeline()
         .attr("stroke-opacity", timeline_opacity)
         .attr("stroke-width", timeline_stroke);
 
-    // draw axis labels    
-    svg.append("text")
-        .attr("class", "axis-label")
-        .text("Year")                    
-        .attr("x", 440)
-        .attr("y", height + 38)
-        .style("opacity", 0.1)
-        .transition() 
-        .duration(2000)
-        .style("opacity", 0.8);
+    if(!isGlobalTimelineDefined)
+    {
+        // draw axis labels    
+        svg.append("text")
+            .attr("class", "axis-label")
+            .text("Year")                    
+            .attr("x", 440)
+            .attr("y", height + 38)
+            .style("opacity", 0.1)
+            .transition() 
+            .duration(2000)
+            .style("opacity", 0.8);
 
-    svg.append("text")
-        .attr("class", "axis-label")
-        .text("Ecological Footprint (ha/capita)")  
-        .attr("transform", "rotate(270, "+ (width + 40) +  " , 450)")
-        .attr("x", width + 40)
-        .attr("y", 450)
-        .style("opacity", 0.1)
-        .transition() 
-        .duration(2000)
-        .style("opacity", 0.8);
+        svg.append("text")
+            .attr("class", "axis-label")
+            .text("Ecological Footprint (ha/capita)")  
+            .attr("transform", "rotate(270, "+ (width + 40) +  " , 450)")
+            .attr("x", width + 40)
+            .attr("y", 450)
+            .style("opacity", 0.1)
+            .transition() 
+            .duration(2000)
+            .style("opacity", 0.8);
+    }
 
     // Show legend
     var legend = svg.append("g");
@@ -978,7 +996,11 @@ function show_global_timeline()
         .duration(animation_time*3)
         .style("opacity", .7);
 
-    AnnotateSource(svg, 700 , 710);
+    if(isGlobalTimelineDefined == false)
+    {
+        AnnotateSource(svg, 700 , 710);    
+    }
+    isGlobalTimelineDefined = true;
 }
 
 function start_worst()
