@@ -135,6 +135,7 @@ function show_chloropleth()
 
     color_countries();
     draw_legend();
+    change_text("Switzerland")
 }
 
 function color_countries()
@@ -213,7 +214,7 @@ function color_countries()
                         + "<tr><td>Footprint: </td><td>" + Number(value.footprint).toFixed(2).toLocaleString("en") + " ha</td></tr>"
                         + "<tr><td>Biocapacity: </td><td>" + Number(value.biocap).toFixed(2).toLocaleString("en") + " ha</td></tr>"
                         + "<tr><td>Sustainability: </td><td>" + Number(value.metric).toFixed(2).toLocaleString("en") + "</td></tr>"
-                        + "<tr><td>Status: </td><td>" + (value.metric > 1 ? "Debitor" : "Creditor") + "</td></tr>"
+                        + "<tr><td>Status: </td><td>" + (value.metric > 1 ? "Debtor" : "Creditor") + "</td></tr>"
                         +"</table>";
                 }
             })	
@@ -234,24 +235,24 @@ function color_countries()
             });
 }
 
-var creditor_text = "Your country has a footprint of {fp} hectares and  "+
-                    "a biocapacity of {bc} hectares. <br/>"+
-                    "That means, your country is one of the worlds "+ 
-                    "<b>creditors</b> - <br/>you build more ressource than you "+
-                    "use."
+var creditor_text = "{country} has a footprint of {fp} hectares and "+
+                    "a biocapacity of {bc} hectares. "+
+                    "The country is one of the worlds "+ 
+                    "<b>creditors</b> and builds more ressource than it "+
+                    "uses."
                     
-var debitor_text = "Your country has a footprint of {fp} hectares and "+
-                    "only a biocapacity of {bc} hectares. <br/>"+
-                    "That means, your country is one of the worlds "+ 
-                    "<b>debitors</b> - <br/>you are using more resources than you "+
+var debitor_text = "{country} has a footprint of {fp} hectares and "+
+                    "only a biocapacity of {bc} hectares. "+
+                    "The country is one of the worlds "+ 
+                    "<b>debtors</b> and is using more resources than it "+
                     "can build."
 
-var even_text = "Your country has a footprint of {fp} hectares and "+
-                    "a biocapacity of {bc} hectares. <br/>"+
-                    "The use of ressources in this country is "+ 
+var even_text = "{country} has a footprint of {fp} hectares and "+
+                    "a biocapacity of {bc} hectares. "+
+                    "Its use of ressources is "+ 
                     "in harmony with its build up."
 
-var no_information_text = "Your country has provided no information<br/>" +
+var no_information_text = "This country has provided no information<br/>" +
                           " to the Global Footprint Network. <br/>" +
                           "Sorry."
 
@@ -287,6 +288,7 @@ function change_text(selectedCountry)
     text = text
         .replace("{bc}", roundToOne(value.biocap))
         .replace("{fp}", roundToOne(value.footprint))
+        .replace("{country}", value.country)
 
     d3.select("#you-text")
         .html(text);
@@ -313,7 +315,8 @@ function GetCountryData(name)
         hdi: record[0].HDI,
         biocap: metric_record.biocap,
         footprint: metric_record.footprint,
-        metric: metric_record.metric
+        metric: metric_record.metric,
+        country: metric_record.country
     };
 }
 
