@@ -437,8 +437,15 @@ function draw_timeline(data)
     timeline_metrics_data = data;
 }
 
+var isWorstTimelineShown = false;
+
 function show_worst_timeline()
 {
+    if(isWorstTimelineShown)
+        return;
+
+    isWorstTimelineShown = true;
+    
     var svg = d3.select(timeline_div)
         .select("svg");
     
@@ -596,13 +603,8 @@ function show_worst_timeline()
             n--;
             if (!n) 
             {
-                d3.select(timeline_div)
-                .selectAll(".connector, .subject")
-                .remove();
-            
-                d3.select(timeline_div)
-                    .selectAll(".annotation-note-label, .annotation-note-title")
-                    .remove();
+                
+                RemoveTimelineAnnotations(timeline_div);
 
                 const makeAnnotations = d3.annotation()
                 .type(d3.annotationLabel)
@@ -637,6 +639,17 @@ function show_worst_timeline()
             .style("opacity", 0) ;
 }
 
+function RemoveTimelineAnnotations(div_name)
+{    
+    d3.select(div_name)
+    .selectAll(".connector, .subject")
+    .remove();
+
+    d3.select(timeline_div)
+        .selectAll(".annotation-note-label, .annotation-note-title")
+        .remove();
+}
+
 function show_best_timeline()
 {
     var svg = d3.select(timeline_div)
@@ -652,6 +665,8 @@ function show_best_timeline()
         .transition()
         .duration(animation_time)
         .attr("stroke-opacity", 0);
+
+    RemoveTimelineAnnotations(timeline_div);        
 
     var cyprus_biocap = timeline_metrics_data.filter(function (d){
         return d.record == "BiocapPerCap" &&
@@ -808,7 +823,9 @@ function show_best_timeline()
 var isGlobalTimelineDefined = false;
 function show_global_timeline()
 {    
-    if(isGlobalTimelineDefined) return;
+    if(isGlobalTimelineDefined) 
+        return;
+    
     isGlobalTimelineDefined = true;
 
     var div_rect = d3.select(timeline_div).node().getBoundingClientRect();
