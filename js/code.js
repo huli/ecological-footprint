@@ -237,14 +237,19 @@ function color_countries()
 var creditor_text = "Your country has a footprint of {fp} hectares and  "+
                     "a biocapacity of {bc} hectares. <br/>"+
                     "That means, your country is one of the worlds "+ 
-                    "<br>creditors</br> - <br/>you build more ressource than you "+
-                    "use. Great!"
+                    "<b>creditors</b> - <br/>you build more ressource than you "+
+                    "use."
                     
 var debitor_text = "Your country has a footprint of {fp} hectares and "+
                     "only a biocapacity of {bc} hectares. <br/>"+
                     "That means, your country is one of the worlds "+ 
-                    "<br>debitors</br> - <br/>you are using more resources than you "+
+                    "<b>debitors</b> - <br/>you are using more resources than you "+
                     "can build."
+
+var even_text = "Your country has a footprint of {fp} hectares and "+
+                    "a biocapacity of {bc} hectares. <br/>"+
+                    "The use of ressources in this country is "+ 
+                    "in harmony with its build up."
 
 var no_information_text = "Your country has provided no information<br/>" +
                           " to the Global Footprint Network. <br/>" +
@@ -265,6 +270,10 @@ function change_text(selectedCountry)
         d3.select("#you-text")
             .html(no_information_text);
         return;
+    }
+    if(roundToOne(value.metric) == 1)
+    {
+        text = even_text;
     }
     else if(value.metric > 1)
     {
