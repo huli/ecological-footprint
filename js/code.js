@@ -1749,24 +1749,25 @@ function AnnotateSource(svg, left, top)
 
 
 function testScroll(e){
-    var scrollingValue = 100 - (window.pageYOffset/2);
-    if(scrollingValue > 0)
+    var scrollingValue = 100 - (window.pageYOffset/6);
+    if(!isFadingOut)
     {
         fadeOutMap(scrollingValue);
     }
 }
 
+var isFadingOut = false;
 function fadeOutMap(alpha)
 {
-    console.log(alpha);
+    if(alpha < 0)
+    {
+        alpha = 0;
+    }
+
     svg_worldmap.selectAll("path")
-        .transition()
-        .duration(animation_time)
         .style("opacity", alpha/100);
     
     svg_worldmap.selectAll("text")
-        .transition()
-        .duration(animation_time)
         .style("opacity", alpha/100);
 }
 
