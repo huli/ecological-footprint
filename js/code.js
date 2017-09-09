@@ -111,7 +111,7 @@ function draw_legend()
         .text("2.0x");
     legendGroup
         .append("text")
-        .attr("y", -4)
+        .attr("y", -5)
         .attr("x", legend_width/2 - 80)
         .attr("class", "legend-title-map")
         .text("Sustainability (Footp./Biocap.)")
@@ -1644,7 +1644,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-bubble #sections > div'))
         .on('active', function(i){
-            //console.log("active: " + i);
+            console.log("active: " + i);
             switch(i)
             {
                 case 1:
@@ -1748,6 +1748,29 @@ function AnnotateSource(svg, left, top)
 }
 
 
+function testScroll(e){
+    var scrollingValue = 100 - (window.pageYOffset/2);
+    if(scrollingValue > 0)
+    {
+        fadeOutMap(scrollingValue);
+    }
+}
+
+function fadeOutMap(alpha)
+{
+    console.log(alpha);
+    svg_worldmap.selectAll("path")
+        .transition()
+        .duration(animation_time)
+        .style("opacity", alpha/100);
+    
+    svg_worldmap.selectAll("text")
+        .transition()
+        .duration(animation_time)
+        .style("opacity", alpha/100);
+}
+
+window.onscroll=testScroll
 
 render();
 
