@@ -67,22 +67,26 @@ function draw_legend()
     var svg_worldmap = d3.select(closing_div)
         .select("svg");
     
+        
+    var div_rect = svg_worldmap.node().getBoundingClientRect();
+
     // draw legend
     var legendGroup = svg_worldmap.append("g");
     var legend_width = 0;
     legendGroup
-        .attr("transform", "translate(850, 650)")
+        .attr("transform", "translate(" + (div_rect.left + (div_rect.width/2) + 100) 
+                    +","+ (div_rect.bottom - 110) +")")
         .selectAll("rect")
         .data(colors)
         .enter()
         .append("rect")
         .style("fill", function(d) {return d;})
-        .attr("width", 20)
+        .attr("width", 35)
         .attr("height", 10)
         .attr("x", function(d,i) 
         {
             var current_x = legend_width;
-            legend_width += 20; 
+            legend_width += 35; 
             return current_x; 
         })
         .attr("y", 0)
@@ -92,23 +96,23 @@ function draw_legend()
         .attr("y", 20)
         .attr("x",  - 5)
         .attr("class", "legend-text-map")
-        .text("0.5");
+        .text("0.5x");
     legendGroup
         .append("text")
         .attr("y", 20)
-        .attr("x",  legend_width/2 - 4)
+        .attr("x",  legend_width/2 - 10)
         .attr("class", "legend-text-map")
-        .text("1.0");
+        .text("1.0x");
     legendGroup
         .append("text")
         .attr("y", 20)
-        .attr("x", legend_width - 5)
+        .attr("x", legend_width - 10)
         .attr("class", "legend-text-map")
-        .text("2.0");
+        .text("2.0x");
     legendGroup
         .append("text")
         .attr("y", -4)
-        .attr("x", -3)
+        .attr("x", legend_width/2 - 80)
         .attr("class", "legend-title-map")
         .text("Sustainability (Footp./Biocap.)")
 }
@@ -1492,7 +1496,7 @@ function draw_overview_bubble(data)
     // Population size                
     var legendGroup = svg
         .append("g")
-        .attr("transform", "translate(590, 140)")
+        .attr("transform", "translate(590, 60)")
         .style("opacity", 0);
 
     var biggest = 100000000;
@@ -1502,13 +1506,13 @@ function draw_overview_bubble(data)
         .append("text")
             .attr("class", "legend-title")
             .text("Population")                
-            .attr("x", 2)
-            .attr("y", 7);
+            .attr("x", 10)
+            .attr("y", 115);
     
     legendGroup
         .append("circle")
-        .attr("cx", 20)
-        .attr("cy", 30)
+        .attr("cx", 30)
+        .attr("cy", 140)
         .attr("r", r_scale(Math.sqrt(biggest)))
         .style("fill", "transparent")
         .style("stroke", "lightslategray")
@@ -1518,13 +1522,13 @@ function draw_overview_bubble(data)
         .append("text")
         .attr("class", "legend-text")
         .text(Number(biggest/1000000).toLocaleString("en") + "M")
-        .attr("x", 40)
-        .attr("y", 34);
+        .attr("x", 50)
+        .attr("y", 145);
         
     legendGroup
         .append("circle")
         .attr("cx", 90)
-        .attr("cy", 30)
+        .attr("cy", 140)
         .attr("r", r_scale(Math.sqrt(medium)))
         .style("fill", "transparent")
         .style("stroke", "lightslategray")
@@ -1535,7 +1539,7 @@ function draw_overview_bubble(data)
         .attr("class", "legend-text")
         .text(Number(medium/1000000).toLocaleString("en") + "M")
         .attr("x", 100)
-        .attr("y", 34);
+        .attr("y", 145);
         
     // Impact size
     var biggestImpact = 5000000000;
@@ -1546,15 +1550,15 @@ function draw_overview_bubble(data)
 
     var legendImpactGroup = svg
         .append("g")
-        .attr("transform", "translate(600, 200)")
+        .attr("transform", "translate(600, 120)")
         .style("opacity", 0);;
 
     legendImpactGroup
         .append("text")
             .attr("class", "legend-title")
             .text("Impact (Footprint x People)")    
-            .attr("x", -10)            
-            .attr("y", 10);
+            .attr("x", 0)            
+            .attr("y", 0);
 
     var legend_width = 0;
     legendImpactGroup
@@ -1565,30 +1569,30 @@ function draw_overview_bubble(data)
         .style("fill", function(d) {
             return colors[Math.round(colorScale(d))];
         })
-        .attr("width", 20)
+        .attr("width", 30)
         .attr("height", 10)
         .attr("x", function(d,i) 
         {
             var current_x = legend_width;
-            legend_width += 20; 
+            legend_width += 30; 
             return current_x; 
         })
-        .attr("y", 20)
+        .attr("y", 10)
         .attr("opacity", .7);
 
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(sizes[0]/1000000).toLocaleString("en") + "M ha")
-        .attr("x", -10)
-        .attr("y", 40);
+        .text(Number(sizes[0]/1000000).toLocaleString("en") + " Mha")
+        .attr("x", 0)
+        .attr("y", 30);
 
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(sizes[sizes.length-1]/1000000).toLocaleString("en") + "M ha")
-        .attr("x",  legend_width - 15)
-        .attr("y", 40);
+        .text(Number(sizes[sizes.length-1]/1000000).toLocaleString("en") + " Mha")
+        .attr("x",  legend_width - 35)
+        .attr("y", 30);
 
     legendGroup
         .transition()
