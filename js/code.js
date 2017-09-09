@@ -1234,11 +1234,44 @@ function start_overview()
 
 var isOverviewDrawn = false;
 
+function RedrawOverview()
+{
+    bubbleGroups
+        .selectAll("text")
+        .remove();
+
+     var allCircles = d3.select(bubble_chart_div)
+                        .select("svg")
+                        .selectAll("circle")
+                         .filter(function(d) 
+                         { 
+                             return d != undefined;
+                         })
+                         .data(country_metrics_data, key_func);
+ 
+     var transitions = 0;
+     allCircles.transition()
+         .delay(function(d,i){ return 10 * (i)})
+         .duration(2000) 
+         .ease(d3.easePolyInOut)
+         .attr("cy", function(d){
+             return y_scale(d.EFConsPerCap);
+         })
+         .style("opacity", bubble_opacity)
+         .attr("r", function(d){
+             return r_scale(Math.sqrt(d.Population));
+         });
+}
+
 function draw_overview_bubble(data)
 {
     country_metrics_data = data;
 
-    if(isOverviewDrawn) return;
+    if(isOverviewDrawn) 
+    {
+        RedrawOverview();
+        return;
+    };
     isOverviewDrawn = true;
 
     var div_rect = d3.select(bubble_chart_div).node().getBoundingClientRect();
@@ -1509,7 +1542,7 @@ function draw_overview_bubble(data)
     var medianImpact = 50000000;
     var smallestImpact = 500000;
 
-    var sizes = [500000, 5000000, 50000000, 500000000, 5000000000];
+    var sizes = [100000, 500000, 5000000, 50000000, 500000000, 5000000000];
 
     var legendImpactGroup = svg
         .append("g")
@@ -1546,14 +1579,14 @@ function draw_overview_bubble(data)
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(sizes[0]/1000000).toLocaleString("en") + "Mha")
+        .text(Number(sizes[0]/1000000).toLocaleString("en") + "M ha")
         .attr("x", -10)
         .attr("y", 40);
 
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(sizes[sizes.length-1]/1000000).toLocaleString("en") + "Mha")
+        .text(Number(sizes[sizes.length-1]/1000000).toLocaleString("en") + "M ha")
         .attr("x",  legend_width - 15)
         .attr("y", 40);
 
@@ -1571,6 +1604,7 @@ function draw_overview_bubble(data)
 }
 
 
+var lastScrollValue = 0;
 function intialize_graph_scroll()
 {   
     var margin = 50,
@@ -1606,7 +1640,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-bubble #sections > div'))
         .on('active', function(i){
-            console.log("active: " + i);
+            //console.log("active: " + i);
             switch(i)
             {
                 case 1:
@@ -1619,6 +1653,7 @@ function intialize_graph_scroll()
                     start_worst();
                     break;
             }
+            lastScrollValue = i;
         })
   
     // Container Timeline
