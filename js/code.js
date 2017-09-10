@@ -239,20 +239,20 @@ function color_countries()
             });
 }
 
-var creditor_text = "{country} has a footprint of {fp} hectares and "+
-                    "a biocapacity of {bc} hectares. "+
+var creditor_text = "{country} has a footprint of {fp} hectares and<br/> "+
+                    "a biocapacity of {bc} hectares.<br/> "+
                     "The country is one of the worlds "+ 
-                    "<b>creditors</b> and builds more ressource than it "+
+                    "<b>creditors</b><br/> and builds more ressource than it "+
                     "uses."
                     
-var debitor_text = "{country} has a footprint of {fp} hectares and "+
-                    "only a biocapacity of {bc} hectares. "+
+var debitor_text = "{country} has a footprint of {fp} hectares and <br/>"+
+                    "only a biocapacity of {bc} hectares.<br/> "+
                     "The country is one of the worlds "+ 
-                    "<b>debtors</b> and is using more resources than it "+
+                    "<b>debtors</b><br/> and is using more resources than it "+
                     "can build."
 
-var even_text = "{country} has a footprint of {fp} hectares and "+
-                    "a biocapacity of {bc} hectares. "+
+var even_text = "{country} has a footprint of {fp} hectares and<br/>"+
+                    "a biocapacity of {bc} hectares.<br/> "+
                     "Its use of ressources is "+ 
                     "in harmony with its build up."
 
@@ -429,7 +429,7 @@ function show_closing()
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
 
-    AnnotateSource(svg, 780, innerHeight - 25);
+    AnnotateSource(svg, innerWidth - 400, innerHeight - 25);
 }
 
 function draw_timeline(data)
@@ -548,7 +548,8 @@ function show_worst_timeline()
                 label: "The British granted Fiji independence.",
                 title: "1970"
             },
-            data: { date: new Date(1970, 1, 1), value: 1.63 },
+            data: { date: new Date(1970, 1, 1), value: 1.63 },         
+            subject: { radius: 20, radiusPadding: 3 },
             dy: 50,
             dx: 80
         }, 
@@ -558,7 +559,8 @@ function show_worst_timeline()
                 label: "Fijian coup d'état.",
                 title: "2006"
             },
-            data: { date: new Date(2006, 1, 1), value: 2.8 },
+            data: { date: new Date(2006, 1, 1), value: 2.8 },            
+            subject: { radius: 20, radiusPadding: 3 },
             dy: -50,
             dx: -130
         }, 
@@ -756,7 +758,8 @@ function show_best_timeline()
                 label: "Coup d'état in cyprus. Turkish invasion and division",
                 title: "1974"
             },
-            data: { date: new Date(1974, 1, 1), value: 2.6 },
+            data: { date: new Date(1974, 1, 1), value: 2.6 },         
+            subject: { radius: 20, radiusPadding: 3 },
             dy: 50,
             dx: 40
         }, 
@@ -766,8 +769,9 @@ function show_best_timeline()
                 label: "Cyprus joins the EU",
                 title: "2004"
             },
-            data: { date: new Date(2004, 1, 1), value: 5.47 },
-            dy: -80,
+            data: { date: new Date(2004, 1, 1), value: 5.47 },         
+            subject: { radius: 20, radiusPadding: 3 },
+            dy: -90,
             dx: -130
         }, 
         {
@@ -785,9 +789,10 @@ function show_best_timeline()
                 label: "Cyprus adopts the euro.",
                 title: "2008"
             },
-            data: { date: new Date(2008, 1, 1), value: 5.70 },
+            data: { date: new Date(2008, 1, 1), value: 5.70 },         
+            subject: { radius: 20, radiusPadding: 3 },
             dy: -40,
-            dx: -10
+            dx: -20
         }
     ].map(function(d){ d.color = "#E8336D"; return d})
 
@@ -827,7 +832,7 @@ function show_global_timeline()
 
     var cover = {
                     top: 20,
-                    right: 50,
+                    right: 80,
                     bottom: 40,
                     left: 650
                 },
@@ -1777,6 +1782,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-closing #sections > div'))
         .on('active', function(i){
+            console.log("closing: " + i );
             switch(i)
             {                
                 case 1:
