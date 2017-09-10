@@ -2,6 +2,8 @@ body{
     margin-left: 0px;
     margin-top: 0px;
     font-family: 'Average', serif;
+    margin-top: 0px;
+    font-family: 'Average', serif;
     overflow-x:hidden;
   }
 
@@ -282,6 +284,32 @@ div.tooltip {
     font-size: 8px;
 }
 
+
+.footprint
+{
+    font-weight: bold;
+    padding-left: 50px;
+    font-size: 30px;
+    color: #bf812d;
+}
+
+.biocapacity
+{
+    font-weight: bold;
+    padding-left: 120px;
+    font-size: 30px;
+    color: #35978f;
+}
+
+.footprint-color
+{
+    color: #bf812d;
+}
+
+.biocapacity-color
+{
+    color: #35978f;
+}
 
 .legend-text-map {
     font-size: 10px;

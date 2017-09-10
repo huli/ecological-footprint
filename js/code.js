@@ -62,8 +62,13 @@ function highlight_country()
     change_text(selectedCountry);
 }
 
+var isLegendDrawn = false;
 function draw_legend()
 {
+    if(isLegendDrawn) return;
+
+    isLegendDrawn = true;
+
     var svg_worldmap = d3.select(closing_div)
         .select("svg");
     
@@ -239,20 +244,23 @@ function color_countries()
             });
 }
 
-var creditor_text = "{country} has a footprint of {fp} hectares and<br/> "+
-                    "a biocapacity of {bc} hectares.<br/> "+
+var creditor_text = "{country} has a footprint of<br/><span class='footprint'>{fp}</span> ha<br/>"+
+                    "&nbsp;&nbsp;&nbsp;&nbsp;and a biocapacity of <br/>"+
+                    "<span class='biocapacity'>{bc}</span> ha.<br/> "+
                     "The country is one of the worlds "+ 
-                    "<b>creditors</b><br/> and builds more ressource than it "+
+                    "<span class='biocapacity-color'>creditors</span><br/>" +
+                    "and builds more ressource than it "+
                     "uses."
                     
-var debitor_text = "{country} has a footprint of {fp} hectares and <br/>"+
-                    "only a biocapacity of {bc} hectares.<br/> "+
+var debitor_text = "{country} has a footprint of<br/><span class='footprint'>{fp}</span> ha<br/>" +
+                    "&nbsp;&nbsp;&nbsp;&nbsp;and only a biocapacity of <br/><span class='biocapacity'>{bc}</span> ha.<br/> "+
                     "The country is one of the worlds "+ 
-                    "<b>debtors</b><br/> and is using more resources than it "+
+                    "<span class='footprint-color'>debtors</span><br/> and is using more resources than it "+
                     "can build."
 
-var even_text = "{country} has a footprint of {fp} hectares and<br/>"+
-                    "a biocapacity of {bc} hectares.<br/> "+
+var even_text = "{country} has a footprint of <br/><span class='footprint'>{fp}</span> ha<br/>"+
+                    "&nbsp;&nbsp;&nbsp;&nbsp;and a biocapacity of <br/>"+ 
+                    "<span class='biocapacity'>{bc}</span> ha.<br/> "+
                     "Its use of ressources is "+ 
                     "in harmony with its build up."
 
@@ -1782,7 +1790,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-closing #sections > div'))
         .on('active', function(i){
-            console.log("closing: " + i );
+            //console.log("closing: " + i );
             switch(i)
             {                
                 case 1:
