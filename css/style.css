@@ -2,6 +2,7 @@ body{
     margin-left: 0px;
     margin-top: 0px;
     font-family: 'Average', serif;
+    overflow-x:hidden;
   }
 
 h1 {
