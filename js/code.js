@@ -1749,7 +1749,7 @@ function AnnotateSource(svg, left, top)
 
 
 function testScroll(e){
-    if(pageYOffset > 600) return;
+    if(pageYOffset > 700) return;
 
     var scrollingValue = 100 - (window.pageYOffset/6);
     if(!isFadingOut)
