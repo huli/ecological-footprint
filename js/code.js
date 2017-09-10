@@ -1739,12 +1739,13 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-closing #sections > div'))
         .on('active', function(i){
+            //console.log("closing: " + i)
             switch(i)
             {                
                 case 1:
                     show_closing();
                     break;
-                case 5:
+                case 3:
                     show_chloropleth();
                     break;
             }
