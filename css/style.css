@@ -220,6 +220,19 @@ div.tooltip {
     stroke-dasharray: 1, 3;
 }
 
+.high-development-border-line {
+    stroke:  #246175;
+    stroke-width: 0.5px;
+    stroke-opacity: 0;
+    stroke-dasharray: 1, 3;
+}
+
+.high-development-border-limit {
+    stroke:  #246175;
+    stroke-width: 0.5px;
+    stroke-opacity: 0;
+}
+
 .annotation-text {
     font-size: 14px;
     font-family: 'Average', serif;
