@@ -8,7 +8,7 @@ var bubble_chart_div = ".container-bubble #graph";
 var timeline_div = ".container-timeline #graph";
 var closing_div = ".container-closing #graph";
 var timeline_opacity = 1;
-var timeline_stroke = 3;
+var timeline_stroke = 4;
 var timeline_inactive_opacity = .3;
 var colors = ['#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e'];
 
@@ -833,7 +833,7 @@ function show_global_timeline()
                     top: 20,
                     right: 50,
                     bottom: 40,
-                    left: 600
+                    left: 650
                 },
                 width = div_rect.width - cover.left - cover.right,
                 height = div_rect.height - cover.top - cover.bottom;
@@ -976,6 +976,49 @@ function show_global_timeline()
             .duration(2000)
             .style("opacity", 0.8);
     }
+
+     // Show Annotations
+     const annotations = [
+        {
+            type: d3.annotationCalloutCircle,
+            note: {
+                label: "In 1970 we hit the break even of demand and supply",
+                title: "1970"
+            },
+            data: { date: new Date(1970, 1, 1), value: 2.7 },            
+            subject: { radius: 50, radiusPadding: 10 },
+            dy: -100,
+            dx: 50
+        }
+    ].map(function(d){ d.color = "#E8336D"; return d})
+
+    const makeAnnotations = d3.annotation()
+        .type(d3.annotationLabel)
+        .accessors({
+            x: d => x_timeline(d.date),
+            y: d => y_timeline(d.value)
+        })
+        .accessorsInverse({
+            date: d => x.invert(d.x),
+            value: d => y.invert(d.y)
+        })
+        .annotations(annotations)
+
+    d3.select(timeline_div)
+        .select("svg")
+        .append("g")
+        .attr("class", "annotation-group")
+        .call(makeAnnotations);
+
+    d3.select(timeline_div).selectAll(".connector, .subject")
+        .transition()
+        .duration(animation_time * 5)
+        .style("stroke-opacity", .3)     
+
+    d3.select(timeline_div).selectAll(".annotation-note-label, .annotation-note-title")
+        .transition()
+        .duration(animation_time * 5)
+        .style("opacity", .7)  
 
     // Show legend
     var legend = svg.append("g");
