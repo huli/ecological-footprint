@@ -40,6 +40,10 @@ h3 {
     padding-top: 100px;
 }
 
+.emphasis {
+    font-weight: bold;
+}
+
 #the-best-content{
     height: 500px;
 }

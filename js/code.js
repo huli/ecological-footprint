@@ -387,13 +387,9 @@ function get_color(d)
 
 function GetProjection()
 {
-    var margin = 50,
-    width = innerWidth -margin,
-    height = innerHeight -2*margin;
-
     return d3.geoMercator()
-        .scale(200)
-        .translate([width / 1.7, height / 1.6]);
+        .scale(230)
+        .translate([innerWidth/2, innerHeight/1.8]);
 }
 
 var isClosingShown = false;
@@ -1325,8 +1321,8 @@ function draw_overview_bubble(data)
 
     var cover = {
                     top: 20,
-                    right: 50,
-                    bottom: 20,
+                    right: 60,
+                    bottom: 35,
                     left: 180
                 },
                 width = div_rect.width - cover.left - cover.right,
@@ -1689,16 +1685,16 @@ function draw_overview_bubble(data)
         .duration(animation_time*3)
         .style("opacity", 1);
 
-    AnnotateSource(svg, window.innerWidth - 480, window.innerHeight - 50)
+    AnnotateSource(svg, innerWidth - 500, innerHeight - 40)
 }
 
 
 var lastScrollValue = 0;
 function intialize_graph_scroll()
 {   
-    var margin = 50,
-    width = innerWidth -margin,
-    height = innerHeight -margin;
+    var margin = 30,
+        width = innerWidth -margin,
+        height = innerHeight -margin;
     
     // Container Introduction    
     svg_worldmap = d3.select('.container-introduction #graph').html('')
@@ -1714,14 +1710,14 @@ function intialize_graph_scroll()
         })
 
     svg_worldmap.attr("width", width)
-                .attr("height", height + margin -20)
+                .attr("height", height + margin)
                 .append('g')
                 .attr('class', 'map');
 
     // Container Bubble
     var svg2 = d3.select('.container-bubble #graph').html('')
     .append('svg')
-        .attrs({width: width, height: height})
+        .attrs({width: innerWidth - margin, height: height})
 
     var gs2 = d3.graphScroll()
         .container(d3.select('.container-bubble'))
@@ -1748,7 +1744,7 @@ function intialize_graph_scroll()
     // Container Timeline
     var svg3 = d3.select('.container-timeline #graph').html('')
     .append('svg')
-        .attrs({width: width, height: height})
+        .attrs({width: width, height: height-30})
 
     var gs3 = d3.graphScroll()
         .container(d3.select('.container-timeline'))
@@ -1803,10 +1799,6 @@ function draw_map(data)
 
     intialize_graph_scroll();
 
-    var margin = 50,
-    width = innerWidth -2*margin,
-    height = innerHeight -2*margin;
-
     var projection = GetProjection();
 
     var path = d3.geoPath().projection(projection);
@@ -1820,7 +1812,7 @@ function draw_map(data)
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
 
-    AnnotateSource(svg_worldmap, 780, innerHeight - 35);
+    AnnotateSource(svg_worldmap, innerWidth -300, innerHeight - 25);
 }
 
 function AnnotateSource(svg, left, top)
