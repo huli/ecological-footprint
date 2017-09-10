@@ -982,7 +982,7 @@ function show_global_timeline()
         {
             type: d3.annotationCalloutCircle,
             note: {
-                label: "In 1970 we hit the break even of demand and supply",
+                label: "In 1970 we already hit the break even of demand and supply",
                 title: "1970"
             },
             data: { date: new Date(1970, 1, 1), value: 2.7 },            
