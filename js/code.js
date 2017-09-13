@@ -244,7 +244,7 @@ function color_countries()
             });
 }
 
-var creditor_text = "{country} has a footprint of<br/><span class='footprint'>{fp}</span> ha<br/>"+
+var creditor_text = "{country} has a per capita footprint of<br/><span class='footprint'>{fp}</span> ha<br/>"+
                     "&nbsp;&nbsp;&nbsp;&nbsp;and a biocapacity of <br/>"+
                     "<span class='biocapacity'>{bc}</span> ha.<br/> "+
                     "The country is one of the worlds "+ 
@@ -252,13 +252,13 @@ var creditor_text = "{country} has a footprint of<br/><span class='footprint'>{f
                     "and builds more ressource than it "+
                     "uses."
                     
-var debitor_text = "{country} has a footprint of<br/><span class='footprint'>{fp}</span> ha<br/>" +
+var debitor_text = "{country} has a per capita footprint of<br/><span class='footprint'>{fp}</span> ha<br/>" +
                     "&nbsp;&nbsp;&nbsp;&nbsp;and only a biocapacity of <br/><span class='biocapacity'>{bc}</span> ha.<br/> "+
                     "The country is one of the worlds "+ 
                     "<span class='footprint-color'>debtors</span><br/> and is using more resources than it "+
                     "can build."
 
-var even_text = "{country} has a footprint of <br/><span class='footprint'>{fp}</span> ha<br/>"+
+var even_text = "{country} has a per capita footprint of <br/><span class='footprint'>{fp}</span> ha<br/>"+
                     "&nbsp;&nbsp;&nbsp;&nbsp;and a biocapacity of <br/>"+ 
                     "<span class='biocapacity'>{bc}</span> ha.<br/> "+
                     "Its use of ressources is "+ 
