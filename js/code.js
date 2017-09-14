@@ -1471,7 +1471,9 @@ function draw_overview_bubble(data)
                     div.html("<b>"+ d["Country Name"] + "</b><br/>EF: " 
                             + d.EFConsPerCap + "<br/>HDI: " 
                             + d.HDI+ "<br/>People: " 
-                            + Number(d.Population).toLocaleString('en'))	
+                            + Number(d.Population).toLocaleString('en') + "<br/>Impact: "
+                            + Math.round(Number(+d.Population * d.EFConsPerCap)).toLocaleString('en')
+                        )	
                         .style("left", (d3.event.pageX + 10) + "px")		
                         .style("top", (d3.event.pageY - 38) + "px")
         })					
