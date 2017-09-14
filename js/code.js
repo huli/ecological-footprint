@@ -1467,15 +1467,21 @@ function draw_overview_bubble(data)
         .on("mouseover", function(d) {
                     div.transition()		
                         .duration(300)		
-                        .style("opacity", .8);		
-                    div.html("<b>"+ d["Country Name"] + "</b><br/>EF: " 
-                            + d.EFConsPerCap + "<br/>HDI: " 
-                            + d.HDI+ "<br/>People: " 
-                            + Number(d.Population).toLocaleString('en') + "<br/>Impact: "
-                            + Math.round(Number(+d.Population * d.EFConsPerCap)).toLocaleString('en')
-                        )	
-                        .style("left", (d3.event.pageX + 10) + "px")		
-                        .style("top", (d3.event.pageY - 38) + "px")
+                        .style("opacity", .8);
+                    div.html("<table>"
+                        + "<tr><td colspan=2><b>"+ d["Country Name"] 
+                                +"</b></td></tr>"
+                        + "<tr><td>HDI: </td><td>" + Number(d.HDI).toFixed(2).toLocaleString("en") + "</td></tr>"
+                        + "<tr><td>Footprint: </td><td>" + Number(d.EFConsPerCap).toFixed(2).toLocaleString("en") 
+                                + " ha (pc)</td></tr>"
+                        + "<tr><td>People: </td><td>" + Number(d.Population).toLocaleString("en") 
+                                + "</td></tr>"
+                        + "<tr><td>Impact: </td><td>" + Number((Number(+d.Population * d.EFConsPerCap)/1000000).toFixed(2)).toLocaleString('en') 
+                                + " Mha</td></tr>"
+                        +"</table>"
+                    )	
+                    .style("left", (d3.event.pageX + 10) + "px")		
+                    .style("top", (d3.event.pageY - 38) + "px")
         })					
         .on("mouseout", function(d) {	
             div.transition()		
