@@ -71,6 +71,14 @@ h3 {
     height: 500px;
 }
 
+#about-you-content{
+    width: 400px;
+}
+
+#about-you-title{
+    width: 200px;
+}
+
 #container{
     position: relative;
   }
