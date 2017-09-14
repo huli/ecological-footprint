@@ -147,7 +147,7 @@ function draw_legend()
         .text("Sustainability (Footp./Biocap.)")
 }
 
-function show_chloropleth()
+function show_choropleth()
 {
     var margin = 75,
         width = 1920 -margin,
@@ -247,7 +247,7 @@ function color_countries()
                         + "<tr><td>People: </td><td>" + Number(value.population).toLocaleString("en") + "</td></tr>"
                         + "<tr><td>Footprint: </td><td>" + Number(value.footprint).toFixed(2).toLocaleString("en") + " ha</td></tr>"
                         + "<tr><td>Biocapacity: </td><td>" + Number(value.biocap).toFixed(2).toLocaleString("en") + " ha</td></tr>"
-                        + "<tr><td>Sustainability: </td><td>" + Number(value.metric).toFixed(2).toLocaleString("en") + "</td></tr>"
+                        + "<tr><td>Sustainability: </td><td>" + Number(1/value.metric).toFixed(2).toLocaleString("en") + "</td></tr>"
                         + "<tr><td>Status: </td><td>" + (value.metric > 1 ? "Debtor" : "Creditor") + "</td></tr>"
                         +"</table>";
                 }
@@ -1830,7 +1830,7 @@ function intialize_graph_scroll()
                     show_closing();
                     break;
                 case 3:
-                    show_chloropleth();
+                    show_choropleth();
                     break;
             }
         })
