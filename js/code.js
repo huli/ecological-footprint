@@ -3,7 +3,7 @@
 "use strict";
 
 
-var bubble_opacity = .7;
+var bubble_opacity = .8;
 var bubble_chart_div = ".container-bubble #graph";
 var timeline_div = ".container-timeline #graph";
 var closing_div = ".container-closing #graph";
@@ -1477,11 +1477,11 @@ function draw_overview_bubble(data)
                         + "<tr><td>People: </td><td>" + Number(d.Population).toLocaleString("en") 
                                 + "</td></tr>"
                         + "<tr><td>Impact: </td><td>" + Number((Number(+d.Population * d.EFConsPerCap)/1000000).toFixed(2)).toLocaleString('en') 
-                                + " Mha</td></tr>"
+                                + " M ha</td></tr>"
                         +"</table>"
                     )	
                     .style("left", (d3.event.pageX + 10) + "px")		
-                    .style("top", (d3.event.pageY - 38) + "px")
+                    .style("top", (d3.event.pageY - 10) + "px")
         })					
         .on("mouseout", function(d) {	
             div.transition()		
@@ -1599,7 +1599,7 @@ function draw_overview_bubble(data)
     // draw axis labels    
     svg.append("text")
         .attr("class", "axis-label")
-        .text("Human Development (HDI)")                    
+        .text("Human Development Index")                    
         .attr("x", 530)
         .attr("y", height + 35)
         .style("opacity", 0.1)
@@ -1710,15 +1710,15 @@ function draw_overview_bubble(data)
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(sizes[0]/1000000).toLocaleString("en") + " Mha")
-        .attr("x", 0)
+        .text(Number(sizes[0]/1000000).toLocaleString("en") + " M ha")
+        .attr("x", -2)
         .attr("y", 30);
 
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
-        .text(Number(sizes[sizes.length-1]/1000000).toLocaleString("en") + " Mha")
-        .attr("x",  legend_width - 35)
+        .text(Number(sizes[sizes.length-1]/1000000000).toLocaleString("en") + " B ha")
+        .attr("x",  legend_width - 15)
         .attr("y", 30);
 
     legendGroup
