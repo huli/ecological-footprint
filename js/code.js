@@ -48,16 +48,41 @@ function highlight_country()
     var svg = d3.select(closing_div)
         .select("svg"); 
 
-    svg.selectAll('path')
-        .transition()
-        .duration(animation_time)
-        .style('fill', function (d){
-                    if(selectedCountry.indexOf(d.properties.name) !== -1)
-                    {
-                        return "darkred";
-                    }
-                    return get_color(d.properties.name);
-                });
+    // svg.selectAll('path')
+    //     .transition()
+    //     .duration(animation_time)
+    //     .style('fill', function (d){
+    //                 if(selectedCountry.indexOf(d.properties.name) !== -1)
+    //                 {
+    //                     return "darkred";
+    //                 }
+    //                 return get_color(d.properties.name);
+    //             });
+    var countryOfInterest = svg.selectAll("path")
+                                .filter(function(d){
+                                    return selectedCountry.indexOf(d.properties.name) !== -1;
+                                });
+
+    var repeated = 0;
+    (function repeat(){
+        countryOfInterest 
+            .transition()
+            .duration(1000)
+            .ease(d3.easeSinIn)
+            .style("fill", "darkred")
+            .transition()
+            .duration(1000)
+            .ease(d3.easeSinOut)
+            .style("fill", function(d){
+                return get_color(d.properties.name);
+            })
+            .on("end", function() {
+                repeated++;
+                if(repeated < 4)
+                    return repeat();
+                return () => {};
+            });
+    })();
 
     change_text(selectedCountry);
 }
