@@ -568,7 +568,7 @@ function show_worst_timeline()
     const annotations =  [
         {
             note: {
-                label: "The footprint rises from 2.1 ha to 3.6 h.a",
+                label: "The footprint rises from 2.1 ha to 3.6 ha",
                 title: "2008 - 2013"
             },
             data: { date: new Date(2011, 1, 1), value: 3.3 },
@@ -601,7 +601,7 @@ function show_worst_timeline()
             type: d3.annotationCalloutCircle,
             note: {
                 label: "Constitutional crysis in fiji.",
-                title: "2006"
+                title: "2009"
             },
             data: { date: new Date(2009, 1, 1), value: 2.3 },
             subject: { radius: 40, radiusPadding: 10 },
