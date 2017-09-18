@@ -1378,9 +1378,8 @@ function draw_overview_bubble(data)
         .style("z-index", 1);
 
     var svg = d3.select(bubble_chart_div)
-        .append("svg")
-        .style("padding-top", cover.top)    
-        .style("padding-left", cover.left)        
+        .append("svg")   
+        .attr("transform", "translate(" + cover.left + ", "+cover.top+")")
         .attr("width", width + cover.left + cover.right)
         .attr("height", height + cover.top + cover.bottom);
 
@@ -1437,7 +1436,7 @@ function draw_overview_bubble(data)
 
     svg.append("g")
         .attr("class", "y axis")
-        .attr("transform", "translate("+ width +", 0)")
+        .attr("transform", "translate("+ (width) +", 0)")
         .call(yAxis)
         .transition()
         .duration(5000)
