@@ -462,7 +462,7 @@ function show_closing()
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
 
-    AnnotateSource(svg, innerWidth - 400, innerHeight - 25);
+    AnnotateSource(svg, width - 200, innerHeight - 25);
 }
 
 function draw_timeline(data)
@@ -866,7 +866,7 @@ function show_global_timeline()
     var cover = {
                     top: 20,
                     right: 60,
-                    bottom: 30,
+                    bottom: 40,
                     left: 650
                 },
                 width = div_rect.width - cover.left - cover.right,
@@ -1078,7 +1078,7 @@ function show_global_timeline()
 
     if(isGlobalTimelineDefined == false)
     {
-        AnnotateSource(svg, width - 200 , height + 45);    
+        AnnotateSource(svg, width - 200 , height + 55);    
     }
     isGlobalTimelineDefined = true;
 }
@@ -1726,7 +1726,7 @@ function draw_overview_bubble(data)
         .duration(animation_time*3)
         .style("opacity", 1);
 
-    AnnotateSource(svg, innerWidth - 500, innerHeight - 40)
+    AnnotateSource(svg, width - 200, innerHeight - 40)
 }
 
 
@@ -1839,6 +1839,10 @@ function intialize_graph_scroll()
 function draw_map(data)
 {
     geo_data = data;
+    
+    var margin = 30,
+        width = innerWidth -margin,
+        height = innerHeight -margin;
 
     intialize_graph_scroll();
 
@@ -1855,7 +1859,7 @@ function draw_map(data)
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
 
-    AnnotateSource(svg_worldmap, innerWidth -300, innerHeight - 25);
+    AnnotateSource(svg_worldmap, width -200, innerHeight - 25);
 }
 
 function AnnotateSource(svg, left, top)
