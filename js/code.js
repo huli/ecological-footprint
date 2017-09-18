@@ -865,7 +865,7 @@ function show_global_timeline()
 
     var cover = {
                     top: 20,
-                    right: 50,
+                    right: 60,
                     bottom: 40,
                     left: 650
                 },
