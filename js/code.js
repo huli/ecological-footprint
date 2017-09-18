@@ -866,7 +866,7 @@ function show_global_timeline()
     var cover = {
                     top: 20,
                     right: 60,
-                    bottom: 40,
+                    bottom: 30,
                     left: 650
                 },
                 width = div_rect.width - cover.left - cover.right,
@@ -884,7 +884,7 @@ function show_global_timeline()
             .attr("width", width + cover.left + cover.right)
             .attr("height", height + cover.top + cover.bottom);
             x_timeline = d3.scaleTime()
-            .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
+            .domain([new Date(1959, 1, 1), new Date(2017, 1, 1)])
             .rangeRound([0, width]);
     
         world_biocap = timeline_metrics_data.filter(function (d){
@@ -1078,7 +1078,7 @@ function show_global_timeline()
 
     if(isGlobalTimelineDefined == false)
     {
-        AnnotateSource(svg, 700 , 710);    
+        AnnotateSource(svg, width - 200 , height + 45);    
     }
     isGlobalTimelineDefined = true;
 }
@@ -1131,8 +1131,6 @@ function start_worst()
         .append("text") 
         .attr("class", "bubble-annotation")                   
         .text(function (d) {
-            
-            console.log("showing country: " + d["Country Name"])
             return d["Country Name"];
         })
         .attr("dx", function(d, i){
@@ -1279,7 +1277,6 @@ function start_best()
         .append("text") 
         .attr("class", "bubble-annotation")                   
         .text(function (d) {
-            console.log("showing country: " + d["Country Name"])
             return d["Country Name"];
         })
         .attr("dx", function(d, i){
@@ -1360,7 +1357,7 @@ function draw_overview_bubble(data)
                     top: 20,
                     right: 60,
                     bottom: 35,
-                    left: 180
+                    left: 200
                 },
                 width = div_rect.width - cover.left - cover.right,
                 height = div_rect.height - cover.top - cover.bottom;
@@ -1796,6 +1793,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-timeline #sections > div'))
         .on('active', function(i){
+            console.log("active: " + i);
             switch(i)
             {
                 case 1:
