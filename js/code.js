@@ -865,7 +865,7 @@ function show_global_timeline()
 
     var cover = {
                     top: 20,
-                    right: 80,
+                    right: 50,
                     bottom: 40,
                     left: 650
                 },
@@ -879,9 +879,8 @@ function show_global_timeline()
                 .remove();
 
         var svg = d3.select(timeline_div)
-            .append("svg")
-            .style("padding-left", cover.left)  
-            .style("padding-top", cover.top)        
+            .append("svg") 
+            .attr("transform", "translate(" + cover.left + ", "+cover.top+")")       
             .attr("width", width + cover.left + cover.right)
             .attr("height", height + cover.top + cover.bottom);
             x_timeline = d3.scaleTime()
