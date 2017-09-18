@@ -462,7 +462,7 @@ function show_closing()
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
 
-    AnnotateSource(svg, innerWidth - 400, innerHeight - 25);
+    AnnotateSource(svg, width - 200, innerHeight - 25);
 }
 
 function draw_timeline(data)
@@ -865,7 +865,7 @@ function show_global_timeline()
 
     var cover = {
                     top: 20,
-                    right: 80,
+                    right: 60,
                     bottom: 40,
                     left: 650
                 },
@@ -879,13 +879,12 @@ function show_global_timeline()
                 .remove();
 
         var svg = d3.select(timeline_div)
-            .append("svg")
-            .style("padding-left", cover.left)  
-            .style("padding-top", cover.top)        
+            .append("svg") 
+            .attr("transform", "translate(" + cover.left + ", "+cover.top+")")       
             .attr("width", width + cover.left + cover.right)
             .attr("height", height + cover.top + cover.bottom);
             x_timeline = d3.scaleTime()
-            .domain([new Date(1960, 1, 1), new Date(2017, 1, 1)])
+            .domain([new Date(1959, 1, 1), new Date(2017, 1, 1)])
             .rangeRound([0, width]);
     
         world_biocap = timeline_metrics_data.filter(function (d){
@@ -1079,7 +1078,7 @@ function show_global_timeline()
 
     if(isGlobalTimelineDefined == false)
     {
-        AnnotateSource(svg, 700 , 710);    
+        AnnotateSource(svg, width - 200 , height + 55);    
     }
     isGlobalTimelineDefined = true;
 }
@@ -1132,8 +1131,6 @@ function start_worst()
         .append("text") 
         .attr("class", "bubble-annotation")                   
         .text(function (d) {
-            
-            console.log("showing country: " + d["Country Name"])
             return d["Country Name"];
         })
         .attr("dx", function(d, i){
@@ -1280,7 +1277,6 @@ function start_best()
         .append("text") 
         .attr("class", "bubble-annotation")                   
         .text(function (d) {
-            console.log("showing country: " + d["Country Name"])
             return d["Country Name"];
         })
         .attr("dx", function(d, i){
@@ -1361,7 +1357,7 @@ function draw_overview_bubble(data)
                     top: 20,
                     right: 60,
                     bottom: 35,
-                    left: 180
+                    left: 200
                 },
                 width = div_rect.width - cover.left - cover.right,
                 height = div_rect.height - cover.top - cover.bottom;
@@ -1378,9 +1374,8 @@ function draw_overview_bubble(data)
         .style("z-index", 1);
 
     var svg = d3.select(bubble_chart_div)
-        .append("svg")
-        .style("padding-top", cover.top)    
-        .style("padding-left", cover.left)        
+        .append("svg")   
+        .attr("transform", "translate(" + cover.left + ", "+cover.top+")")
         .attr("width", width + cover.left + cover.right)
         .attr("height", height + cover.top + cover.bottom);
 
@@ -1437,7 +1432,7 @@ function draw_overview_bubble(data)
 
     svg.append("g")
         .attr("class", "y axis")
-        .attr("transform", "translate("+ width +", 0)")
+        .attr("transform", "translate("+ (width) +", 0)")
         .call(yAxis)
         .transition()
         .duration(5000)
@@ -1731,7 +1726,7 @@ function draw_overview_bubble(data)
         .duration(animation_time*3)
         .style("opacity", 1);
 
-    AnnotateSource(svg, innerWidth - 500, innerHeight - 40)
+    AnnotateSource(svg, width - 200, innerHeight - 40)
 }
 
 
@@ -1798,6 +1793,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-timeline #sections > div'))
         .on('active', function(i){
+            console.log("active: " + i);
             switch(i)
             {
                 case 1:
@@ -1843,6 +1839,10 @@ function intialize_graph_scroll()
 function draw_map(data)
 {
     geo_data = data;
+    
+    var margin = 30,
+        width = innerWidth -margin,
+        height = innerHeight -margin;
 
     intialize_graph_scroll();
 
@@ -1859,7 +1859,7 @@ function draw_map(data)
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
 
-    AnnotateSource(svg_worldmap, innerWidth -300, innerHeight - 25);
+    AnnotateSource(svg_worldmap, width -200, innerHeight - 25);
 }
 
 function AnnotateSource(svg, left, top)
