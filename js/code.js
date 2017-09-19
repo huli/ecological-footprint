@@ -461,14 +461,8 @@ function draw_timeline(data)
     timeline_metrics_data = data;
 }
 
-var isWorstTimelineShown = false;
-
 function show_worst_timeline()
 {
-    if(isWorstTimelineShown)
-        return;
-
-    isWorstTimelineShown = true;
     
     var svg = d3.select(timeline_div)
         .select("svg");
@@ -1789,7 +1783,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-timeline #sections > div'))
         .on('active', function(i){
-            console.log("active: " + i);
+            console.log("active timeline: " + i);
             switch(i)
             {
                 case 1:
@@ -1815,7 +1809,7 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-closing #sections > div'))
         .on('active', function(i){
-            //console.log("closing: " + i );
+            console.log("closing: " + i );
             switch(i)
             {                
                 case 1:
