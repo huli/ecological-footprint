@@ -79,6 +79,12 @@ h3 {
     width: 200px;
 }
 
+#about-you-hint
+{
+    margin-bottom: 30px;
+    width: 400px;
+}
+
 #container{
     position: relative;
   }
@@ -97,7 +103,7 @@ h3 {
 }
 
 #sections > div:last-child{
-    margin-bottom: 80px;   
+    margin-bottom: 30px;   
 }
   
 #sections > div.graph-scroll-active{

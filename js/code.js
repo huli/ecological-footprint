@@ -36,7 +36,6 @@ var bubbleGroups;
 var svg_worldmap;
 
 
-
 function render()
 {
 
@@ -1814,10 +1813,7 @@ function intialize_graph_scroll()
             {                
                 case 1:
                     show_closing();
-                    break;
-                case 3:
-                    show_choropleth();
-                    break;
+                    break
             }
         })
           
@@ -1862,7 +1858,12 @@ function AnnotateSource(svg, left, top)
 }
 
 
-function testScroll(e){
+function scrollVertical(e){
+    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+        //alert("you're at the bottom of the page");        
+        show_choropleth();
+    }
+
     if(pageYOffset > 700) return;
 
     var scrollingValue = 100 - (window.pageYOffset/6);
@@ -1870,7 +1871,10 @@ function testScroll(e){
     {
         fadeOutMap(scrollingValue);
     }
+
 }
+
+
 
 var isFadingOut = false;
 function fadeOutMap(alpha)
@@ -1887,7 +1891,7 @@ function fadeOutMap(alpha)
         .style("opacity", alpha/100);
 }
 
-window.onscroll=testScroll
+window.onscroll=scrollVertical
 
 render();
 
