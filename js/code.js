@@ -1338,6 +1338,7 @@ function draw_overview_bubble(data)
         RedrawOverview();
         return;
     };
+    
     isOverviewDrawn = true;
 
     var div_rect = d3.select(bubble_chart_div).node().getBoundingClientRect();
@@ -1758,7 +1759,7 @@ function intialize_graph_scroll()
             console.log("active: " + i);
             switch(i)
             {
-                case 1:
+                case 3:
                     start_overview();
                     break;
                 case 5:

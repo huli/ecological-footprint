@@ -56,7 +56,7 @@ h3 {
 }
 
 #global-timeline-content{
-    height: 50%x; 
+    height: 50%; 
 }
 
 #best-timeline-content{    
@@ -68,7 +68,7 @@ h3 {
 }
 
 #what-about-you-content{
-    height: 500px;
+    height: 400px;
 }
 
 #about-you-content{
@@ -373,17 +373,17 @@ div.tooltip {
 }
   
 #top-spacer {
-    padding-top: 20%;
+    padding-top: 30%;
 }
 
 #middle-spacer {
-    padding-top: 60%;
+    padding-top: 70%;
 }
 
 #bottom-spacer {
-    padding-top: 50%;
+    padding-top: 60%;
 }
 
 #small-spacer{
-    padding-top: 10%;
+    padding-top: 20%;
 }
