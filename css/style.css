@@ -48,15 +48,15 @@ h3 {
 }
 
 #the-best-content{
-    height: 500px;
+    height: 50%;
 }
 
 #the-worst-content{
-    height: 500px; 
+    height: 50%; 
 }
 
 #global-timeline-content{
-    height: 500px; 
+    height: 50%x; 
 }
 
 #best-timeline-content{    
@@ -64,7 +64,7 @@ h3 {
 }
 
 #worst-timeline-content{
-    height: 500px;
+    height: 50%;
 }
 
 #what-about-you-content{
@@ -373,17 +373,17 @@ div.tooltip {
 }
   
 #top-spacer {
-    padding-top: 150px;
+    padding-top: 20%;
 }
 
 #middle-spacer {
-    padding-top: 100px;
+    padding-top: 60%;
 }
 
 #bottom-spacer {
-    padding-top: 500px;
+    padding-top: 50%;
 }
 
 #small-spacer{
-    padding-top: 20px;
+    padding-top: 10%;
 }

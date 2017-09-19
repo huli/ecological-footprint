@@ -1761,10 +1761,10 @@ function intialize_graph_scroll()
                 case 1:
                     start_overview();
                     break;
-                case 4:
+                case 5:
                     start_best();
                     break;
-                case 5:
+                case 7:
                     start_worst();
                     break;
             }
@@ -1785,7 +1785,7 @@ function intialize_graph_scroll()
             console.log("active timeline: " + i);
             switch(i)
             {
-                case 1:
+                case 2:
                     show_global_timeline();
                     break;
                 case 3:
