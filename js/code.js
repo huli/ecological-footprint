@@ -57,18 +57,18 @@ function highlight_country()
     (function repeat(){
         countryOfInterest 
             .transition()
-            .duration(1000)
+            .duration(700)
             .ease(d3.easeSinIn)
             .style("fill", "darkred")
             .transition()
-            .duration(1000)
+            .duration(1200)
             .ease(d3.easeSinOut)
             .style("fill", function(d){
                 return get_color(d.properties.name);
             })
             .on("end", function() {
                 repeated++;
-                if(repeated < 4)
+                if(repeated < 3)
                     return repeat();
                 return () => {};
             });
@@ -281,7 +281,7 @@ var even_text = "{country} has a per capita footprint of <br/><span class='footp
 
 var no_information_text = "This country has provided no information<br/>" +
                           " to the Global Footprint Network. <br/>" +
-                          "Sorry."
+                          "<p/>Sorry."
 
 var no_information_tooltip = "No information available";
 
@@ -293,6 +293,7 @@ function change_text(selectedCountry)
 {
     var value = get_metric(selectedCountry);
     var text = "";
+    console.log(value);
     if(value == null)
     {    
         d3.select("#you-text")
@@ -1858,11 +1859,13 @@ function AnnotateSource(svg, left, top)
         .attr("transform", "translate("+ left +","+ top +")")
 }
 
+var choroplethShown = false;
 
 function scrollVertical(e){
-    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+    if (!choroplethShown && (window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
         //alert("you're at the bottom of the page");        
         show_choropleth();
+        choroplethShown = true;
     }
 
     if(pageYOffset > 700) return;
