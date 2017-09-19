@@ -1338,7 +1338,7 @@ function draw_overview_bubble(data)
         RedrawOverview();
         return;
     };
-    
+
     isOverviewDrawn = true;
 
     var div_rect = d3.select(bubble_chart_div).node().getBoundingClientRect();
@@ -1347,7 +1347,7 @@ function draw_overview_bubble(data)
                     top: 20,
                     right: 60,
                     bottom: 35,
-                    left: 200
+                    left: 300
                 },
                 width = div_rect.width - cover.left - cover.right,
                 height = div_rect.height - cover.top - cover.bottom;
