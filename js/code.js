@@ -49,16 +49,6 @@ function highlight_country()
     var svg = d3.select(closing_div)
         .select("svg"); 
 
-    // svg.selectAll('path')
-    //     .transition()
-    //     .duration(animation_time)
-    //     .style('fill', function (d){
-    //                 if(selectedCountry.indexOf(d.properties.name) !== -1)
-    //                 {
-    //                     return "darkred";
-    //                 }
-    //                 return get_color(d.properties.name);
-    //             });
     var countryOfInterest = svg.selectAll("path")
                                 .filter(function(d){
                                     return selectedCountry.indexOf(d.properties.name) !== -1;
@@ -508,7 +498,7 @@ function show_worst_timeline()
     // Show biocapacity of world and country
     svg.append("path")
         .datum(world_biocap)
-        .attr("class", ".reference")
+        .attr("class", "reference")
         .attr("fill", "none")
         .attr("stroke", "#5ab4ac")
         .attr("stroke-linejoin", "round")
@@ -527,7 +517,7 @@ function show_worst_timeline()
     // Show footprint of world and country
     svg.append("path")
         .datum(world_footprint)
-        .attr("class", ".reference")
+        .attr("class", "reference")
         .attr("fill", "none")
         .attr("stroke", "#d8b365")
         .attr("stroke-linejoin", "round")
@@ -944,6 +934,7 @@ function show_global_timeline()
             .style("opacity", 0);
 
         svg.selectAll("path")
+            .filter(".reference")
             .transition()
             .duration(animation_time/2)
             .attr("stroke-opacity", 0);
