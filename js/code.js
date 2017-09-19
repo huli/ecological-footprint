@@ -36,6 +36,7 @@ var bubbleGroups;
 var svg_worldmap;
 
 
+
 function render()
 {
 
@@ -489,6 +490,7 @@ function show_worst_timeline()
         .style("opacity", 0);
 
     svg.selectAll("path")
+        .filter(".reference")
         .transition()
         .duration(animation_time/2)
         .attr("stroke-opacity", 0);
@@ -506,6 +508,7 @@ function show_worst_timeline()
     // Show biocapacity of world and country
     svg.append("path")
         .datum(world_biocap)
+        .attr("class", ".reference")
         .attr("fill", "none")
         .attr("stroke", "#5ab4ac")
         .attr("stroke-linejoin", "round")
@@ -697,6 +700,7 @@ function show_best_timeline()
         .style("opacity", 0);
     
     svg.selectAll("path")
+        .filter(".reference")
         .transition()
         .duration(animation_time)
         .attr("stroke-opacity", 0);
@@ -716,6 +720,7 @@ function show_best_timeline()
     // Show biocapacity of world
     svg.append("path")
         .datum(world_biocap)
+        .attr("class", "reference")
         .attr("fill", "none")
         .attr("stroke", "#5ab4ac")
         .attr("stroke-linejoin", "round")
@@ -734,7 +739,7 @@ function show_best_timeline()
     // Show footprint of world
     svg.append("path")
         .datum(world_footprint)
-        .attr("class", ".reference")
+        .attr("class", "reference")
         .attr("fill", "none")
         .attr("stroke", "#d8b365")
         .attr("stroke-linejoin", "round")
@@ -951,6 +956,7 @@ function show_global_timeline()
     // Show biocapacity of world and country
     svg.append("path")
         .datum(world_biocap)
+        .attr("class", "reference")
         .attr("fill", "none")
         .attr("stroke", "#5ab4ac")
         .attr("stroke-linejoin", "round")
@@ -968,7 +974,7 @@ function show_global_timeline()
     // Show footprint of world and country
     svg.append("path")
         .datum(world_footprint)
-        .attr("class", ".reference")
+        .attr("class", "reference")
         .attr("fill", "none")
         .attr("stroke", "#d8b365")
         .attr("stroke-linejoin", "round")
