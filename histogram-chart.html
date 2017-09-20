@@ -1,11 +1,39 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css?family=Average" rel="stylesheet">
 <style>
 
 .bar rect {
 }
 
 .bar text {
+}
+
+body
+{
+    font-family: 'Average', serif;
+}
+
+
+.percentage
+{
+    font-size: 32px;
+    color: #bf812d;
+    font-weight: bold;
+}
+
+#histogram{
+    position: absolute;
+    top: 80px;
+    left: 330px;
+    width: 200px;
+}
+
+#pie{
+    position: absolute;
+    top: 320px;
+    left: 330px;
+    width: 200px;
 }
 
 .arc text {
@@ -33,17 +61,17 @@ d3.csv('country_metrics.csv', drawHistogram);
 
 function drawPie()
 {
-    var data = [.5, 1, 1.5, 2, 2.5, 3];
+    var data = [.5, 1, 1.5, 2, 2.5, 3].reverse();
+    //var data = [3, 2.5, 2, .5, 1, 1.5];
 
-    var width = 660,
-        height = 250,
+    var width = 350,
+        height = 200,
         radius = Math.min(width, height) / 2;
 
-        ['#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e']
     var color = d3.scaleOrdinal()
         //.range(["#005595", "#4c88c4", "#ffa25d", "#c60c13", "#b0ca90", "#ffe49c"]);
         //.domain([1,3])
-        .range(['#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f'].reverse());
+        .range(['#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f']);
 
     var arc = d3.arc()
         .outerRadius(radius - 10)
@@ -75,7 +103,7 @@ function drawPie()
     g.append("text")
         .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
         .attr("dy", ".35em")
-        .style("opacity", .3)
+        .style("opacity", 0)
         .text(function(d) { return d.data; });
 }
 
@@ -89,7 +117,7 @@ function drawHistogram(d)
 
     var svg = d3.select("svg"),
         margin = {top: 10, right: 30, bottom: 30, left: 30},
-        width = 660 - margin.left - margin.right,
+        width = 560 - margin.left - margin.right,
         height = 250 - margin.top - margin.bottom,
         g = svg.append("g");
         
@@ -145,6 +173,8 @@ function drawHistogram(d)
     g.append("g")
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
+        .style("font-size", 8)
+        .style("stroke-opacity", .5)
         .call(d3.axisBottom(x));
 
     g.append("g")
@@ -153,6 +183,7 @@ function drawHistogram(d)
         .attr("y1", 0)
         .attr("x2", x(currentFootprint))
         .attr("y2", height + 40)
+        .attr("stroke-dasharray",  [1, 3])
         .attr("stroke", "darkgrey");
 
     drawSummary(d, currentFootprint);
@@ -220,3 +251,11 @@ function drawTemplate()
 }
 
 </script>
+<body>
+    <div id="histogram">
+        Only<span class="percentage"> 26%</span> of the countries have a bigger footprint than Switzerland.
+    </div>
+    <div id="pie">
+        <span class="percentage">50%</span> of its footprint is the demand on crop land.
+    </div>
+</body>
