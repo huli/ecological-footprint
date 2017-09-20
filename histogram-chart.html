@@ -14,6 +14,23 @@ body
     font-family: 'Average', serif;
 }
 
+svg {
+	width: 100%;
+	height: 100%;
+}
+  
+path.slice{
+	stroke-width:1px;
+    stroke: #fff;
+}
+
+polyline{
+	opacity: .6;
+	stroke: darkgray;
+	stroke-width: 1px;
+	fill: none;
+}
+
 
 .percentage
 {
@@ -25,24 +42,27 @@ body
 #histogram{
     position: absolute;
     top: 80px;
-    left: 330px;
+    left: 450px;
     width: 200px;
 }
 
 #pie{
     position: absolute;
-    top: 320px;
-    left: 330px;
+    top: 340px;
+    left: 450px;
     width: 200px;
 }
 
 .arc text {
-  font: 10px sans-serif;
   text-anchor: middle;
 }
 
 .arc path {
   stroke: #fff;
+}
+
+.labels text{
+    font-size: 10px;
 }
 
 .axis{
@@ -51,62 +71,173 @@ body
 }
 
 </style>
-<svg width="960" height="250"></svg>
+<svg width="960" height="270"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
 d3.csv('country_metrics.csv', drawHistogram);
 
-
-
-function drawPie()
+function setupPie()
 {
-    var data = [.5, 1, 1.5, 2, 2.5, 3].reverse();
-    //var data = [3, 2.5, 2, .5, 1, 1.5];
+    var svg = d3.select("body")
+        .append("svg")
+        .attr("width", 460)
+        .attr("height", 300)
+        .attr("class", "pie")
+        .append("g")
 
-    var width = 350,
-        height = 200,
+    svg.append("g")
+        .attr("class", "slices");
+    svg.append("g")
+        .attr("class", "labels");
+    svg.append("g")
+        .attr("class", "lines");
+
+    var width = 460,
+        height = 230,
         radius = Math.min(width, height) / 2;
-
-    var color = d3.scaleOrdinal()
-        //.range(["#005595", "#4c88c4", "#ffa25d", "#c60c13", "#b0ca90", "#ffe49c"]);
-        //.domain([1,3])
-        .range(['#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f']);
-
-    var arc = d3.arc()
-        .outerRadius(radius - 10)
-        .innerRadius(0);
-
-    var labelArc = d3.arc()
-        .outerRadius(radius - 40)
-        .innerRadius(radius - 40);
 
     var pie = d3.pie()
         .sort(null)
-        .value(function(d) { return d; });
+        .value(function(d) {
+            return d.value;
+        });
 
-    var svg = d3.select("body").append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    var arc = d3.arc()
+        .outerRadius(radius * 0.8)
+        .innerRadius(radius * 0.4);
 
-    var g = svg.selectAll(".arc")
-        .data(pie(data))
-        .enter().append("g")
-        .attr("class", "arc");
+    var outerArc = d3.arc()
+        .innerRadius(radius * 0.9)
+        .outerRadius(radius * 0.9);
 
-    g.append("path")
-        .attr("d", arc)
-        .style("fill", function(d) { return color(d.data); });
+    svg.attr("transform", "translate(" + width / 2 + "," + height / 1.8 + ")");
 
-    g.append("text")
-        .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
-        .attr("dy", ".35em")
-        .style("opacity", 0)
-        .text(function(d) { return d.data; });
+    var key = function(d){ return d.data.label; };
+
+    var color = d3.scaleOrdinal()
+        .domain(["crop land", "fishing ground", "carbon", "built up land", "foreast area", "grazing land"])
+        .range(['#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f']);
+
+    function randomData (){
+        var labels = color.domain();
+        return labels.map(function(label){
+            return { label: label, value: Math.random() }
+        });
+    }
+
+    function fixData (){
+        var labels = color.domain();
+        var data = [.5, 1, 1.5, 2, 2.5, 3].reverse();
+        var i = 0;
+        return labels.map(function(label){
+            return { label: label, value: data[i++] }
+        });
+    }
+
+    function initialData (){
+        var labels = color.domain();
+        var data = [1,1,1,1,1,1]
+        var i = 0;
+        return labels.map(function(label){
+            return { label: label, value: data[i++] }
+        });
+    }
+
+    function change(data) {
+
+        var svg = d3.select("body")
+            .selectAll("svg")
+            .filter(".pie");
+        
+        var slice = svg.select(".slices").selectAll("path.slice")
+            .data(pie(data), key);
+
+        slice.enter()
+            .insert("path")
+            .style("fill", function(d) { return color(d.data.label); })
+            .attr("class", "slice");
+
+        slice		
+            .transition().duration(1000)
+            .attrTween("d", function(d) {
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    return arc(interpolate(t));
+                };
+            })
+
+        slice.exit()
+            .remove();
+
+        var text = svg.select(".labels").selectAll("text")
+            .data(pie(data), key);
+
+        text.enter()
+            .append("text")
+            .attr("dy", ".15em")
+            .text(function(d) {
+                return d.data.label;
+            });
+        
+        function midAngle(d){
+            return d.startAngle + (d.endAngle - d.startAngle)/2;
+        }
+
+        text.transition().duration(1000)
+            .attrTween("transform", function(d) {
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    var d2 = interpolate(t);
+                    var pos = outerArc.centroid(d2);
+                    pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+                    return "translate("+ pos +")";
+                };
+            })
+            .styleTween("text-anchor", function(d){
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    var d2 = interpolate(t);
+                    return midAngle(d2) < Math.PI ? "start":"end";
+                };
+            });
+
+        text.exit()
+            .remove();
+
+        var polyline = svg.select(".lines").selectAll("polyline")
+            .data(pie(data), key);
+        
+        polyline.enter()
+            .append("polyline");
+
+        polyline.transition().duration(1000)
+            .attrTween("points", function(d){
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    var d2 = interpolate(t);
+                    var pos = outerArc.centroid(d2);
+                    pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+                    return [arc.centroid(d2), outerArc.centroid(d2), pos];
+                };			
+            });
+        
+        polyline.exit()
+            .remove();
+    }
+
+    change(initialData());
+    change(fixData());
+    
 }
-
 
 function drawHistogram(d)
 {
@@ -188,7 +319,7 @@ function drawHistogram(d)
         .attr("stroke", "darkgrey");
 
     drawSummary(d, currentFootprint);
-    drawPie(d);
+    setupPie();
 }
 
 function drawSummary(data, fp)
