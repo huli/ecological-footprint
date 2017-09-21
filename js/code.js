@@ -311,6 +311,14 @@ function DrawDetailInfos(div_infos)
     var div_height = div_infos.node().getBoundingClientRect().height;
     if(svg.empty())
     {
+        div_infos.append("div")
+            .attr("class", "info-title")
+            .html("Details of Switzerland");
+
+        div_infos.append("div")
+            .attr("class", "info-sub-title")
+            .html("Distribution of the countries and their footprints");
+
         svg = div_infos
             .append("svg");
 
