@@ -414,6 +414,7 @@ function DrawDetailInfos(div_infos, node)
 
     // mark country
     svg.append("g")
+     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
      .append("line")
      .attr("x1", x(currentFootprint))
      .attr("y1", 0)

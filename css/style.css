@@ -411,7 +411,7 @@ div.info-title
     font-weight: bold;
     /* color:#246175; */
     color: black;
-    padding: 8px;
+    padding: 6px;
     padding-left: 12px;
     opacity: .7;
 }
@@ -464,3 +464,7 @@ div.info-sub-title
     font-size: 10px;
 }
  
+.axis{
+    color: darkgrey;
+    opacity: 0.4
+}
