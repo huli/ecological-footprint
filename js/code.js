@@ -250,6 +250,47 @@ function color_countries()
                 .duration(500)		
                 .style("opacity", 0);	
         })
+        .on("click", function(d)
+        {
+            // first hide tooltip
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);
+                
+            // then show details
+            var div_infos = d3
+                    .select("body")
+                    .select(".info");
+
+            if(div_infos.empty())
+            {
+                div_infos = d3.select("body")
+                    .append("div")	
+                    .attr("class", "info")				
+                    .style("opacity", 0);
+            }
+                
+            div_infos.transition()		
+                .duration(300)		
+                .style("opacity", 1);		
+            div_infos	
+                .style("left", (innerWidth/2 - 400) + "px")		
+                .style("top", (innerHeight/2 - 200 + scrollY) + "px")
+                .style("pointer-events", "all");
+            div_infos.on("click", function(d){
+                div_infos	
+                .style("opacity", 0)
+                .style("pointer-events", "none");
+            });
+            
+            
+            // d3.select('#fade')
+            //     .style("width", innerWidth + "px")
+            //     .style("height", innerHeight + "px")
+            //     .style("opacity", 1);
+                                 
+            DrawDetailInfos(div_infos);
+        })
         .transition()
         .duration(600)
         .style("opacity", .7)
@@ -257,6 +298,95 @@ function color_countries()
             {
                 return get_color(d.properties.name);
             });
+}
+
+function DrawDetailInfos(div_infos)
+{
+    var svg = div_infos.select("svg");
+    var currentFootprint = 4.3;
+    var data = country_metrics_data.map(function(d) {return d.EFConsPerCap;});
+    var formatCount = d3.format(",.0f");
+
+    var div_width = div_infos.node().getBoundingClientRect().width;
+    var div_height = div_infos.node().getBoundingClientRect().height;
+    if(svg.empty())
+    {
+        svg = div_infos
+            .append("svg");
+
+        var margin = {top: 10, right: 30, bottom: 40, left: 30},
+            width = div_width - margin.left - margin.right,
+            height = (div_height - margin.top - margin.bottom)/2,
+            g = svg.append("g");
+
+        svg.style("width", div_width + "px")
+            .style("height", (div_height/2) + "px")
+            
+        g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+        var x = d3.scaleLinear()
+            .domain([0,13.5])
+            .range([0, width]);
+    
+        var bins = d3.histogram()
+            .domain([0, 13.5])
+            .thresholds(d3.ticks(0, 13.5, 50))
+                (data);
+    
+        var y = d3.scaleLinear()
+            .domain([0, d3.max(bins, function(d) { return d.length; })])
+            .range([height, 0]);
+    
+        var bar = g.selectAll(".bar")
+            .data(bins)
+            .enter().append("g")
+                .attr("class", "bar")
+                .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+                .attr("fill", function(d)
+                {
+                    var val = d.x0;
+                    var max = 13.4;
+                    var part = 13.4 / 8;
+                    var color_index;
+                    switch (true) {
+                        case (val < (part)): color_index = 7; break;
+                        case (val < (2*part)): color_index = 6; break;
+                        case (val < (3*part)): color_index = 5; break;
+                        case (val < (4*part)): color_index = 4; break;
+                        case (val < (5*part)): color_index = 3; break;
+                        case (val < (6*part)): color_index = 2; break;
+                        case (val < (7*part)): color_index = 1; break;
+                        default:
+                            color_index = 0; break;
+                    
+                    }
+                    return colors[color_index];
+                })
+                .style("opacity", .8);
+    
+        bar.append("rect")
+            .attr("x", 1)
+            .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
+            .attr("height", function(d) { return height - y(d.length); });
+    
+        g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .style("font-size", 8)
+            .style("stroke-opacity", .5)
+            .style("opacity", .4)
+            .call(d3.axisBottom(x));
+    }
+
+    // mark country
+    g.append("g")
+        .append("line")
+        .attr("x1", x(currentFootprint))
+        .attr("y1", 0)
+        .attr("x2", x(currentFootprint))
+        .attr("y2", height + 40)
+        .attr("stroke-dasharray",  [1, 3])
+        .attr("stroke", "darkgrey");
 }
 
 var creditor_text = "{country} has a per capita footprint of<br/><span class='footprint'>{fp}</span> ha<br/>"+
