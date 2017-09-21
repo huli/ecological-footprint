@@ -300,6 +300,10 @@ function color_countries()
             });
 }
 
+var histogramm_explanation_html = "<div id='histogram'>"
+        + "Only <span class='percentage'>{percentage}%</span> of the countries have a bigger footprint than {country}."
+        + "</div>";
+
 function DrawDetailInfos(div_infos, node)
 {
     var country_name = node.properties.name;   
@@ -330,6 +334,9 @@ function DrawDetailInfos(div_infos, node)
         div_infos.append("div")
             .attr("class", "info-sub-title")
             .html("Distribution of the countries and their footprints");
+
+        div_infos.append("div")
+            .attr("class", "histogram-explanation");
 
         svg = div_infos
             .append("svg");
@@ -391,10 +398,16 @@ function DrawDetailInfos(div_infos, node)
             .call(d3.axisBottom(x));
     }
 
+    div_infos.selectAll("div")
+        .filter(".histogram-explanation")
+        .html(histogramm_explanation_html
+            .replace("{percentage}", 34)
+            .replace("{country}", country_name));
+        
     div_infos.select("div")
         .filter(".info-title")
         .html("Details of " + country_name);
-        
+
     svg.selectAll("g")
         .selectAll("line")
         .remove();

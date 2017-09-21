@@ -419,8 +419,48 @@ div.info-title
 div.info-sub-title
 {
     font-family: 'Average', serif;
-    font-size: 12px;
+    font-size: 14px;
     color:black; 
     padding-left: 12px;
     opacity: .7;
 }
+
+.percentage
+{
+    font-family: 'Average', serif;
+    font-size: 32px;
+    color: #bf812d;
+    font-weight: bold;
+}
+
+
+#histogram{
+    font-family: 'Average', serif;
+    font-size: 12px;
+    position: absolute;
+    color:black; 
+    top: 50px;
+    left: 350px;
+    width: 200px;
+    height: 100px;
+}
+
+#pie{
+    position: absolute;
+    top: 340px;
+    left: 450px;
+    width: 200px;
+}
+
+.arc text {
+    text-anchor: middle;
+}
+  
+.arc path {
+    stroke: #fff;
+}
+
+.labels text{
+    font-size: 10px;
+}
+ 
