@@ -458,6 +458,12 @@ div.info-sub-title
     height: 100px;
 }
 
+#lightbox{
+    position: absolute;
+    z-index: 10;
+    background-color: white;
+}
+
 path.slice{
 	stroke-width:1px;
     stroke: #fff;
@@ -473,6 +479,7 @@ polyline{
 
 .arc text {
     text-anchor: middle;
+    font-family: 'Average', serif;
 }
   
 .arc path {
@@ -481,6 +488,7 @@ polyline{
 
 .labels text{
     font-size: 10px;
+    font-family: 'Average', serif;
 }
  
 .axis{

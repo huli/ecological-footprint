@@ -271,24 +271,17 @@ function color_countries()
             }
                 
             div_infos.transition()		
-                .duration(300)		
+                .duration(500)		
                 .style("opacity", 1);		
             div_infos	
-                .style("left", (innerWidth/2 - 400) + "px")		
-                .style("top", (innerHeight/2 - 200 + scrollY) + "px")
+                .style("left", (innerWidth/2 - 350) + "px")		
+                .style("top", (innerHeight/2 - 275 + scrollY) + "px")
                 .style("pointer-events", "all");
-            div_infos.on("click", function(d){
-                div_infos	
-                .style("opacity", 0)
-                .style("pointer-events", "none");
-            });
-            
-            
-            // d3.select('#fade')
-            //     .style("width", innerWidth + "px")
-            //     .style("height", innerHeight + "px")
-            //     .style("opacity", 1);
-                                 
+            div_infos.on("click", function(d) {
+                    hideInfos(div_infos);
+                });
+
+            DrawLightbox(div_infos);                     
             DrawHistogram(div_infos, d);
             DrawDougnut(div_infos, d);
         })
@@ -299,6 +292,44 @@ function color_countries()
             {
                 return get_color(d.properties.name);
             });
+}
+
+function hideInfos(div)
+{
+    div.style("opacity", 0)
+        .transition()
+        .duration(300)
+        .style("pointer-events", "none");
+    
+    d3.select("#lightbox")
+        .transition()
+        .duration(300)
+        .style("opacity", 0)
+        .style("pointer-events", "none");
+}
+
+function DrawLightbox(div_infos)
+{
+    var div = d3.select("#lightbox");
+    if(div.empty())
+    {
+        d3.select("body")
+            .append("div")        
+            .on("click", function(d){
+                hideInfos(div_infos);
+            })
+            .attr("id", "lightbox")
+            .style("opacity", 0);
+    }
+
+    d3.select('#lightbox')       
+        .style("width", innerWidth + "px")
+        .style("height", innerHeight + "px")
+        .style("left", "0px")
+        .style("top", (scrollY)+ "px")
+        .transition()
+        .duration(300)
+        .style("opacity", .9);
 }
 
 var histogramm_explanation_html = "<div id='histogram-text'>"
@@ -340,8 +371,8 @@ function DrawDougnut(div_infos, node)
         .filter(".pie-explanation")
         .html(pie_explanation_html
             .replace("{percentage}", 
-                Number(50.34).toFixed(0).toLocaleString("en")
-            .replace("{land type}", "crop land")));
+                Number(50.34).toFixed(0).toLocaleString("en"))
+            .replace("{land type}", "crop land"));
 
     svg.append("g")
         .attr("class", "slices");
