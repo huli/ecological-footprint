@@ -289,7 +289,7 @@ function color_countries()
             //     .style("height", innerHeight + "px")
             //     .style("opacity", 1);
                                  
-            DrawDetailInfos(div_infos);
+            DrawDetailInfos(div_infos, d);
         })
         .transition()
         .duration(600)
@@ -300,20 +300,32 @@ function color_countries()
             });
 }
 
-function DrawDetailInfos(div_infos)
+function DrawDetailInfos(div_infos, node)
 {
+    var country_name = node.properties.name;   
+    var value = GetCountryData(country_name);
+
     var svg = div_infos.select("svg");
-    var currentFootprint = 4.3;
+    var currentFootprint = value.footprint;
     var data = country_metrics_data.map(function(d) {return d.EFConsPerCap;});
     var formatCount = d3.format(",.0f");
 
     var div_width = div_infos.node().getBoundingClientRect().width;
     var div_height = div_infos.node().getBoundingClientRect().height;
+    
+    var margin = {top: 10, right: 30, bottom: 40, left: 30},
+        width = div_width - margin.left - margin.right,
+        height = (div_height - margin.top - margin.bottom)/2;
+        
+    var x = d3.scaleLinear()
+        .domain([0,13.5])
+        .range([0, width]);
+
     if(svg.empty())
     {
         div_infos.append("div")
             .attr("class", "info-title")
-            .html("Details of Switzerland");
+            .html("Details of " + country_name);
 
         div_infos.append("div")
             .attr("class", "info-sub-title")
@@ -322,23 +334,16 @@ function DrawDetailInfos(div_infos)
         svg = div_infos
             .append("svg");
 
-        var margin = {top: 10, right: 30, bottom: 40, left: 30},
-            width = div_width - margin.left - margin.right,
-            height = (div_height - margin.top - margin.bottom)/2,
-            g = svg.append("g");
+        var g = svg.append("g");
 
         svg.style("width", div_width + "px")
             .style("height", (div_height/2) + "px")
             
         g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
-        var x = d3.scaleLinear()
-            .domain([0,13.5])
-            .range([0, width]);
-    
         var bins = d3.histogram()
             .domain([0, 13.5])
-            .thresholds(d3.ticks(0, 13.5, 50))
+            .thresholds(d3.ticks(0, 13.5, 60))
                 (data);
     
         var y = d3.scaleLinear()
@@ -386,15 +391,23 @@ function DrawDetailInfos(div_infos)
             .call(d3.axisBottom(x));
     }
 
+    div_infos.select("div")
+        .filter(".info-title")
+        .html("Details of " + country_name);
+        
+    svg.selectAll("g")
+        .selectAll("line")
+        .remove();
+
     // mark country
-    g.append("g")
-        .append("line")
-        .attr("x1", x(currentFootprint))
-        .attr("y1", 0)
-        .attr("x2", x(currentFootprint))
-        .attr("y2", height + 40)
-        .attr("stroke-dasharray",  [1, 3])
-        .attr("stroke", "darkgrey");
+    svg.append("g")
+     .append("line")
+     .attr("x1", x(currentFootprint))
+     .attr("y1", 0)
+     .attr("x2", x(currentFootprint))
+     .attr("y2", height + 40)
+     .attr("stroke-dasharray",  [1, 3])
+     .attr("stroke", "darkgrey");
 }
 
 var creditor_text = "{country} has a per capita footprint of<br/><span class='footprint'>{fp}</span> ha<br/>"+
