@@ -57,8 +57,17 @@
             background:lightslategrey;	
             border: 0px;		
             border-radius: 8px;	
-            z-index: 10;		
+            z-index: 15;		
         }   
+        #fade{
+            position: absolute;				
+            color: white;	
+            background: white;	
+            margin: 0px;
+            padding: 0px;
+            border: 0px;		
+            z-index: 10;		
+        }
 
     </style>
     <script type="text/javascript">
@@ -94,6 +103,9 @@
                 .append("div")	
                 .attr("class", "info")				
                 .style("opacity", 0);
+
+            var div_lightbox = d3.select("#fade")			
+                .style("opacity", 0);
                 
             var map = svg.selectAll('path')
                             .data(geo_data.features)
@@ -127,7 +139,12 @@
                                     .style("opacity", 0)
                                     .style("pointer-events", "none");
                                 });
-
+                                
+                                
+                                d3.select('#fade')
+                                    .style("width", innerWidth + "px")
+                                    .style("height", innerHeight + "px")
+                                    .style("opacity", 1);
                                                                     
                                 var svg = div_infos.append("svg");
                                 DrawDistribution(svg);
@@ -353,9 +370,17 @@
                 return d;
             }, color_countries);
         }
+    
+    function lightboxClose()
+    {
+        d3.select('#fade')
+            .style("opacity", 0);
+    }
     </script>
 </head>
 <body>
+
+    <div id="fade" onClick="lightboxClose();"></div> 
     <script type="text/javascript">
         d3.json("world_countries.json", draw);
 </script>
