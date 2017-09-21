@@ -304,11 +304,17 @@ function color_countries()
 var histogramm_explanation_html = "<div id='histogram-text'>"
         + "{emphasis}<span class='percentage'>{percentage}%</span> of the countries have a bigger footprint than {country}."
         + "</div>";
+var pie_explanation_html = "<div id='pie-text'>"
+        + "<span class='percentage'>{percentage}%</span>  of its footprint is the demand on {land type}."
+        + "</div>";
 
 function DrawDougnut(div_infos, node)
 {
     var svg = div_infos.select("#pie");
-
+    var width = 460,
+        height = 200,
+        radius = Math.min(width, height) / 2;
+        
     if(svg.empty())
     {
         div_infos.append("div")
@@ -323,7 +329,19 @@ function DrawDougnut(div_infos, node)
             .attr("class", "pie")
             .append("g");
 
+        svg.attr("transform", "translate(" + width / 2 + "," + height / 1.8 + ")");
+
+        div_infos.append("div")
+            .attr("class", "pie-explanation");
     }
+
+    
+    div_infos.selectAll("div")
+        .filter(".pie-explanation")
+        .html(pie_explanation_html
+            .replace("{percentage}", 
+                Number(50.34).toFixed(0).toLocaleString("en")
+            .replace("{land type}", "crop land")));
 
     svg.append("g")
         .attr("class", "slices");
@@ -331,10 +349,6 @@ function DrawDougnut(div_infos, node)
         .attr("class", "labels");
     svg.append("g")
         .attr("class", "lines");
-
-    var width = 460,
-        height = 200,
-        radius = Math.min(width, height) / 2;
 
     var pie = d3.pie()
         .sort(null)
@@ -350,7 +364,6 @@ function DrawDougnut(div_infos, node)
         .innerRadius(radius * 0.9)
         .outerRadius(radius * 0.9);
 
-    svg.attr("transform", "translate(" + width / 2 + "," + height / 1.8 + ")");
 
     var key = function(d){ return d.data.label; };
 

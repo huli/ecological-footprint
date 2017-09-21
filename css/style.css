@@ -439,17 +439,23 @@ div.info-sub-title
     font-size: 12px;
     position: absolute;
     color:black; 
-    top: 60px;
-    left: 350px;
+    background-color: white;
+    top: 100px;
+    left: 450px;
     width: 200px;
     height: 100px;
 }
 
 #pie-text{
+    font-family: 'Average', serif;
+    font-size: 12px;
     position: absolute;
-    top: 340px;
+    color:black; 
+    background-color: white;
+    top: 380px;
     left: 450px;
     width: 200px;
+    height: 100px;
 }
 
 path.slice{
