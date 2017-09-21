@@ -289,7 +289,8 @@ function color_countries()
             //     .style("height", innerHeight + "px")
             //     .style("opacity", 1);
                                  
-            DrawDetailInfos(div_infos, d);
+            DrawHistogram(div_infos, d);
+            DrawDougnut(div_infos, d);
         })
         .transition()
         .duration(600)
@@ -300,16 +301,188 @@ function color_countries()
             });
 }
 
-var histogramm_explanation_html = "<div id='histogram'>"
+var histogramm_explanation_html = "<div id='histogram-text'>"
         + "{emphasis}<span class='percentage'>{percentage}%</span> of the countries have a bigger footprint than {country}."
         + "</div>";
 
-function DrawDetailInfos(div_infos, node)
+function DrawDougnut(div_infos, node)
+{
+    var svg = div_infos.select("#pie");
+
+    if(svg.empty())
+    {
+        div_infos.append("div")
+            .attr("class", "info-sub-title")
+            .html("Composition of footprint by resource type");
+            
+        svg = div_infos
+            .append("svg")
+            .attr("id", "pie")
+            .attr("width", 460)
+            .attr("height", 300)
+            .attr("class", "pie")
+            .append("g");
+
+    }
+
+    svg.append("g")
+        .attr("class", "slices");
+    svg.append("g")
+        .attr("class", "labels");
+    svg.append("g")
+        .attr("class", "lines");
+
+    var width = 460,
+        height = 200,
+        radius = Math.min(width, height) / 2;
+
+    var pie = d3.pie()
+        .sort(null)
+        .value(function(d) {
+            return d.value;
+        });
+
+    var arc = d3.arc()
+        .outerRadius(radius * 0.8)
+        .innerRadius(radius * 0.4);
+
+    var outerArc = d3.arc()
+        .innerRadius(radius * 0.9)
+        .outerRadius(radius * 0.9);
+
+    svg.attr("transform", "translate(" + width / 2 + "," + height / 1.8 + ")");
+
+    var key = function(d){ return d.data.label; };
+
+    var color = d3.scaleOrdinal()
+        .domain(["crop land", "fishing ground", "carbon", "built up land", "foreast area", "grazing land"])
+        .range(['#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f']);
+
+    function randomData (){
+        var labels = color.domain();
+        return labels.map(function(label){
+            return { label: label, value: Math.random() }
+        });
+    }
+
+    function fixData (){
+        var labels = color.domain();
+        var data = [.5, 1, 1.5, 2, 2.5, 3].reverse();
+        var i = 0;
+        return labels.map(function(label){
+            return { label: label, value: data[i++] }
+        });
+    }
+
+    function initialData (){
+        var labels = color.domain();
+        var data = [1,1,1,1,1,1]
+        var i = 0;
+        return labels.map(function(label){
+            return { label: label, value: data[i++] }
+        });
+    }
+
+    function change(data) {
+
+        var svg = d3.select("body")
+            .selectAll("svg")
+            .filter(".pie");
+        
+        var slice = svg.select(".slices").selectAll("path.slice")
+            .data(pie(data), key);
+
+        slice.enter()
+            .insert("path")
+            .style("fill", function(d) { return color(d.data.label); })
+            .attr("class", "slice");
+
+        slice		
+            .transition().duration(1000)
+            .attrTween("d", function(d) {
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    return arc(interpolate(t));
+                };
+            })
+
+        slice.exit()
+            .remove();
+
+        var text = svg.select(".labels").selectAll("text")
+            .data(pie(data), key);
+
+        text.enter()
+            .append("text")
+            .attr("dy", ".15em")
+            .text(function(d) {
+                return d.data.label;
+            });
+        
+        function midAngle(d){
+            return d.startAngle + (d.endAngle - d.startAngle)/2;
+        }
+
+        text.transition().duration(1000)
+            .attrTween("transform", function(d) {
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    var d2 = interpolate(t);
+                    var pos = outerArc.centroid(d2);
+                    pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+                    return "translate("+ pos +")";
+                };
+            })
+            .styleTween("text-anchor", function(d){
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    var d2 = interpolate(t);
+                    return midAngle(d2) < Math.PI ? "start":"end";
+                };
+            });
+
+        text.exit()
+            .remove();
+
+        var polyline = svg.select(".lines").selectAll("polyline")
+            .data(pie(data), key);
+        
+        polyline.enter()
+            .append("polyline");
+
+        polyline.transition().duration(1000)
+            .attrTween("points", function(d){
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    var d2 = interpolate(t);
+                    var pos = outerArc.centroid(d2);
+                    pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+                    return [arc.centroid(d2), outerArc.centroid(d2), pos];
+                };			
+            });
+        
+        polyline.exit()
+            .remove();
+    }
+
+    change(initialData());
+    change(fixData());
+}
+
+function DrawHistogram(div_infos, node)
 {
     var country_name = node.properties.name;   
     var value = GetCountryData(country_name);
 
-    var svg = div_infos.select("svg");
+    var svg = div_infos.select("#histogram");
     var currentFootprint = value.footprint;
     var data = country_metrics_data.map(function(d) {return d.EFConsPerCap;});
     var formatCount = d3.format(",.0f");
@@ -319,7 +492,7 @@ function DrawDetailInfos(div_infos, node)
     
     var margin = {top: 10, right: 30, bottom: 40, left: 30},
         width = div_width - margin.left - margin.right,
-        height = (div_height - margin.top - margin.bottom)/2;
+        height = (250 - margin.top - margin.bottom);
         
     var x = d3.scaleLinear()
         .domain([0,13.5])
@@ -339,14 +512,15 @@ function DrawDetailInfos(div_infos, node)
             .attr("class", "histogram-explanation");
 
         svg = div_infos
-            .append("svg");
+            .append("svg")
+            .attr("id", "histogram");
 
         var g = svg.append("g");
 
         svg.style("width", div_width + "px")
-            .style("height", (div_height/2) + "px")
+            .style("height", height + margin.top + margin.bottom + "px")
             
-        g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        g.attr("transform", "translate(" + margin.left + ", 10)");
     
         var bins = d3.histogram()
             .domain([0, 13.5])
@@ -418,15 +592,15 @@ function DrawDetailInfos(div_infos, node)
 
     // mark country
     svg.append("g")
-     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-     .append("line")
-     .attr("x1", x(currentFootprint)+2)
-     .attr("y1", 0)
-     .attr("x2", x(currentFootprint)+2)
-     .attr("y2", height + 40)
-     .attr("stroke-width", .5)
-     .attr("stroke-dasharray",  [3, 2])
-     .attr("stroke", "black");
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .append("line")
+        .attr("x1", x(currentFootprint)+2)
+        .attr("y1", 0)
+        .attr("x2", x(currentFootprint)+2)
+        .attr("y2", height + 40)
+        .attr("stroke-width", .5)
+        .attr("stroke-dasharray",  [3, 2])
+        .attr("stroke", "black");
 }
 
 
@@ -2058,8 +2232,6 @@ function scrollVertical(e){
     }
 
 }
-
-
 
 var isFadingOut = false;
 function fadeOutMap(alpha)
