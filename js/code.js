@@ -301,7 +301,7 @@ function color_countries()
 }
 
 var histogramm_explanation_html = "<div id='histogram'>"
-        + "Only <span class='percentage'>{percentage}%</span> of the countries have a bigger footprint than {country}."
+        + "{emphasis}<span class='percentage'>{percentage}%</span> of the countries have a bigger footprint than {country}."
         + "</div>";
 
 function DrawDetailInfos(div_infos, node)
@@ -398,11 +398,15 @@ function DrawDetailInfos(div_infos, node)
             .call(d3.axisBottom(x));
     }
 
+    var biggerPercentage = calcPercentage(country_metrics_data, currentFootprint);
+
     div_infos.selectAll("div")
         .filter(".histogram-explanation")
         .html(histogramm_explanation_html
-            .replace("{percentage}", 34)
-            .replace("{country}", country_name));
+            .replace("{percentage}", 
+                biggerPercentage.toFixed(0).toLocaleString("en"))
+            .replace("{country}", country_name)
+            .replace("{emphasis}", biggerPercentage > 50 ? "":"Only "));
         
     div_infos.select("div")
         .filter(".info-title")
@@ -416,12 +420,24 @@ function DrawDetailInfos(div_infos, node)
     svg.append("g")
      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
      .append("line")
-     .attr("x1", x(currentFootprint))
+     .attr("x1", x(currentFootprint)+2)
      .attr("y1", 0)
-     .attr("x2", x(currentFootprint))
+     .attr("x2", x(currentFootprint)+2)
      .attr("y2", height + 40)
-     .attr("stroke-dasharray",  [1, 3])
-     .attr("stroke", "darkgrey");
+     .attr("stroke-width", .5)
+     .attr("stroke-dasharray",  [3, 2])
+     .attr("stroke", "black");
+}
+
+
+function calcPercentage(data, fp)
+{
+    var numberOfCountries = data.length;
+    var countiesWithSmallerFp = data.filter(function(d){
+            return d.EFConsPerCap > fp;
+    }).length;
+    
+    return countiesWithSmallerFp / numberOfCountries * 100;
 }
 
 var creditor_text = "{country} has a per capita footprint of<br/><span class='footprint'>{fp}</span> ha<br/>"+
