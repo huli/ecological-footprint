@@ -238,6 +238,9 @@ function color_countries()
 
         svg.selectAll('path')
         .on("mouseover", function(d) {
+            
+            d3.select(this).style("cursor", "pointer"); 
+
             div.transition()		
                 .duration(300)		
                 .style("opacity", .8);		
@@ -262,12 +265,20 @@ function color_countries()
                 .style("top", (d3.event.pageY - 10) + "px")
         })					
         .on("mouseout", function(d) {	
+
+            d3.select(this).style("cursor", "default"); 
+            
             div.transition()		
                 .duration(500)		
                 .style("opacity", 0);	
         })
         .on("click", function(d)
         {
+            
+            var value = GetCountryData(d.properties.name);
+            if(value == undefined)
+                return;
+
             // first hide tooltip
             div.transition()		
                 .duration(500)		

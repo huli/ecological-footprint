@@ -65,24 +65,29 @@ h3 {
 
 #worst-timeline-content{
     height: 50%;
+    pointer-events: none;	
 }
 
 #what-about-you-content{
-    height: 400px;
+    height: 400px;    	
+    pointer-events: none;	
 }
 
 #about-you-content{
     width: 400px;
+    pointer-events: none;	
 }
 
 #about-you-title{
     width: 200px;
+    pointer-events: none;	
 }
 
 #about-you-hint
 {
     margin-bottom: 30px;
     width: 400px;
+    pointer-events: none;	
 }
 
 #container{
@@ -373,19 +378,23 @@ div.tooltip {
 }
   
 #top-spacer {
-    padding-top: 30%;
+    padding-top: 30%;	
+    pointer-events: none;	
 }
 
 #middle-spacer {
-    padding-top: 70%;
+    padding-top: 70%;	
+    pointer-events: none;	
 }
 
 #bottom-spacer {
-    padding-top: 60%;
+    padding-top: 60%;	
+    pointer-events: none;	
 }
 
 #small-spacer{
-    padding-top: 10%;
+    padding-top: 10%;	
+    pointer-events: none;	
 }
 
 div.info {	
