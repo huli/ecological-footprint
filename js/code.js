@@ -351,6 +351,11 @@ function DrawLightbox(div_infos)
 var histogramm_explanation_html = "<div id='histogram-text'>"
         + "{emphasis}<span class='percentage'>{percentage}%</span> of the countries have a bigger footprint than {country}."
         + "</div>";
+
+var histogramm_explanation_html_big = "<div id='histogram-text'>"
+        + "<span class='percentage'>{percentage}%</span> of the countries have a smaller footprint than {country}."
+        + "</div>";
+
 var pie_explanation_html = "<div id='pie-text'>"
         + "<span class='percentage'>{percentage}%</span>  of its footprint is the demand on {land type}."
         + "</div>";
@@ -680,13 +685,27 @@ function DrawHistogram(div_infos, node)
 
     var biggerPercentage = calcPercentage(country_metrics_data, currentFootprint);
 
-    div_infos.selectAll("div")
+
+    if(currentFootprint > 8)
+    {
+        div_infos.selectAll("div")
+        .filter(".histogram-explanation")
+        .html(histogramm_explanation_html_big
+            .replace("{percentage}", 
+                (100-biggerPercentage).toFixed(0).toLocaleString("en"))
+            .replace("{country}", country_name));
+    }   
+    else
+    {
+        div_infos.selectAll("div")
         .filter(".histogram-explanation")
         .html(histogramm_explanation_html
             .replace("{percentage}", 
                 biggerPercentage.toFixed(0).toLocaleString("en"))
             .replace("{country}", country_name)
             .replace("{emphasis}", biggerPercentage > 50 ? "":"Only "));
+    }             
+
         
     div_infos.select("div")
         .filter(".info-title")
@@ -700,13 +719,70 @@ function DrawHistogram(div_infos, node)
     svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .append("line")
-        .attr("x1", x(currentFootprint)+2)
-        .attr("y1", 0)
-        .attr("x2", x(currentFootprint)+2)
-        .attr("y2", height + 40)
+        .attr("x1", x(currentFootprint))
+        .attr("y1", 10)
+        .attr("x2", x(currentFootprint))
+        .attr("y2", height)
         .attr("stroke-width", .5)
         .attr("stroke-dasharray",  [3, 2])
-        .attr("stroke", "black");
+        .attr("stroke", "black")
+        .style("stroke-opacity", .8);
+
+    if(currentFootprint > 8)
+    {
+        svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .append("line")
+            .attr("x1", x(.3))
+            .attr("y1", 10)
+            .attr("x2", x(.3))
+            .attr("y2", height)
+            .attr("stroke-width", .5)
+            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke", "black")
+            .style("stroke-opacity", .8);
+
+        svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .append("line")
+            .attr("x1", x(currentFootprint))
+            .attr("y1", 50)
+            .attr("x2", x(.3))
+            .attr("y2", 50)
+            .attr("stroke-width", .5)
+            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke", "black")
+            .style("stroke-opacity", .8);
+
+        div_infos.select("#histogram-text")
+            .style("left", "220px");
+    }
+    else
+    {
+        svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .append("line")
+            .attr("x1", x(13.2))
+            .attr("y1", 10)
+            .attr("x2", x(13.2))
+            .attr("y2", height)
+            .attr("stroke-width", .5)
+            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke", "black")
+            .style("stroke-opacity", .8);
+        
+            svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .append("line")
+            .attr("x1", x(currentFootprint))
+            .attr("y1", 50)
+            .attr("x2", x(13.2))
+            .attr("y2", 50)
+            .attr("stroke-width", .5)
+            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke", "black")
+            .style("stroke-opacity", .8);
+    }
 }
 
 

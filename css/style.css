@@ -438,8 +438,10 @@ div.info-sub-title
     position: absolute;
     color:black; 
     background-color: white;
-    top: 150px;
-    left: 450px;
+    padding-left: 10px;
+    padding-right: 10px;
+    top: 130px;
+    left: 440px;
     width: 200px;
     height: 100px;
 }
@@ -449,6 +451,7 @@ div.info-sub-title
     font-size: 12px;
     position: absolute;
     color:black; 
+    padding: 10px;
     background-color: white;
     top: 450px;
     left: 450px;
