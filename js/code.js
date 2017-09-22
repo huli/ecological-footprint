@@ -290,8 +290,8 @@ function color_countries()
                 .duration(500)		
                 .style("opacity", 1);		
             div_infos	
-                .style("left", (innerWidth/2 - 350) + "px")		
-                .style("top", (innerHeight/2 - 275 + scrollY) + "px")
+                .style("left", (innerWidth/2 - (360)) + "px")		
+                .style("top", (innerHeight/2 - (325) + scrollY) + "px")
                 .style("pointer-events", "all");
             div_infos.on("click", function(d) {
                     hideInfos(div_infos);
@@ -407,6 +407,7 @@ function DrawDougnut(div_infos, node)
     {
         div_infos.append("div")
             .attr("class", "info-sub-title")
+            .style("padding-top", "20px")
             .html("Composition of footprint by resource type");
             
         svg = div_infos
@@ -636,7 +637,7 @@ function DrawHistogram(div_infos, node)
             .data(bins)
             .enter().append("g")
                 .attr("class", "bar")
-                .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+                .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + height + ")"; })
                 .attr("fill", function(d)
                 {
                     var val = d.x0;
@@ -659,9 +660,13 @@ function DrawHistogram(div_infos, node)
                 })
                 .style("opacity", .8);
     
+        var duration = 500;
         bar.append("rect")
             .attr("x", 1)
             .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
+            .transition()
+            .duration(duration+=500)
+            .attr("transform", function(d) { return "translate(0, -" + (height - y(d.length)) + ")"; })
             .attr("height", function(d) { return height - y(d.length); });
     
         g.append("g")

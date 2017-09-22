@@ -394,8 +394,8 @@ div.info {
     padding-right: 5px;
     padding-top: 2px;		
     padding-bottom: 2px;	
-    width: 700px;					
-    height: 550px;				
+    width: 740px;					
+    height: 650px;				
     font: 10px sans-serif;	
     color: white;	
     background: white;	
@@ -406,12 +406,11 @@ div.info {
 div.info-title
 {
     font-family: 'Average', serif;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
     /* color:#246175; */
     color: black;
-    padding: 6px;
-    padding-left: 12px;
+    padding: 30px;
     opacity: .7;
 }
 
@@ -420,7 +419,7 @@ div.info-sub-title
     font-family: 'Average', serif;
     font-size: 14px;
     color:black; 
-    padding-left: 12px;
+    padding-left: 30px;
     opacity: .7;
 }
 
@@ -439,7 +438,7 @@ div.info-sub-title
     position: absolute;
     color:black; 
     background-color: white;
-    top: 100px;
+    top: 150px;
     left: 450px;
     width: 200px;
     height: 100px;
@@ -451,7 +450,7 @@ div.info-sub-title
     position: absolute;
     color:black; 
     background-color: white;
-    top: 380px;
+    top: 450px;
     left: 450px;
     width: 200px;
     height: 100px;
@@ -492,6 +491,5 @@ polyline{
  
 .axis{
     color: darkgrey;
-    font-family: 'Average', serif;
     opacity: 0.4
 }
