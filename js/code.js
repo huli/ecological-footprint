@@ -201,7 +201,15 @@ function color_countries()
                                 max_year: last_year_of_country,
                                 biocap: 0,
                                 footprint: 0,
-                                metric: 0
+                                metric: 0,
+                                details : {
+                                    crop_land: 0,
+                                    carbon: 0,
+                                    fish_ground: 0,
+                                    built_land: 0,
+                                    forest_land: 0,
+                                    grazing_land: 0
+                                }
                             }
                         }
 
@@ -215,7 +223,15 @@ function color_countries()
                                 max_year: last_year_of_country,
                                 biocap: biocap,
                                 footprint: footprint,
-                                metric: result
+                                metric: result,
+                                details : {
+                                    crop_land: footprint_entry[0].crop_land,
+                                    carbon: footprint_entry[0].carbon,
+                                    fish_ground: footprint_entry[0].fishing_ground,
+                                    built_land: footprint_entry[0].built_up_land,
+                                    forest_land: footprint_entry[0].forest_land,
+                                    grazing_land: footprint_entry[0].grazing_land
+                                }
                         }
                     })
                     .entries(capacity_and_prints);
@@ -345,6 +361,47 @@ function DrawDougnut(div_infos, node)
     var width = 460,
         height = 200,
         radius = Math.min(width, height) / 2;
+
+    var metric = GetCountryData(node.properties.name);
+
+    var landData = {
+        "carbon": Number(metric.details.carbon),
+        "fishing ground": Number(metric.details.fish_ground),
+        "grazing land": Number(metric.details.grazing_land),
+        "crop land": Number(metric.details.crop_land),
+        "built-up land": Number(metric.details.built_land),
+        "forest land": Number(metric.details.forest_land)
+    };
+
+    var items = Object.keys(landData).map(function(key) {
+        return [key, landData[key]];
+    });
+
+    var sumOfAll = 0;
+    Object.keys(landData).map(function(key) {
+        return sumOfAll+=landData[key];
+    });
+
+    var aggregateValue = 0;
+    var items = Object.keys(landData).map(function(key) {
+        var part = (landData[key]/sumOfAll*100);
+        if(part > 5)
+            return [key, landData[key]];
+        {
+            aggregateValue+= landData[key];
+        }
+    });
+
+    if(aggregateValue>0)
+    {
+        items.push(["others", aggregateValue]);
+    }
+
+    items = items.filter(function(n){ return n != undefined });
+
+    items = items.sort(function(first, second) {
+        return second[1] - first[1];
+    });
         
     if(svg.empty())
     {
@@ -399,22 +456,16 @@ function DrawDougnut(div_infos, node)
     var key = function(d){ return d.data.label; };
 
     var color = d3.scaleOrdinal()
-        .domain(["crop land", "fishing ground", "carbon", "built up land", "foreast area", "grazing land"])
+        .domain(items.map((item) => {
+            return item[0]
+        }))
         .range(['#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f']);
-
-    function randomData (){
-        var labels = color.domain();
-        return labels.map(function(label){
-            return { label: label, value: Math.random() }
-        });
-    }
 
     function fixData (){
         var labels = color.domain();
-        var data = [.5, 1, 1.5, 2, 2.5, 3].reverse();
         var i = 0;
-        return labels.map(function(label){
-            return { label: label, value: data[i++] }
+        return labels.map(function(d){
+            return { label: d, value: items[i++][1] }
         });
     }
 
@@ -517,7 +568,7 @@ function DrawDougnut(div_infos, node)
             .remove();
     }
 
-    change(initialData());
+    change(fixData());
     change(fixData());
 }
 
@@ -743,7 +794,8 @@ function GetCountryData(name)
         biocap: metric_record.biocap,
         footprint: metric_record.footprint,
         metric: metric_record.metric,
-        country: metric_record.country
+        country: metric_record.country,
+        details: metric_record.details
     };
 }
 
