@@ -423,13 +423,13 @@ function DrawDougnut(div_infos, node)
             .attr("class", "pie-explanation");
     }
 
-    
+    var maxLand = items[0];
     div_infos.selectAll("div")
         .filter(".pie-explanation")
         .html(pie_explanation_html
             .replace("{percentage}", 
-                Number(50.34).toFixed(0).toLocaleString("en"))
-            .replace("{land type}", "crop land"));
+                (maxLand[1]/sumOfAll*100).toFixed(0).toLocaleString("en"))
+            .replace("{land type}", maxLand[0]));
 
     svg.append("g")
         .attr("class", "slices");
@@ -455,31 +455,25 @@ function DrawDougnut(div_infos, node)
 
     var key = function(d){ return d.data.label; };
 
-    var color = d3.scaleOrdinal()
+
+    function change() {
+
+        var color = d3.scaleOrdinal()
         .domain(items.map((item) => {
             return item[0]
         }))
         .range(['#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f']);
 
-    function fixData (){
-        var labels = color.domain();
-        var i = 0;
-        return labels.map(function(d){
-            return { label: d, value: items[i++][1] }
-        });
-    }
 
-    function initialData (){
-        var labels = color.domain();
-        var data = [1,1,1,1,1,1]
-        var i = 0;
-        return labels.map(function(label){
-            return { label: label, value: data[i++] }
-        });
-    }
+        function getData (){
+            var i = 0;
+            return items.map(function(d){
+                return { label: d[0], value: d[1] }
+            });
+        }
 
-    function change(data) {
-
+        var data = getData();
+        
         var svg = d3.select("body")
             .selectAll("svg")
             .filter(".pie");
@@ -489,7 +483,10 @@ function DrawDougnut(div_infos, node)
 
         slice.enter()
             .insert("path")
-            .style("fill", function(d) { return color(d.data.label); })
+            .style("fill", function(d) 
+                { 
+                    return color(d.data.label); 
+                })
             .attr("class", "slice");
 
         slice		
@@ -568,8 +565,8 @@ function DrawDougnut(div_infos, node)
             .remove();
     }
 
-    change(fixData());
-    change(fixData());
+    change();
+    change();
 }
 
 function DrawHistogram(div_infos, node)
