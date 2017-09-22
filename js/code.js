@@ -349,11 +349,11 @@ function DrawLightbox(div_infos)
 }
 
 var histogramm_explanation_html = "<div id='histogram-text'>"
-        + "{emphasis}<span class='percentage'>{percentage}%</span> of the countries have a bigger footprint than {country}."
+        + "{emphasis}<span class='percentage'>{percentage}%</span> of the other countries have a bigger footprint than {country}."
         + "</div>";
 
 var histogramm_explanation_html_big = "<div id='histogram-text'>"
-        + "<span class='percentage'>{percentage}%</span> of the countries have a smaller footprint than {country}."
+        + "<span class='percentage'>{percentage}%</span> of the other countries have a smaller footprint than {country}."
         + "</div>";
 
 var pie_explanation_html = "<div id='pie-text'>"
@@ -685,6 +685,9 @@ function DrawHistogram(div_infos, node)
 
     var biggerPercentage = calcPercentage(country_metrics_data, currentFootprint);
 
+    div_infos.selectAll("div")
+        .filter(".histogram-explanation")
+        .style("opacity", 0);
 
     if(currentFootprint > 8)
     {
@@ -704,8 +707,13 @@ function DrawHistogram(div_infos, node)
                 biggerPercentage.toFixed(0).toLocaleString("en"))
             .replace("{country}", country_name)
             .replace("{emphasis}", biggerPercentage > 50 ? "":"Only "));
-    }             
+    }          
 
+    div_infos.selectAll("div")
+        .filter(".histogram-explanation")
+        .transition()
+        .duration(500)
+        .style("opacity", 1);
         
     div_infos.select("div")
         .filter(".info-title")
@@ -733,6 +741,7 @@ function DrawHistogram(div_infos, node)
         svg.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
             .append("line")
+            .attr("class", "annotation-line")
             .attr("x1", x(.3))
             .attr("y1", 10)
             .attr("x2", x(.3))
@@ -740,11 +749,12 @@ function DrawHistogram(div_infos, node)
             .attr("stroke-width", .5)
             .attr("stroke-dasharray",  [3, 2])
             .attr("stroke", "black")
-            .style("stroke-opacity", .8);
+            .style("stroke-opacity", .0);
 
         svg.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
             .append("line")
+            .attr("class", "annotation-line")
             .attr("x1", x(currentFootprint))
             .attr("y1", 50)
             .attr("x2", x(.3))
@@ -752,7 +762,7 @@ function DrawHistogram(div_infos, node)
             .attr("stroke-width", .5)
             .attr("stroke-dasharray",  [3, 2])
             .attr("stroke", "black")
-            .style("stroke-opacity", .8);
+            .style("stroke-opacity", .0);
 
         div_infos.select("#histogram-text")
             .style("left", "220px");
@@ -762,6 +772,7 @@ function DrawHistogram(div_infos, node)
         svg.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
             .append("line")
+            .attr("class", "annotation-line")
             .attr("x1", x(13.2))
             .attr("y1", 10)
             .attr("x2", x(13.2))
@@ -769,11 +780,12 @@ function DrawHistogram(div_infos, node)
             .attr("stroke-width", .5)
             .attr("stroke-dasharray",  [3, 2])
             .attr("stroke", "black")
-            .style("stroke-opacity", .8);
+            .style("stroke-opacity", .0);
         
             svg.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
             .append("line")
+            .attr("class", "annotation-line")
             .attr("x1", x(currentFootprint))
             .attr("y1", 50)
             .attr("x2", x(13.2))
@@ -781,8 +793,13 @@ function DrawHistogram(div_infos, node)
             .attr("stroke-width", .5)
             .attr("stroke-dasharray",  [3, 2])
             .attr("stroke", "black")
-            .style("stroke-opacity", .8);
+            .style("stroke-opacity", .0);
     }
+
+    svg.selectAll(".annotation-line")
+        .transition()
+        .duration(1000)
+        .style("stroke-opacity", .8);
 }
 
 
