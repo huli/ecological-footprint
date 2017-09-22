@@ -345,7 +345,7 @@ function DrawLightbox(div_infos)
         .style("top", (scrollY)+ "px")
         .transition()
         .duration(300)
-        .style("opacity", .9);
+        .style("opacity", .75);
 }
 
 var histogramm_explanation_html = "<div id='histogram-text'>"
@@ -473,7 +473,7 @@ function DrawDougnut(div_infos, node)
         }
 
         var data = getData();
-        
+
         var svg = d3.select("body")
             .selectAll("svg")
             .filter(".pie");
@@ -481,13 +481,22 @@ function DrawDougnut(div_infos, node)
         var slice = svg.select(".slices").selectAll("path.slice")
             .data(pie(data), key);
 
+        var colored = false;
         slice.enter()
             .insert("path")
             .style("fill", function(d) 
                 { 
+                    colored = true;
                     return color(d.data.label); 
                 })
             .attr("class", "slice");
+
+        svg.select(".slices")
+            .selectAll("path.slice")
+            .style("fill", function(d) 
+            { 
+                return color(d.data.label); 
+            });
 
         slice		
             .transition().duration(1000)
