@@ -1695,6 +1695,10 @@ function start_worst()
             {
                 xoffset = -15;
             }
+            if(d["Country Name"] == "Qatar")
+                {
+                    xoffset = -15;
+                }
             return x_scale(d.HDI) + xoffset;
         })
         .attr("dy", function(d){
@@ -1727,6 +1731,7 @@ function filterWorstFunc(d)
         case "Luxembourg":
         case "Canada":
         case "Australia":
+        case "Qatar":
             return false;
             break;
         default:
