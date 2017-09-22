@@ -109,25 +109,56 @@ function setupPie()
 
     svg.attr("transform", "translate(" + width / 2 + "," + height / 1.8 + ")");
 
+    var landData = {
+        "carbon": 8,
+        "fishing ground": .2,
+        "grazing land": .2,
+        "crop land": .3,
+        "built-up land": .4,
+        "forest land": .3
+    };
+
+    var sumOfAll = 0;
+    Object.keys(landData).map(function(key) {
+        return sumOfAll+=landData[key];
+    });
+
+    var aggregateValue = 0;
+
+    var items = Object.keys(landData).map(function(key) {
+        var part = (landData[key]/sumOfAll*100);
+        if(part > 5)
+            return [key, landData[key]];
+        {
+            aggregateValue+= landData[key];
+        }
+    });
+
+    if(aggregateValue>0)
+    {
+        items.push(["others", aggregateValue]);
+    }
+
+    items = items.filter(function(n){ return n != undefined });
+
+    items.sort(function(first, second) {
+        return second[1] - first[1];
+    });
+
+
     var key = function(d){ return d.data.label; };
 
     var color = d3.scaleOrdinal()
-        .domain(["crop land", "fishing ground", "carbon", "built up land", "foreast area", "grazing land"])
+        .domain(items.map((item) => {
+            return item[0]
+        }))
         .range(['#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f']);
-
-    function randomData (){
-        var labels = color.domain();
-        return labels.map(function(label){
-            return { label: label, value: Math.random() }
-        });
-    }
 
     function fixData (){
         var labels = color.domain();
-        var data = [.5, 1, 1.5, 2, 2.5, 3].reverse();
         var i = 0;
-        return labels.map(function(label){
-            return { label: label, value: data[i++] }
+        return labels.map(function(d){
+            return { label: d, value: items[i++][1] }
         });
     }
 

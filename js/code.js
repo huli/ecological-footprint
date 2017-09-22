@@ -201,7 +201,15 @@ function color_countries()
                                 max_year: last_year_of_country,
                                 biocap: 0,
                                 footprint: 0,
-                                metric: 0
+                                metric: 0,
+                                details : {
+                                    crop_land: 0,
+                                    carbon: 0,
+                                    fish_ground: 0,
+                                    built_land: 0,
+                                    forest_land: 0,
+                                    grazing_land: 0
+                                }
                             }
                         }
 
@@ -215,13 +223,24 @@ function color_countries()
                                 max_year: last_year_of_country,
                                 biocap: biocap,
                                 footprint: footprint,
-                                metric: result
+                                metric: result,
+                                details : {
+                                    crop_land: footprint_entry[0].crop_land,
+                                    carbon: footprint_entry[0].carbon,
+                                    fish_ground: footprint_entry[0].fishing_ground,
+                                    built_land: footprint_entry[0].built_up_land,
+                                    forest_land: footprint_entry[0].forest_land,
+                                    grazing_land: footprint_entry[0].grazing_land
+                                }
                         }
                     })
                     .entries(capacity_and_prints);
 
         svg.selectAll('path')
         .on("mouseover", function(d) {
+            
+            d3.select(this).style("cursor", "pointer"); 
+
             div.transition()		
                 .duration(300)		
                 .style("opacity", .8);		
@@ -246,9 +265,52 @@ function color_countries()
                 .style("top", (d3.event.pageY - 10) + "px")
         })					
         .on("mouseout", function(d) {	
+
+            d3.select(this).style("cursor", "default"); 
+            
             div.transition()		
                 .duration(500)		
                 .style("opacity", 0);	
+        })
+        .on("click", function(d)
+        {
+            
+            var value = GetCountryData(d.properties.name);
+            if(value == undefined)
+                return;
+
+            // first hide tooltip
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);
+                
+            // then show details
+            var div_infos = d3
+                    .select("body")
+                    .select(".info");
+
+            if(div_infos.empty())
+            {
+                div_infos = d3.select("body")
+                    .append("div")	
+                    .attr("class", "info")				
+                    .style("opacity", 0);
+            }
+                
+            div_infos.transition()		
+                .duration(500)		
+                .style("opacity", 1);		
+            div_infos	
+                .style("left", (innerWidth/2 - (360)) + "px")		
+                .style("top", (innerHeight/2 - (325) + scrollY) + "px")
+                .style("pointer-events", "all");
+            div_infos.on("click", function(d) {
+                    hideInfos(div_infos);
+                });
+
+            DrawLightbox(div_infos);                     
+            DrawHistogram(div_infos, d);
+            DrawDougnut(div_infos, d);
         })
         .transition()
         .duration(600)
@@ -257,6 +319,509 @@ function color_countries()
             {
                 return get_color(d.properties.name);
             });
+}
+
+function hideInfos(div)
+{
+    div.style("opacity", 0)
+        .transition()
+        .duration(300)
+        .style("pointer-events", "none");
+    
+    d3.select("#lightbox")
+        .transition()
+        .duration(300)
+        .style("opacity", 0)
+        .style("pointer-events", "none");
+}
+
+function DrawLightbox(div_infos)
+{
+    var div = d3.select("#lightbox");
+    if(div.empty())
+    {
+        d3.select("body")
+            .append("div")        
+            .on("click", function(d){
+                hideInfos(div_infos);
+            })
+            .attr("id", "lightbox")
+            .style("opacity", 0);
+    }
+
+    d3.select('#lightbox')       
+        .style("width", innerWidth + "px")
+        .style("height", innerHeight + "px")
+        .style("left", "0px")
+        .style("top", (scrollY)+ "px")
+        .transition()
+        .duration(300)
+        .style("opacity", .75);
+}
+
+var histogramm_explanation_html = "<div id='histogram-text'>"
+        + "{emphasis}<span class='percentage'>{percentage}%</span> of the other countries have a bigger footprint than {country}."
+        + "</div>";
+
+var histogramm_explanation_html_big = "<div id='histogram-text'>"
+        + "<span class='percentage'>{percentage}%</span> of the other countries have a smaller footprint than {country}."
+        + "</div>";
+
+var pie_explanation_html = "<div id='pie-text'>"
+        + "<span class='percentage'>{percentage}%</span>  of its footprint is the demand on {land type}."
+        + "</div>";
+
+function DrawDougnut(div_infos, node)
+{
+    var svg = div_infos.select("#pie");
+    var width = 460,
+        height = 200,
+        radius = Math.min(width, height) / 2;
+
+    var metric = GetCountryData(node.properties.name);
+
+    var landData = {
+        "carbon": Number(metric.details.carbon),
+        "fishing ground": Number(metric.details.fish_ground),
+        "grazing land": Number(metric.details.grazing_land),
+        "crop land": Number(metric.details.crop_land),
+        "built-up land": Number(metric.details.built_land),
+        "forest land": Number(metric.details.forest_land)
+    };
+
+    var items = Object.keys(landData).map(function(key) {
+        return [key, landData[key]];
+    });
+
+    var sumOfAll = 0;
+    Object.keys(landData).map(function(key) {
+        return sumOfAll+=landData[key];
+    });
+
+    var aggregateValue = 0;
+    var items = Object.keys(landData).map(function(key) {
+        var part = (landData[key]/sumOfAll*100);
+        if(part > 5)
+            return [key, landData[key]];
+        {
+            aggregateValue+= landData[key];
+        }
+    });
+
+    if(aggregateValue>0)
+    {
+        items.push(["others", aggregateValue]);
+    }
+
+    items = items.filter(function(n){ return n != undefined });
+
+    items = items.sort(function(first, second) {
+        return second[1] - first[1];
+    });
+        
+    if(svg.empty())
+    {
+        div_infos.append("div")
+            .attr("class", "info-sub-title")
+            .style("padding-top", "20px")
+            .html("Composition of footprint by resource type");
+            
+        svg = div_infos
+            .append("svg")
+            .attr("id", "pie")
+            .attr("width", 460)
+            .attr("height", 300)
+            .attr("class", "pie")
+            .append("g");
+
+        svg.attr("transform", "translate(" + width / 2 + "," + height / 1.8 + ")");
+
+        div_infos.append("div")
+            .attr("class", "pie-explanation");
+    }
+
+    var maxLand = items[0];
+    div_infos.selectAll("div")
+        .filter(".pie-explanation")
+        .html(pie_explanation_html
+            .replace("{percentage}", 
+                (maxLand[1]/sumOfAll*100).toFixed(0).toLocaleString("en"))
+            .replace("{land type}", maxLand[0]));
+
+    svg.append("g")
+        .attr("class", "slices");
+    svg.append("g")
+        .attr("class", "labels");
+    svg.append("g")
+        .attr("class", "lines");
+
+    var pie = d3.pie()
+        .sort(null)
+        .value(function(d) {
+            return d.value;
+        });
+
+    var arc = d3.arc()
+        .outerRadius(radius * 0.8)
+        .innerRadius(radius * 0.4);
+
+    var outerArc = d3.arc()
+        .innerRadius(radius * 0.9)
+        .outerRadius(radius * 0.9);
+
+
+    var key = function(d){ return d.data.label; };
+
+
+    function change() {
+
+        var color = d3.scaleOrdinal()
+        .domain(items.map((item) => {
+            return item[0]
+        }))
+        .range(['#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f']);
+
+
+        function getData (){
+            var i = 0;
+            return items.map(function(d){
+                return { label: d[0], value: d[1] }
+            });
+        }
+
+        var data = getData();
+
+        var svg = d3.select("body")
+            .selectAll("svg")
+            .filter(".pie");
+        
+        var slice = svg.select(".slices").selectAll("path.slice")
+            .data(pie(data), key);
+
+        var colored = false;
+        slice.enter()
+            .insert("path")
+            .style("fill", function(d) 
+                { 
+                    colored = true;
+                    return color(d.data.label); 
+                })
+            .attr("class", "slice");
+
+        svg.select(".slices")
+            .selectAll("path.slice")
+            .style("fill", function(d) 
+            { 
+                return color(d.data.label); 
+            });
+
+        slice		
+            .transition().duration(1000)
+            .attrTween("d", function(d) {
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    return arc(interpolate(t));
+                };
+            })
+
+        slice.exit()
+            .remove();
+
+        var text = svg.select(".labels").selectAll("text")
+            .data(pie(data), key);
+
+        text.enter()
+            .append("text")
+            .attr("dy", ".15em")
+            .text(function(d) {
+                return d.data.label;
+            });
+        
+        function midAngle(d){
+            return d.startAngle + (d.endAngle - d.startAngle)/2;
+        }
+
+        text.transition().duration(1000)
+            .attrTween("transform", function(d) {
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    var d2 = interpolate(t);
+                    var pos = outerArc.centroid(d2);
+                    pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+                    return "translate("+ pos +")";
+                };
+            })
+            .styleTween("text-anchor", function(d){
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    var d2 = interpolate(t);
+                    return midAngle(d2) < Math.PI ? "start":"end";
+                };
+            });
+
+        text.exit()
+            .remove();
+
+        var polyline = svg.select(".lines").selectAll("polyline")
+            .data(pie(data), key);
+        
+        polyline.enter()
+            .append("polyline");
+
+        polyline.transition().duration(1000)
+            .attrTween("points", function(d){
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                    var d2 = interpolate(t);
+                    var pos = outerArc.centroid(d2);
+                    pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+                    return [arc.centroid(d2), outerArc.centroid(d2), pos];
+                };			
+            });
+        
+        polyline.exit()
+            .remove();
+    }
+
+    change();
+    change();
+}
+
+function DrawHistogram(div_infos, node)
+{
+    var country_name = node.properties.name;   
+    var value = GetCountryData(country_name);
+
+    var svg = div_infos.select("#histogram");
+    var currentFootprint = value.footprint;
+    var data = country_metrics_data.map(function(d) {return d.EFConsPerCap;});
+    var formatCount = d3.format(",.0f");
+
+    var div_width = div_infos.node().getBoundingClientRect().width;
+    var div_height = div_infos.node().getBoundingClientRect().height;
+    
+    var margin = {top: 10, right: 30, bottom: 40, left: 30},
+        width = div_width - margin.left - margin.right,
+        height = (250 - margin.top - margin.bottom);
+        
+    var x = d3.scaleLinear()
+        .domain([0,13.5])
+        .range([0, width]);
+
+    if(svg.empty())
+    {
+        div_infos.append("div")
+            .attr("class", "info-title")
+            .html("Details of " + country_name);
+
+        div_infos.append("div")
+            .attr("class", "info-sub-title")
+            .html("Distribution of the countries and their footprints");
+
+        div_infos.append("div")
+            .attr("class", "histogram-explanation");
+
+        svg = div_infos
+            .append("svg")
+            .attr("id", "histogram");
+
+        var g = svg.append("g");
+
+        svg.style("width", div_width + "px")
+            .style("height", height + margin.top + margin.bottom + "px")
+            
+        g.attr("transform", "translate(" + margin.left + ", 10)");
+    
+        var bins = d3.histogram()
+            .domain([0, 13.5])
+            .thresholds(d3.ticks(0, 13.5, 60))
+                (data);
+    
+        var y = d3.scaleLinear()
+            .domain([0, d3.max(bins, function(d) { return d.length; })])
+            .range([height, 0]);
+    
+        var bar = g.selectAll(".bar")
+            .data(bins)
+            .enter().append("g")
+                .attr("class", "bar")
+                .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + height + ")"; })
+                .attr("fill", function(d)
+                {
+                    var val = d.x0;
+                    var max = 13.4;
+                    var part = 13.4 / 8;
+                    var color_index;
+                    switch (true) {
+                        case (val < (part)): color_index = 7; break;
+                        case (val < (2*part)): color_index = 6; break;
+                        case (val < (3*part)): color_index = 5; break;
+                        case (val < (4*part)): color_index = 4; break;
+                        case (val < (5*part)): color_index = 3; break;
+                        case (val < (6*part)): color_index = 2; break;
+                        case (val < (7*part)): color_index = 1; break;
+                        default:
+                            color_index = 0; break;
+                    
+                    }
+                    return colors[color_index];
+                })
+                .style("opacity", .8);
+    
+        var duration = 500;
+        bar.append("rect")
+            .attr("x", 1)
+            .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
+            .transition()
+            .duration(duration+=500)
+            .attr("transform", function(d) { return "translate(0, -" + (height - y(d.length)) + ")"; })
+            .attr("height", function(d) { return height - y(d.length); });
+    
+        g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .style("font-size", 8)
+            .style("stroke-opacity", .5)
+            .style("opacity", .4)
+            .call(d3.axisBottom(x));
+    }
+
+    var biggerPercentage = calcPercentage(country_metrics_data, currentFootprint);
+
+    div_infos.selectAll("div")
+        .filter(".histogram-explanation")
+        .style("opacity", 0);
+
+    if(currentFootprint > 8)
+    {
+        div_infos.selectAll("div")
+        .filter(".histogram-explanation")
+        .html(histogramm_explanation_html_big
+            .replace("{percentage}", 
+                (100-biggerPercentage).toFixed(0).toLocaleString("en"))
+            .replace("{country}", country_name));
+    }   
+    else
+    {
+        div_infos.selectAll("div")
+        .filter(".histogram-explanation")
+        .html(histogramm_explanation_html
+            .replace("{percentage}", 
+                biggerPercentage.toFixed(0).toLocaleString("en"))
+            .replace("{country}", country_name)
+            .replace("{emphasis}", biggerPercentage > 50 ? "":"Only "));
+    }          
+
+    div_infos.selectAll("div")
+        .filter(".histogram-explanation")
+        .transition()
+        .duration(500)
+        .style("opacity", 1);
+        
+    div_infos.select("div")
+        .filter(".info-title")
+        .html("Details of " + country_name);
+
+    svg.selectAll("g")
+        .selectAll("line")
+        .remove();
+
+    // mark country
+    svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .append("line")
+        .attr("x1", x(currentFootprint))
+        .attr("y1", 10)
+        .attr("x2", x(currentFootprint))
+        .attr("y2", height)
+        .attr("stroke-width", .5)
+        .attr("stroke-dasharray",  [3, 2])
+        .attr("stroke", "black")
+        .style("stroke-opacity", .8);
+
+    if(currentFootprint > 8)
+    {
+        svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .append("line")
+            .attr("class", "annotation-line")
+            .attr("x1", x(.3))
+            .attr("y1", 10)
+            .attr("x2", x(.3))
+            .attr("y2", height)
+            .attr("stroke-width", .5)
+            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke", "black")
+            .style("stroke-opacity", .0);
+
+        svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .append("line")
+            .attr("class", "annotation-line")
+            .attr("x1", x(currentFootprint))
+            .attr("y1", 50)
+            .attr("x2", x(.3))
+            .attr("y2", 50)
+            .attr("stroke-width", .5)
+            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke", "black")
+            .style("stroke-opacity", .0);
+
+        div_infos.select("#histogram-text")
+            .style("left", "220px");
+    }
+    else
+    {
+        svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .append("line")
+            .attr("class", "annotation-line")
+            .attr("x1", x(13.2))
+            .attr("y1", 10)
+            .attr("x2", x(13.2))
+            .attr("y2", height)
+            .attr("stroke-width", .5)
+            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke", "black")
+            .style("stroke-opacity", .0);
+        
+            svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .append("line")
+            .attr("class", "annotation-line")
+            .attr("x1", x(currentFootprint))
+            .attr("y1", 50)
+            .attr("x2", x(13.2))
+            .attr("y2", 50)
+            .attr("stroke-width", .5)
+            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke", "black")
+            .style("stroke-opacity", .0);
+    }
+
+    svg.selectAll(".annotation-line")
+        .transition()
+        .duration(1000)
+        .style("stroke-opacity", .8);
+}
+
+
+function calcPercentage(data, fp)
+{
+    var numberOfCountries = data.length;
+    var countiesWithSmallerFp = data.filter(function(d){
+            return d.EFConsPerCap > fp;
+    }).length;
+    
+    return countiesWithSmallerFp / numberOfCountries * 100;
 }
 
 var creditor_text = "{country} has a per capita footprint of<br/><span class='footprint'>{fp}</span> ha<br/>"+
@@ -344,7 +909,8 @@ function GetCountryData(name)
         biocap: metric_record.biocap,
         footprint: metric_record.footprint,
         metric: metric_record.metric,
-        country: metric_record.country
+        country: metric_record.country,
+        details: metric_record.details
     };
 }
 
@@ -1877,8 +2443,6 @@ function scrollVertical(e){
     }
 
 }
-
-
 
 var isFadingOut = false;
 function fadeOutMap(alpha)

@@ -65,24 +65,29 @@ h3 {
 
 #worst-timeline-content{
     height: 50%;
+    pointer-events: none;	
 }
 
 #what-about-you-content{
-    height: 400px;
+    height: 400px;    	
+    pointer-events: none;	
 }
 
 #about-you-content{
     width: 400px;
+    pointer-events: none;	
 }
 
 #about-you-title{
     width: 200px;
+    pointer-events: none;	
 }
 
 #about-you-hint
 {
     margin-bottom: 30px;
     width: 400px;
+    pointer-events: none;	
 }
 
 #container{
@@ -373,17 +378,130 @@ div.tooltip {
 }
   
 #top-spacer {
-    padding-top: 30%;
+    padding-top: 30%;	
+    pointer-events: none;	
 }
 
 #middle-spacer {
-    padding-top: 70%;
+    padding-top: 70%;	
+    pointer-events: none;	
 }
 
 #bottom-spacer {
-    padding-top: 60%;
+    padding-top: 60%;	
+    pointer-events: none;	
 }
 
 #small-spacer{
-    padding-top: 10%;
+    padding-top: 10%;	
+    pointer-events: none;	
+}
+
+div.info {	
+    position: absolute;			
+    padding-left: 5px;		
+    padding-right: 5px;
+    padding-top: 2px;		
+    padding-bottom: 2px;	
+    width: 740px;					
+    height: 650px;				
+    font: 10px sans-serif;	
+    color: white;	
+    background: white;	
+    border: 0px;		
+    z-index: 15;		
+}  
+
+div.info-title
+{
+    font-family: 'Average', serif;
+    font-size: 20px;
+    font-weight: bold;
+    /* color:#246175; */
+    color: black;
+    padding: 30px;
+    opacity: .7;
+}
+
+div.info-sub-title
+{
+    font-family: 'Average', serif;
+    font-size: 14px;
+    color:black; 
+    padding-left: 30px;
+    opacity: .7;
+}
+
+.percentage
+{
+    font-family: 'Average', serif;
+    font-size: 32px;
+    color: #bf812d;
+    font-weight: bold;
+}
+
+
+#histogram-text{
+    font-family: 'Average', serif;
+    font-size: 12px;
+    position: absolute;
+    color:black; 
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    top: 130px;
+    left: 440px;
+    width: 220px;
+    height: 100px;
+}
+
+#pie-text{
+    font-family: 'Average', serif;
+    font-size: 12px;
+    position: absolute;
+    color:black; 
+    padding: 10px;
+    background-color: white;
+    top: 450px;
+    left: 450px;
+    width: 200px;
+    height: 100px;
+}
+
+#lightbox{
+    position: absolute;
+    z-index: 10;
+    background-color: white;
+}
+
+path.slice{
+	stroke-width:1px;
+    stroke: #fff;
+}
+
+polyline{
+	opacity: .6;
+	stroke: darkgray;
+	stroke-width: 1px;
+	fill: none;
+}
+
+
+.arc text {
+    text-anchor: middle;
+    font-family: 'Average', serif;
+}
+  
+.arc path {
+    stroke: #fff;
+}
+
+.labels text{
+    font-size: 10px;
+    font-family: 'Average', serif;
+}
+ 
+.axis{
+    color: darkgrey;
+    opacity: 0.4
 }
