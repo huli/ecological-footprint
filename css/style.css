@@ -93,6 +93,11 @@ h3 {
 #container{
     position: relative;
   }
+
+#select-country
+{
+    pointer-events: all;	
+}
   
 #sections{
     padding-top: 10px;
