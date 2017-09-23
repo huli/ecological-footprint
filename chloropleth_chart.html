@@ -69,6 +69,55 @@
             z-index: 10;		
         }
 
+        button {
+            -webkit-appearance: none;
+            background: transparent;
+            border: 0;
+            outline:0;
+        }
+
+        .arrow-info {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            margin-top: -45px;
+            margin-left: -35px;
+            width: 70px;
+            height: 90px;
+        }
+
+        .left {
+            left: -40px;
+        }
+
+        .right {
+            right: 20px;
+        }
+
+        .left:hover polyline,
+        .left:focus polyline {
+            stroke-width: 3;
+        }
+
+        .left:active polyline {
+            stroke-width: 3;
+            transition: all 100ms ease-in-out;
+        }
+
+        .right:hover polyline,
+        .right:focus polyline {
+            stroke-width: 2;
+        }
+
+        .right:active polyline {
+            stroke-width: 5;
+            transition: all 100ms ease-in-out;
+        }
+
+        polyline {
+            transition: all 250ms ease-in-out;
+        }
+
     </style>
     <script type="text/javascript">
         function draw(geo_data)
@@ -130,11 +179,24 @@
                                 div_infos.transition()		
                                     .duration(300)		
                                     .style("opacity", .8);		
-                                div_infos.html("Information")	
+                                div_infos.html("<button class='arrow-info left'>"
+ + "<svg width='20px' height='30px' viewBox='0 0 50 80' xml:space='preserve'>"
+ + "  <polyline fill='none' stroke='#000000' stroke-width='1' stroke-linecap='round' stroke-linejoin='round' points='"
++	"45.63,75.8 0.375,38.087 45.63,0.375 '/>"
+ + "</svg>  "
++"</button>"
++"<button class='arrow-info right'>"
++  "<svg  width='20px' height='30px'  viewBox='0 0 50 80' xml:space='preserve'>"
++    "<polyline fill='none' stroke='#000000' stroke-width='1' stroke-linecap='round' stroke-linejoin='round' points='"
++	"0.375,0.375 45.63,38.087 0.375,75.8 '/>"
++  "</svg>"
++"</button>")	
                                     .style("left", (innerWidth/2 - 400) + "px")		
                                     .style("top", (innerHeight/2 - 200) + "px")
                                     .style("pointer-events", "all");
                                 div_infos.on("click", function(d){
+
+                                    debugger;
                                     div_infos	
                                     .style("opacity", 0)
                                     .style("pointer-events", "none");
@@ -405,6 +467,10 @@
             }, color_countries);
         }
     
+    function gugus()
+    {
+        alert("foo");
+    }
     function lightboxClose()
     {
         d3.select('#fade')

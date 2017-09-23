@@ -608,7 +608,7 @@ function DrawHistogram(div_infos, node)
     var div_width = div_infos.node().getBoundingClientRect().width;
     var div_height = div_infos.node().getBoundingClientRect().height;
     
-    var margin = {top: 10, right: 30, bottom: 40, left: 30},
+    var margin = {top: 10, right: 70, bottom: 40, left: 60},
         width = div_width - margin.left - margin.right,
         height = (250 - margin.top - margin.bottom);
         
@@ -628,6 +628,20 @@ function DrawHistogram(div_infos, node)
 
         div_infos.append("div")
             .attr("class", "histogram-explanation");
+
+        div_infos.append("div")
+            .html("<button class='arrow-info left'>"
+                    + "<svg width='20px' height='30px' viewBox='0 0 50 80' xml:space='preserve'>"
+                    + "  <polyline fill='none' stroke='#000000' stroke-linecap='round' stroke-linejoin='round' points='"
+                    +	"45.63,75.8 0.375,38.087 45.63,0.375 '/>"
+                    + "</svg>  "
+                    +"</button>"
+                    +"<button class='arrow-info right'>"
+                    +  "<svg  width='20px' height='30px'  viewBox='0 0 50 80' xml:space='preserve'>"
+                    +    "<polyline fill='none' stroke='#000000' stroke-linecap='round' stroke-linejoin='round' points='"
+                    +	"0.375,0.375 45.63,38.087 0.375,75.8 '/>"
+                    +  "</svg>"
+                    +"</button>");
 
         svg = div_infos
             .append("svg")
