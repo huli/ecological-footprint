@@ -2145,7 +2145,7 @@ function draw_overview_bubble(data)
                 svg.append("text")
                     .attr("class", "annotation-text")
                     .text("World biocapacity (1.7 h)")
-                    .attr("x", 270)
+                    .attr("x", 330)
                     .attr("y", y_scale(1.74) -9)
                     .style("opacity", 0)
                     .transition() 
@@ -2180,7 +2180,7 @@ function draw_overview_bubble(data)
     // Population size                
     var legendGroup = svg
         .append("g")
-        .attr("transform", "translate(590, 60)")
+        .attr("transform", "translate(530, 100)")
         .style("opacity", 0);
 
     var biggest = 100000000;
@@ -2234,7 +2234,7 @@ function draw_overview_bubble(data)
 
     var legendImpactGroup = svg
         .append("g")
-        .attr("transform", "translate(600, 120)")
+        .attr("transform", "translate(540, 160)")
         .style("opacity", 0);;
 
     legendImpactGroup
@@ -2268,14 +2268,14 @@ function draw_overview_bubble(data)
         .append("text")
         .attr("class", "legend-text")
         .text(Number(sizes[0]/1000000).toLocaleString("en") + " M ha")
-        .attr("x", -2)
+        .attr("x", 0)
         .attr("y", 30);
 
     legendImpactGroup
         .append("text")
         .attr("class", "legend-text")
         .text(Number(sizes[sizes.length-1]/1000000000).toLocaleString("en") + " B ha")
-        .attr("x",  legend_width - 15)
+        .attr("x",  legend_width - 25)
         .attr("y", 30);
 
     legendGroup
