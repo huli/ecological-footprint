@@ -13,6 +13,7 @@ var timeline_inactive_opacity = .3;
 var colors = ['#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e'];
 
 var country_metrics_data;
+var country_metrics_rankings;
 var timeline_metrics_data;
 var biocapacity_metrics;
 
@@ -304,13 +305,16 @@ function color_countries()
                 .style("left", (innerWidth/2 - (360)) + "px")		
                 .style("top", (innerHeight/2 - (325) + scrollY) + "px")
                 .style("pointer-events", "all");
-            div_infos.on("click", function(d) {
-                    hideInfos(div_infos);
+            
+            currentCountry = d.properties.name;
+
+            div_infos.on("click", function(d2) {
+                    ChangeCountryOrHideInfos(div_infos);
                 });
 
             DrawLightbox(div_infos);                     
-            DrawHistogram(div_infos, d);
-            DrawDougnut(div_infos, d);
+            DrawHistogram(div_infos, d.properties.name);
+            DrawDougnut(div_infos, d.properties.name);
         })
         .transition()
         .duration(600)
@@ -319,6 +323,54 @@ function color_countries()
             {
                 return get_color(d.properties.name);
             });
+}
+
+var currentCountry;
+
+function ChangeCountryOrHideInfos(div)
+{
+    if(d3.event.target.localName == "polyline")
+    {  
+        var nextCountry = GetNextRanking(d3.event.pageX > 600,
+                currentCountry);      
+        
+        if(nextCountry == null)
+            return;
+
+        var div_infos = d3
+                .select("body")
+                .select(".info")  
+
+        DrawHistogram(div_infos, nextCountry);
+        DrawDougnut(div_infos, nextCountry);
+    }
+    else
+    {    
+        hideInfos(div);
+    }
+}
+
+function GetNextRanking(isForeward, name)
+{
+    var nextRanking = country_metrics_rankings.indexOf(name);
+    if(isForeward)
+    {
+        nextRanking = nextRanking+1;
+    }
+    else
+    {
+        nextRanking = nextRanking-1;
+    }
+    if(nextRanking < 0) return null;
+    if(nextRanking >= 175) return null;
+    var nextName = country_metrics_rankings[nextRanking];
+    var value = GetCountryData(nextName);
+    if(value == undefined)
+    {
+        return GetNextRanking(isForeward, nextName);
+    }
+    currentCountry = nextName;
+    return nextName;
 }
 
 function hideInfos(div)
@@ -371,14 +423,14 @@ var pie_explanation_html = "<div id='pie-text'>"
         + "<span class='percentage'>{percentage}%</span>  of its footprint is the demand on {land type}."
         + "</div>";
 
-function DrawDougnut(div_infos, node)
+function DrawDougnut(div_infos, country_name)
 {
     var svg = div_infos.select("#pie");
     var width = 460,
         height = 200,
         radius = Math.min(width, height) / 2;
 
-    var metric = GetCountryData(node.properties.name);
+    var metric = GetCountryData(country_name);
 
     var landData = {
         "carbon": Number(metric.details.carbon),
@@ -595,9 +647,8 @@ function DrawDougnut(div_infos, node)
     change();
 }
 
-function DrawHistogram(div_infos, node)
-{
-    var country_name = node.properties.name;   
+function DrawHistogram(div_infos, country_name)
+{  
     var value = GetCountryData(country_name);
 
     var svg = div_infos.select("#histogram");
@@ -608,7 +659,7 @@ function DrawHistogram(div_infos, node)
     var div_width = div_infos.node().getBoundingClientRect().width;
     var div_height = div_infos.node().getBoundingClientRect().height;
     
-    var margin = {top: 10, right: 30, bottom: 40, left: 30},
+    var margin = {top: 10, right: 70, bottom: 40, left: 60},
         width = div_width - margin.left - margin.right,
         height = (250 - margin.top - margin.bottom);
         
@@ -619,8 +670,7 @@ function DrawHistogram(div_infos, node)
     if(svg.empty())
     {
         div_infos.append("div")
-            .attr("class", "info-title")
-            .html("Details of " + country_name);
+            .attr("class", "info-title");
 
         div_infos.append("div")
             .attr("class", "info-sub-title")
@@ -628,6 +678,20 @@ function DrawHistogram(div_infos, node)
 
         div_infos.append("div")
             .attr("class", "histogram-explanation");
+
+        div_infos.append("div")
+            .html("<button class='arrow-info left'>"
+                    + "<svg width='20px' height='30px' viewBox='0 0 50 80' xml:space='preserve'>"
+                    + "  <polyline fill='none' stroke='#000000' stroke-linecap='round' stroke-linejoin='round' points='"
+                    +	"45.63,75.8 0.375,38.087 45.63,0.375 '/>"
+                    + "</svg>  "
+                    +"</button>"
+                    +"<button class='arrow-info right'>"
+                    +  "<svg  width='20px' height='30px'  viewBox='0 0 50 80' xml:space='preserve'>"
+                    +    "<polyline fill='none' stroke='#000000' stroke-linecap='round' stroke-linejoin='round' points='"
+                    +	"0.375,0.375 45.63,38.087 0.375,75.8 '/>"
+                    +  "</svg>"
+                    +"</button>");
 
         svg = div_infos
             .append("svg")
@@ -694,6 +758,12 @@ function DrawHistogram(div_infos, node)
             .call(d3.axisBottom(x));
     }
 
+    var ranking = GetRanking(country_name);
+    div_infos.select("div")
+        .filter(".info-title")
+        .html("Details of " + country_name 
+                + " (Ranked "+ranking+" of 175 resource saver)");
+
     var biggerPercentage = calcPercentage(country_metrics_data, currentFootprint);
 
     div_infos.selectAll("div")
@@ -725,10 +795,6 @@ function DrawHistogram(div_infos, node)
         .transition()
         .duration(500)
         .style("opacity", 1);
-        
-    div_infos.select("div")
-        .filter(".info-title")
-        .html("Details of " + country_name);
 
     svg.selectAll("g")
         .selectAll("line")
@@ -738,6 +804,7 @@ function DrawHistogram(div_infos, node)
     svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .append("line")
+        .attr("class", "annotation-line")
         .attr("x1", x(currentFootprint))
         .attr("y1", 10)
         .attr("x2", x(currentFootprint))
@@ -745,7 +812,7 @@ function DrawHistogram(div_infos, node)
         .attr("stroke-width", .5)
         .attr("stroke-dasharray",  [3, 2])
         .attr("stroke", "black")
-        .style("stroke-opacity", .8);
+        .style("stroke-opacity", .0);
 
     if(currentFootprint > 8)
     {
@@ -774,9 +841,9 @@ function DrawHistogram(div_infos, node)
             .attr("stroke-dasharray",  [3, 2])
             .attr("stroke", "black")
             .style("stroke-opacity", .0);
-
+            
         div_infos.select("#histogram-text")
-            .style("left", "220px");
+            .style("left", currentFootprint > 12 ? "280px" : "250px");
     }
     else
     {
@@ -813,6 +880,10 @@ function DrawHistogram(div_infos, node)
         .style("stroke-opacity", .8);
 }
 
+function GetRanking(countryName)
+{
+    return country_metrics_rankings.indexOf(countryName) + 1;
+}
 
 function calcPercentage(data, fp)
 {
@@ -1904,6 +1975,14 @@ function RedrawOverview()
 function draw_overview_bubble(data)
 {
     country_metrics_data = data;
+
+    country_metrics_rankings =  country_metrics_data
+            .sort(function(first, second) {
+                return Number(first.EFConsPerCap) - Number(second.EFConsPerCap);
+            })
+            .map(function(d){
+                return d["Country Name"];
+            });
 
     if(isOverviewDrawn) 
     {

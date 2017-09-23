@@ -408,7 +408,7 @@ div.info {
     padding-right: 5px;
     padding-top: 2px;		
     padding-bottom: 2px;	
-    width: 740px;					
+    width: 800px;					
     height: 650px;				
     font: 10px sans-serif;	
     color: white;	
@@ -424,7 +424,9 @@ div.info-title
     font-weight: bold;
     /* color:#246175; */
     color: black;
-    padding: 30px;
+    padding: 20px;
+    padding-top: 40px;
+    padding-left: 50px;
     opacity: .7;
 }
 
@@ -433,7 +435,7 @@ div.info-sub-title
     font-family: 'Average', serif;
     font-size: 14px;
     color:black; 
-    padding-left: 30px;
+    padding-left: 50px;
     opacity: .7;
 }
 
@@ -452,11 +454,11 @@ div.info-sub-title
     position: absolute;
     color:black; 
     background-color: white;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
     top: 130px;
-    left: 440px;
-    width: 220px;
+    left: 450px;
+    width: 210px;
     height: 100px;
 }
 
@@ -509,4 +511,54 @@ polyline{
 .axis{
     color: darkgrey;
     opacity: 0.4
+}
+
+button {
+    -webkit-appearance: none;
+    background: transparent;
+    border: 0;
+    outline:0;
+}
+
+.arrow-info {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    margin-top: -45px;
+    margin-left: -35px;
+    width: 70px;
+    height: 90px;
+}
+
+.left {
+    left: 25px;
+}
+
+.right {
+    left: 782px;
+}
+
+.left:hover polyline,
+.left:focus polyline {
+    stroke-width: 3;
+}
+
+.left:active polyline {
+    stroke-width: 3;
+    transition: all 100ms ease-in-out;
+}
+
+.right:hover polyline,
+.right:focus polyline {
+    stroke-width: 2;
+}
+
+.right:active polyline {
+    stroke-width: 5;
+    transition: all 100ms ease-in-out;
+}
+
+div.info polyline {
+    stroke-width: 2;
+    transition: all 250ms ease-in-out;
 }
