@@ -412,11 +412,11 @@ function DrawLightbox(div_infos)
 }
 
 var histogramm_explanation_html = "<div id='histogram-text'>"
-        + "{emphasis}<span class='percentage'>{percentage}%</span> of the other countries have a bigger footprint than {country}."
+        + "{emphasis}<span class='percentage'>{percentage}%</span> of the countries have a bigger footprint than {country}."
         + "</div>";
 
 var histogramm_explanation_html_big = "<div id='histogram-text'>"
-        + "<span class='percentage'>{percentage}%</span> of the other countries have a smaller footprint than {country}."
+        + "<span class='percentage'>{percentage}%</span> of the countries have a smaller footprint than {country}."
         + "</div>";
 
 var pie_explanation_html = "<div id='pie-text'>"
@@ -681,13 +681,13 @@ function DrawHistogram(div_infos, country_name)
 
         div_infos.append("div")
             .html("<button class='arrow-info left'>"
-                    + "<svg width='20px' height='30px' viewBox='0 0 50 80' xml:space='preserve'>"
+                    + "<svg width='30px' height='40px' viewBox='0 0 50 80' xml:space='preserve'>"
                     + "  <polyline fill='none' stroke='#000000' stroke-linecap='round' stroke-linejoin='round' points='"
                     +	"45.63,75.8 0.375,38.087 45.63,0.375 '/>"
                     + "</svg>  "
                     +"</button>"
                     +"<button class='arrow-info right'>"
-                    +  "<svg  width='20px' height='30px'  viewBox='0 0 50 80' xml:space='preserve'>"
+                    +  "<svg  width='30px' height='40px'  viewBox='0 0 50 80' xml:space='preserve'>"
                     +    "<polyline fill='none' stroke='#000000' stroke-linecap='round' stroke-linejoin='round' points='"
                     +	"0.375,0.375 45.63,38.087 0.375,75.8 '/>"
                     +  "</svg>"
@@ -762,7 +762,7 @@ function DrawHistogram(div_infos, country_name)
     div_infos.select("div")
         .filter(".info-title")
         .html("Details of " + country_name 
-                + " (Ranked "+ranking+" of 175 resource saver)");
+                + " (No "+ranking+" of 175 in resource saver)");
 
     var biggerPercentage = calcPercentage(country_metrics_data, currentFootprint);
 
@@ -792,8 +792,6 @@ function DrawHistogram(div_infos, country_name)
 
     div_infos.selectAll("div")
         .filter(".histogram-explanation")
-        .transition()
-        .duration(500)
         .style("opacity", 1);
 
     svg.selectAll("g")

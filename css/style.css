@@ -531,34 +531,16 @@ button {
 }
 
 .left {
-    left: 25px;
+    left: -40px;
 }
 
 .right {
-    left: 782px;
+    left: 852px;
 }
 
-.left:hover polyline,
-.left:focus polyline {
-    stroke-width: 3;
-}
 
-.left:active polyline {
-    stroke-width: 3;
-    transition: all 100ms ease-in-out;
-}
-
-.right:hover polyline,
-.right:focus polyline {
-    stroke-width: 2;
-}
-
-.right:active polyline {
-    stroke-width: 5;
-    transition: all 100ms ease-in-out;
-}
-
-div.info polyline {
-    stroke-width: 2;
-    transition: all 250ms ease-in-out;
+button polyline {
+    stroke-width: 4;
+    /* transition: all 250ms ease-in-out; */
+    opacity: .9;
 }
