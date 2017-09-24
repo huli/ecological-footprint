@@ -807,7 +807,7 @@ function DrawHistogram(div_infos, country_name)
             .replace("{percentage}", 
                 biggerPercentage.toFixed(0).toLocaleString("en"))
             .replace("{country}", country_name)
-            .replace("{emphasis}", biggerPercentage > 50 ? "":"Only "));
+            .replace("{emphasis}", biggerPercentage > 40 ? "":"Only "));
     }          
 
     div_infos.selectAll("div")
@@ -857,12 +857,12 @@ function DrawHistogram(div_infos, country_name)
             .attr("x2", x(.3))
             .attr("y2", 50)
             .attr("stroke-width", .5)
-            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke-dasharray",  [1, 3])
             .attr("stroke", "black")
             .style("stroke-opacity", .0);
             
         div_infos.select("#histogram-text")
-            .style("left", currentFootprint > 12 ? "280px" : "250px");
+            .style("left", currentFootprint > 12 ? "280px" : "235px");
     }
     else
     {
@@ -888,7 +888,7 @@ function DrawHistogram(div_infos, country_name)
             .attr("x2", x(13.2))
             .attr("y2", 50)
             .attr("stroke-width", .5)
-            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke-dasharray",  [1, 3])
             .attr("stroke", "black")
             .style("stroke-opacity", .0);
     }

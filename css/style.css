@@ -540,7 +540,7 @@ button {
 
 
 button polyline {
-    stroke-width: 4;
+    stroke-width: 3;
     /* transition: all 250ms ease-in-out; */
     opacity: .9;
 }
