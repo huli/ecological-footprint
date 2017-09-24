@@ -416,11 +416,11 @@ var histogramm_explanation_html = "<div id='histogram-text'>"
         + "</div>";
 
 var histogramm_explanation_html_big = "<div id='histogram-text'>"
-        + "<span class='percentage'>{percentage}%</span> of the countries have a smaller footprint than {country}."
+        + "<span class='percentage-bigger'>{percentage}%</span> of the countries have a smaller footprint than {country}."
         + "</div>";
 
 var pie_explanation_html = "<div id='pie-text'>"
-        + "<span class='percentage'>{percentage}%</span>  of its footprint is the demand on {land type}."
+        + "<span class='percentage-bigger'>{percentage}%</span>  of its footprint is the demand on {land type}."
         + "</div>";
 
 function DrawDougnut(div_infos, country_name)
@@ -475,7 +475,7 @@ function DrawDougnut(div_infos, country_name)
     {
         div_infos.append("div")
             .attr("class", "info-sub-title")
-            .style("padding-top", "20px")
+            .style("padding-top", "25px")
             .html("Composition of footprint by resource type");
             
         svg = div_infos
@@ -765,10 +765,10 @@ function DrawHistogram(div_infos, country_name)
     
         g.append("g")     
             .attr("class", "hist-annotation")
-            .attr("transform", "translate("+(width+32)+","+(height/2+40)+") rotate(-90)")   
+            .attr("transform", "translate("+(width+32)+","+(height/2+50)+") rotate(-90)")   
             .style("font-size", 12)
             .append("text")
-            .text("No. of countries");
+            .text("Number of countries");
                 
         g.append("g")
             .attr("class", "axis axis--y")
@@ -782,7 +782,7 @@ function DrawHistogram(div_infos, country_name)
     div_infos.select("div")
         .filter(".info-title")
         .html("Details of " + country_name 
-                + " (No. "+ranking+" of 175 in resource saver)");
+                + "<span class='ranking-title'>(No "+ranking+" of 175, by footprint size desc)</span>");
 
     var biggerPercentage = calcPercentage(country_metrics_data, currentFootprint);
 
@@ -790,7 +790,7 @@ function DrawHistogram(div_infos, country_name)
         .filter(".histogram-explanation")
         .style("opacity", 0);
 
-    if(currentFootprint > 8)
+    if(currentFootprint > 2.5)
     {
         div_infos.selectAll("div")
         .filter(".histogram-explanation")
@@ -828,10 +828,10 @@ function DrawHistogram(div_infos, country_name)
         .attr("y1", 10)
         .attr("x2", x(currentFootprint))
         .attr("y2", height)
-        .attr("stroke-width", .5)
-        .attr("stroke-dasharray",  [3, 2])
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray",  [5, 2])
         .attr("stroke", "black")
-        .style("stroke-opacity", .0);
+        .style("stroke-opacity", 1);
 
     if(currentFootprint > 8)
     {
@@ -844,7 +844,7 @@ function DrawHistogram(div_infos, country_name)
             .attr("x2", x(.3))
             .attr("y2", height)
             .attr("stroke-width", .5)
-            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke-dasharray",  [1, 3])
             .attr("stroke", "black")
             .style("stroke-opacity", .0);
 
@@ -870,12 +870,12 @@ function DrawHistogram(div_infos, country_name)
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
             .append("line")
             .attr("class", "annotation-line")
-            .attr("x1", x(13.2))
+            .attr("x1", x(13.3))
             .attr("y1", 10)
-            .attr("x2", x(13.2))
+            .attr("x2", x(13.3))
             .attr("y2", height)
             .attr("stroke-width", .5)
-            .attr("stroke-dasharray",  [3, 2])
+            .attr("stroke-dasharray",  [1, 3])
             .attr("stroke", "black")
             .style("stroke-opacity", .0);
         
@@ -885,7 +885,7 @@ function DrawHistogram(div_infos, country_name)
             .attr("class", "annotation-line")
             .attr("x1", x(currentFootprint))
             .attr("y1", 50)
-            .attr("x2", x(13.2))
+            .attr("x2", x(13.3))
             .attr("y2", 50)
             .attr("stroke-width", .5)
             .attr("stroke-dasharray",  [1, 3])

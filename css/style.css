@@ -421,12 +421,26 @@ div.info-title
 {
     font-family: 'Average', serif;
     font-size: 20px;
-    font-weight: bold;
     /* color:#246175; */
+    font-weight: bold;
     color: black;
     padding: 20px;
     padding-top: 40px;
     padding-left: 50px;
+    opacity: .7;
+}
+
+
+.ranking-title
+{
+    font-family: 'Average', serif;
+    font-size: 14px;
+    /* color:#246175; */
+    font-weight: normal;
+    color: black;
+    padding: 20px;
+    padding-top: 40px;
+    padding-left: 10px;
     opacity: .7;
 }
 
@@ -439,11 +453,19 @@ div.info-sub-title
     opacity: .7;
 }
 
-.percentage
+.percentage-bigger
 {
     font-family: 'Average', serif;
     font-size: 32px;
     color: #bf812d;
+    font-weight: bold;
+}
+
+.percentage
+{
+    font-family: 'Average', serif;
+    font-size: 32px;
+    color: #35978f;
     font-weight: bold;
 }
 
@@ -469,7 +491,7 @@ div.info-sub-title
     color:black; 
     padding: 10px;
     background-color: white;
-    top: 450px;
+    top: 475px;
     left: 450px;
     width: 200px;
     height: 100px;
