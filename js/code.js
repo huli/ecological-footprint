@@ -2531,10 +2531,22 @@ function AnnotateSource(svg, left, top)
 var choroplethShown = false;
 
 function scrollVertical(e){
-    if (!choroplethShown && (window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
-        //alert("you're at the bottom of the page");        
+    if (!choroplethShown && (window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {             
         show_choropleth();
         choroplethShown = true;
+    }
+
+    if(choroplethShown  && (window.innerHeight + window.pageYOffset) < document.body.offsetHeight)
+    {
+        var alpha = document.body.offsetHeight - (window.innerHeight + window.pageYOffset);
+        var opacity = 100-(alpha/10);
+        console.log("fade out choropleth: " + opacity);
+        if(opacity >= 0)
+        {        
+            d3.select(closing_div)
+            .select("svg")
+            .attr("opacity", opacity/100);
+        }
     }
 
     if(pageYOffset > 700) return;
