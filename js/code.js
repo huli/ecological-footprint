@@ -486,7 +486,7 @@ function DrawDougnut(div_infos, country_name)
             .attr("class", "pie")
             .append("g");
 
-        svg.attr("transform", "translate(" + width / 2 + "," + height / 1.8 + ")");
+        svg.attr("transform", "translate(" + width / 2 + "," + height / 1.6 + ")");
 
         div_infos.append("div")
             .attr("class", "pie-explanation");
@@ -659,7 +659,7 @@ function DrawHistogram(div_infos, country_name)
     var div_width = div_infos.node().getBoundingClientRect().width;
     var div_height = div_infos.node().getBoundingClientRect().height;
     
-    var margin = {top: 10, right: 70, bottom: 40, left: 60},
+    var margin = {top: 10, right: 100, bottom: 40, left: 60},
         width = div_width - margin.left - margin.right,
         height = (250 - margin.top - margin.bottom);
         
@@ -710,7 +710,7 @@ function DrawHistogram(div_infos, country_name)
                 (data);
     
         var y = d3.scaleLinear()
-            .domain([0, d3.max(bins, function(d) { return d.length; })])
+            .domain([0, d3.max(bins, function(d) { return d.length; })+1])
             .range([height, 0]);
     
         var bar = g.selectAll(".bar")
@@ -754,15 +754,35 @@ function DrawHistogram(div_infos, country_name)
             .attr("transform", "translate(0," + height + ")")
             .style("font-size", 8)
             .style("stroke-opacity", .5)
-            .style("opacity", .4)
             .call(d3.axisBottom(x));
+
+            g.append("g")   
+            .attr("class", "hist-annotation")            
+            .attr("transform", "translate("+(width/2-80)+","+(height+30)+")")
+            .style("font-size", 12)
+            .append("text")
+            .text("Ecological Footprint (ha/pc)");
+    
+        g.append("g")     
+            .attr("class", "hist-annotation")
+            .attr("transform", "translate("+(width+32)+","+(height/2+40)+") rotate(-90)")   
+            .style("font-size", 12)
+            .append("text")
+            .text("No. of countries");
+                
+        g.append("g")
+            .attr("class", "axis axis--y")
+            .attr("transform", "translate("+width+",0)")
+            .style("font-size", 8)
+            .style("stroke-opacity", .5)
+            .call(d3.axisRight(y).ticks(3));
     }
 
     var ranking = GetRanking(country_name);
     div_infos.select("div")
         .filter(".info-title")
         .html("Details of " + country_name 
-                + " (No "+ranking+" of 175 in resource saver)");
+                + " (No. "+ranking+" of 175 in resource saver)");
 
     var biggerPercentage = calcPercentage(country_metrics_data, currentFootprint);
 
@@ -796,6 +816,7 @@ function DrawHistogram(div_infos, country_name)
 
     svg.selectAll("g")
         .selectAll("line")
+        .filter(".annotation-line")
         .remove();
 
     // mark country

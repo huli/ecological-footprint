@@ -544,3 +544,9 @@ button polyline {
     /* transition: all 250ms ease-in-out; */
     opacity: .9;
 }
+
+.hist-annotation
+{
+    font-family: 'Average', serif;
+    fill: lightslategray;
+}

@@ -292,7 +292,7 @@ function drawHistogram(d)
             (data);
 
     var y = d3.scaleLinear()
-        .domain([0, d3.max(bins, function(d) { return d.length; })])
+        .domain([0, d3.max(bins, function(d) { return d.length; })+1])
         .range([height, 0]);
 
         
@@ -335,6 +335,28 @@ function drawHistogram(d)
         .style("font-size", 8)
         .style("stroke-opacity", .5)
         .call(d3.axisBottom(x));
+
+    g.append("g")        
+        .attr("transform", "translate("+(width/2-80)+","+(height+30)+")")
+        .style("font-size", 12)
+        .attr("fill", "darkgrey")
+        .append("text")
+        .text("Ecological Footprint (ha/pc)");
+
+    g.append("g")     
+        .attr("transform", "translate("+(width+32)+","+(height/2+40)+") rotate(-90)")   
+        .style("font-size", 12)
+        .attr("fill", "darkgrey")
+        .append("text")
+        .text("No. of countries");
+            
+    
+    g.append("g")
+        .attr("class", "axis axis--y")
+        .attr("transform", "translate("+width+",0)")
+        .style("font-size", 8)
+        .style("stroke-opacity", .5)
+        .call(d3.axisRight(y).ticks(3));
 
     g.append("g")
         .append("line")
