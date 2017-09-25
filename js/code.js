@@ -413,19 +413,20 @@ function DrawLightbox(div_infos)
         .style("top", (scrollY)+ "px")
         .transition()
         .duration(300)
-        .style("opacity", .75);
+        .style("opacity", .75)
+        .style("pointer-events", "all");
 }
 
-var histogramm_explanation_html = "<div id='histogram-text'>"
-        + "{emphasis}<span class='percentage'>{percentage}%</span> of the countries have a bigger footprint than {country}."
+var histogramm_explanation_bigger = "<div id='histogram-text'>"
+        + "{emphasis}<span class='{class}'>{percentage}%</span> of the countries have a bigger footprint than {country}."
         + "</div>";
 
-var histogramm_explanation_html_big = "<div id='histogram-text'>"
-        + "<span class='percentage-bigger'>{percentage}%</span> of the countries have a smaller footprint than {country}."
+var histogramm_explanation_smaller = "<div id='histogram-text'>"
+        + "<span class='{class}'>{percentage}%</span> of the countries have a smaller footprint than {country}."
         + "</div>";
 
 var pie_explanation_html = "<div id='pie-text'>"
-        + "<span class='percentage-bigger'>{percentage}%</span>  of its footprint is the demand on {land type}."
+        + "<span class='percentage-bad'>{percentage}%</span>  of its footprint is the demand on {land type}."
         + "</div>";
 
 function DrawDougnut(div_infos, country_name)
@@ -795,24 +796,26 @@ function DrawHistogram(div_infos, country_name)
         .filter(".histogram-explanation")
         .style("opacity", 0);
 
-    if(currentFootprint > 2.5)
+    if(currentFootprint > 8)
     {
         div_infos.selectAll("div")
         .filter(".histogram-explanation")
-        .html(histogramm_explanation_html_big
+        .html(histogramm_explanation_smaller
             .replace("{percentage}", 
                 (100-biggerPercentage).toFixed(0).toLocaleString("en"))
+            .replace("{class}", biggerPercentage.toFixed(0) < 50 ? "percentage-bad" : "percentage")
             .replace("{country}", country_name));
     }   
     else
     {
         div_infos.selectAll("div")
         .filter(".histogram-explanation")
-        .html(histogramm_explanation_html
+        .html(histogramm_explanation_bigger
             .replace("{percentage}", 
                 biggerPercentage.toFixed(0).toLocaleString("en"))
             .replace("{country}", country_name)
-            .replace("{emphasis}", biggerPercentage > 40 ? "":"Only "));
+            .replace("{class}", biggerPercentage.toFixed(0) < 50 ? "percentage-bad" : "percentage")
+            .replace("{emphasis}", biggerPercentage < 30 ? "Only " : ""));
     }          
 
     div_infos.selectAll("div")
@@ -906,7 +909,7 @@ function DrawHistogram(div_infos, country_name)
 
 function GetRanking(countryName)
 {
-    return country_metrics_rankings.indexOf(countryName) + 1;
+    return country_metrics_rankings.indexOf(CorrectCountryNames(countryName)) + 1;
 }
 
 function calcPercentage(data, fp)
@@ -920,7 +923,7 @@ function calcPercentage(data, fp)
 }
 
 var creditor_text = "{country} has a per capita footprint of<br/><span class='footprint'>{fp}</span> ha<br/>"+
-                    "&nbsp;&nbsp;&nbsp;&nbsp;and a biocapacity of <br/>"+
+                    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and a biocapacity of <br/>"+
                     "<span class='biocapacity'>{bc}</span> ha.<br/> "+
                     "The country is one of the worlds "+ 
                     "<span class='biocapacity-color'>creditors</span><br/>" +
@@ -928,13 +931,13 @@ var creditor_text = "{country} has a per capita footprint of<br/><span class='fo
                     "uses."
                     
 var debitor_text = "{country} has a per capita footprint of<br/><span class='footprint'>{fp}</span> ha<br/>" +
-                    "&nbsp;&nbsp;&nbsp;&nbsp;and only a biocapacity of <br/><span class='biocapacity'>{bc}</span> ha.<br/> "+
+                    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and only a biocapacity of <br/><span class='biocapacity'>{bc}</span> ha.<br/> "+
                     "The country is one of the worlds "+ 
                     "<span class='footprint-color'>debtors</span><br/> and is using more resources than it "+
                     "can build."
 
 var even_text = "{country} has a per capita footprint of <br/><span class='footprint'>{fp}</span> ha<br/>"+
-                    "&nbsp;&nbsp;&nbsp;&nbsp;and a biocapacity of <br/>"+ 
+                    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and a biocapacity of <br/>"+ 
                     "<span class='biocapacity'>{bc}</span> ha.<br/> "+
                     "Its use of ressources is "+ 
                     "in harmony with its build up."

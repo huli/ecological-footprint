@@ -74,7 +74,7 @@ h3 {
 }
 
 #about-you-content{
-    width: 400px;
+    width: 350px;
     pointer-events: none;	
 }
 
@@ -453,7 +453,7 @@ div.info-sub-title
     opacity: .7;
 }
 
-.percentage-bigger
+.percentage-bad
 {
     font-family: 'Average', serif;
     font-size: 32px;
