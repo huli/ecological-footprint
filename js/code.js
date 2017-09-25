@@ -2249,7 +2249,7 @@ function draw_overview_bubble(data)
             {
                 svg.append("text")
                     .attr("class", "annotation-text")
-                    .text("World biocapacity (1.7 h)")
+                    .text("World biocapacity (1.7 ha)")
                     .attr("x", 330)
                     .attr("y", y_scale(1.74) -9)
                     .style("opacity", 0)
