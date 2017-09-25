@@ -956,7 +956,6 @@ function change_text(selectedCountry)
 {
     var value = get_metric(selectedCountry);
     var text = "";
-    console.log(value);
     if(value == null)
     {    
         d3.select("#you-text")
@@ -2434,7 +2433,6 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-bubble #sections > div'))
         .on('active', function(i){
-            console.log("active: " + i);
             switch(i)
             {
                 case 3:
@@ -2461,7 +2459,6 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-timeline #sections > div'))
         .on('active', function(i){
-            console.log("active timeline: " + i);
             switch(i)
             {
                 case 2:
@@ -2487,7 +2484,6 @@ function intialize_graph_scroll()
         .eventId('uniqueId1')
         .sections(d3.selectAll('.container-closing #sections > div'))
         .on('active', function(i){
-            console.log("closing: " + i );
             switch(i)
             {                
                 case 1:
@@ -2548,7 +2544,6 @@ function scrollVertical(e){
     {
         var alpha = document.body.offsetHeight - (window.innerHeight + window.pageYOffset);
         var opacity = 100-(alpha/10);
-        console.log("fade out choropleth: " + opacity);
         if(opacity >= 0)
         {        
             d3.select(closing_div)
