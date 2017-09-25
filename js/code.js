@@ -95,19 +95,19 @@ function draw_legend()
     var legendGroup = svg_worldmap.append("g");
     var legend_width = 0;
     legendGroup
-        .attr("transform", "translate(" + (div_rect.left + (div_rect.width/2) + 100) 
+        .attr("transform", "translate(" + (div_rect.left + (div_rect.width/2) -70) 
                     +","+ (div_rect.bottom - 110) +")")
         .selectAll("rect")
         .data(colors)
         .enter()
         .append("rect")
         .style("fill", function(d) {return d;})
-        .attr("width", 35)
-        .attr("height", 10)
+        .attr("width", 55)
+        .attr("height", 8)
         .attr("x", function(d,i) 
         {
             var current_x = legend_width;
-            legend_width += 35; 
+            legend_width += 55; 
             return current_x; 
         })
         .attr("y", 0)
@@ -115,9 +115,9 @@ function draw_legend()
     legendGroup
         .append("text")
         .attr("y", 20)
-        .attr("x",  - 5)
+        .attr("x",  0)
         .attr("class", "legend-text-map")
-        .text("0.5x");
+        .text("0.5x or less");
     legendGroup
         .append("text")
         .attr("y", 20)
@@ -127,15 +127,15 @@ function draw_legend()
     legendGroup
         .append("text")
         .attr("y", 20)
-        .attr("x", legend_width - 10)
+        .attr("x", legend_width - 52)
         .attr("class", "legend-text-map")
-        .text("2.0x");
+        .text("2.0x or more");
     legendGroup
         .append("text")
-        .attr("y", -5)
+        .attr("y", -7)
         .attr("x", legend_width/2 - 80)
         .attr("class", "legend-title-map")
-        .text("Sustainability (Footp./Biocap.)")
+        .text("Sustainability (Biocap/Footprint)")
 }
 
 function show_choropleth()
@@ -1116,7 +1116,7 @@ function show_closing()
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
 
-    AnnotateSource(svg, width - 200, innerHeight - 25);
+    AnnotateSource(svg, width - 850, innerHeight - 25);
 }
 
 function draw_timeline(data)
