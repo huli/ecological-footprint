@@ -1184,7 +1184,23 @@ function show_worst_timeline()
             
             svg.selectAll("dot")	
                 .data(fiji_biocap)			
-                .enter().append("circle")								
+                .enter().append("circle")	                
+                .on("mouseover", function(d) {
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<b>"+d.year.getFullYear()+"</b><br/>"
+                            +"Biocap: "+d.total.toFixed(2)+" ha")	
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+                })								
                 .attr("r", timeline_circle_width)	
                 .style("opacity", 0)	
                 .attr("cx", function(d) { return x_timeline(d.year); })		 
@@ -1220,7 +1236,23 @@ function show_worst_timeline()
             
             svg.selectAll("dot")	
                 .data(fiji_footprint)			
-                .enter().append("circle")								
+                .enter().append("circle")	                
+                .on("mouseover", function(d) {
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<b>"+d.year.getFullYear()+"</b><br/>"
+                            +"Footprint: "+d.total.toFixed(2)+" ha")	
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+                })								
                 .attr("r", timeline_circle_width)	
                 .style("opacity", 0)	
                 .attr("cx", function(d) { return x_timeline(d.year); })		 
@@ -1378,7 +1410,7 @@ function RemoveTimelineAnnotations(div_name)
 function show_best_timeline()
 {
     isWorstTimeLineShown = false;
-    
+
     var svg = d3.select(timeline_div)
         .select("svg");
 
@@ -1433,7 +1465,23 @@ function show_best_timeline()
             
             svg.selectAll("dot")	
                 .data(cyprus_biocap)			
-                .enter().append("circle")								
+                .enter().append("circle")                
+                .on("mouseover", function(d) {
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<b>"+d.year.getFullYear()+"</b><br/>"
+                            +"Biocap: "+d.total.toFixed(2)+" ha")	
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+                })							
                 .attr("r", timeline_circle_width)	
                 .style("opacity", 0)	
                 .attr("cx", function(d) { return x_timeline(d.year); })		 
@@ -1469,7 +1517,23 @@ function show_best_timeline()
             
             svg.selectAll("dot")	
                 .data(cyprus_footprint)			
-                .enter().append("circle")								
+                .enter().append("circle")	                
+                .on("mouseover", function(d) {
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<b>"+d.year.getFullYear()+"</b><br/>"
+                            +"Footprint: "+d.total.toFixed(2)+" ha")	
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+                })								
                 .attr("r", timeline_circle_width)	
                 .style("opacity", 0)	
                 .attr("cx", function(d) { return x_timeline(d.year); })		 
@@ -1685,6 +1749,9 @@ function show_global_timeline()
     // Remove all points
     svg.selectAll("circle").remove();
 
+    
+    var tooltip_div = d3.select(".tooltip");
+
     // Show biocapacity of world and country
     svg.append("path")
         .datum(world_biocap)
@@ -1708,7 +1775,23 @@ function show_global_timeline()
             
             svg.selectAll("dot")	
                 .data(world_biocap)			
-                .enter().append("circle")								
+                .enter().append("circle")	
+                .on("mouseover", function(d) {
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<b>"+d.year.getFullYear()+"</b><br/>"
+                            +"Footprint: "+d.total.toFixed(2)+" ha")	
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+                })								
                 .attr("r", timeline_circle_width)	
                 .style("opacity", 0)	
                 .attr("cx", function(d) { return x_timeline(d.year); })		 
@@ -1740,12 +1823,26 @@ function show_global_timeline()
         .attr("stroke-opacity", timeline_opacity)
         .attr("stroke-width", timeline_stroke)
         .on("end", function(d) 
-        {
-            var tooltip_div = d3.select(".tooltip");
-            
+        {   
             svg.selectAll("dot")	
                 .data(world_footprint)			
-                .enter().append("circle")								
+                .enter().append("circle")		
+                .on("mouseover", function(d) {
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<b>"+d.year.getFullYear()+"</b><br/>"
+                            +"Footprint: "+d.total.toFixed(2)+" ha")	
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+                })							
                 .attr("r", timeline_circle_width)	
                 .style("opacity", 0)	
                 .attr("cx", function(d) { return x_timeline(d.year); })		 
