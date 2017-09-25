@@ -262,8 +262,13 @@ function color_countries()
                         +"</table>";
                 }
             })	
-                .style("left", (d3.event.pageX + 10) + "px")		
-                .style("top", (d3.event.pageY - 10) + "px")
+            .style("left", function() {
+                if(d.properties.name == "New Zealand")
+                    return (d3.event.pageX - 35) + "px"
+                return (d3.event.pageX + 10) + "px"	;
+            }
+            )	
+            .style("top", (d3.event.pageY - 10) + "px")
         })					
         .on("mouseout", function(d) {	
 
