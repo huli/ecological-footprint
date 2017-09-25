@@ -2367,7 +2367,7 @@ function draw_overview_bubble(data)
             return current_x; 
         })
         .attr("y", 10)
-        .attr("opacity", .7);
+        .attr("opacity", bubble_opacity);
 
     legendImpactGroup
         .append("text")
