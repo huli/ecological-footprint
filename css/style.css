@@ -199,6 +199,11 @@ svg{
 	-webkit-animation-delay:0s; /* Safari and Chrome */
 }
 
+.deficit-line{
+    stroke:lightslategrey;	
+    opacity: 1;
+    stroke-dasharray: 1, 5;
+}
 
 div.tooltip {	
     position: absolute;			
