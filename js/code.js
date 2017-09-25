@@ -2255,7 +2255,7 @@ function draw_overview_bubble(data)
     svg.append("text")
         .attr("class", "axis-label")
         .text("Human Development Index")                    
-        .attr("x", 530)
+        .attr("x", width/2-90)
         .attr("y", height + 35)
         .style("opacity", 0.1)
         .transition() 
@@ -2264,10 +2264,10 @@ function draw_overview_bubble(data)
 
     svg.append("text")
         .attr("class", "axis-label")
-        .text("Ecological Footprint (ha/capita)")  
-        .attr("transform", "rotate(270, "+ (width + 40) +  " , 450)")
+        .text("Ecological Footprint (ha/capita)") 
+        .attr("transform", "rotate(270, "+ (width + 40) +  " , 470)")
         .attr("x", width + 40)
-        .attr("y", 450)
+        .attr("y", 470)
         .style("opacity", 0.1)
         .transition() 
         .duration(2000)
@@ -2516,7 +2516,7 @@ function draw_map(data)
                     .style('stroke', "white")
                     .style('stroke-width',"0.3");
 
-    AnnotateSource(svg_worldmap, width -200, innerHeight - 25);
+    AnnotateSource(svg_worldmap, width -850, innerHeight - 25);
 }
 
 function AnnotateSource(svg, left, top)
