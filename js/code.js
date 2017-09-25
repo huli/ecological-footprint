@@ -8,8 +8,8 @@ var bubble_chart_div = ".container-bubble #graph";
 var timeline_div = ".container-timeline #graph";
 var closing_div = ".container-closing #graph";
 var timeline_opacity = 1;
-var timeline_circle_width = 3;
-var timeline_circle_opacity = .6;
+var timeline_circle_width = 2;
+var timeline_circle_opacity = 1;
 var timeline_stroke = 2;
 var timeline_inactive_opacity = .3;
 var colors = ['#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e'];
@@ -1652,7 +1652,7 @@ function show_best_timeline()
                 label: "Coup d'état in cyprus. Turkish invasion and division",
                 title: "1974"
             },
-            data: { date: new Date(1974, 1, 1), value: 2.6 },         
+            data: { date: new Date(1974, 1, 1), value: 2.63 },         
             subject: { radius: 20, radiusPadding: 3 },
             dy: 50,
             dx: 40
@@ -1683,7 +1683,7 @@ function show_best_timeline()
                 label: "Cyprus adopts the euro.",
                 title: "2008"
             },
-            data: { date: new Date(2008, 1, 1), value: 5.70 },         
+            data: { date: new Date(2008, 1, 1), value: 5.75 },         
             subject: { radius: 20, radiusPadding: 3 },
             dy: -40,
             dx: -20
