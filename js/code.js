@@ -8,7 +8,9 @@ var bubble_chart_div = ".container-bubble #graph";
 var timeline_div = ".container-timeline #graph";
 var closing_div = ".container-closing #graph";
 var timeline_opacity = 1;
-var timeline_stroke = 4;
+var timeline_circle_width = 3;
+var timeline_circle_opacity = .6;
+var timeline_stroke = 2;
 var timeline_inactive_opacity = .3;
 var colors = ['#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e'];
 
@@ -1124,9 +1126,12 @@ function draw_timeline(data)
     timeline_metrics_data = data;
 }
 
+var isWorstTimeLineShown = false;
 function show_worst_timeline()
 {
-    
+    if(isWorstTimeLineShown) return;
+
+    isWorstTimeLineShown = true;
     var svg = d3.select(timeline_div)
         .select("svg");
     
@@ -1141,6 +1146,9 @@ function show_worst_timeline()
         .transition()
         .duration(animation_time/2)
         .attr("stroke-opacity", 0);
+
+    // Remove all points
+    svg.selectAll("circle").remove();
 
     var fiji_biocap = timeline_metrics_data.filter(function (d){
         return d.record == "BiocapPerCap" &&
@@ -1169,7 +1177,23 @@ function show_worst_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke)
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(fiji_biocap)			
+                .enter().append("circle")								
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#5ab4ac");
+            });
     
     // Show footprint of world and country
     svg.append("path")
@@ -1189,7 +1213,23 @@ function show_worst_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke)
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(fiji_footprint)			
+                .enter().append("circle")								
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#d8b365");
+            });
 
     // Show legend
     var legend = svg.append("g");
@@ -1337,6 +1377,8 @@ function RemoveTimelineAnnotations(div_name)
 
 function show_best_timeline()
 {
+    isWorstTimeLineShown = false;
+    
     var svg = d3.select(timeline_div)
         .select("svg");
 
@@ -1351,6 +1393,9 @@ function show_best_timeline()
         .transition()
         .duration(animation_time)
         .attr("stroke-opacity", 0);
+
+    // Remove all points
+    svg.selectAll("circle").remove();
 
     RemoveTimelineAnnotations(timeline_div);        
 
@@ -1381,7 +1426,23 @@ function show_best_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke)
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(cyprus_biocap)			
+                .enter().append("circle")								
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#5ab4ac");
+        });
     
     // Show footprint of world
     svg.append("path")
@@ -1401,7 +1462,23 @@ function show_best_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke) 
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(cyprus_footprint)			
+                .enter().append("circle")								
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#d8b365");
+            });
 
         // Show legend
         var legend = svg.append("g");
@@ -1513,6 +1590,8 @@ function show_best_timeline()
 var isGlobalTimelineDefined = false;
 function show_global_timeline()
 {    
+    isWorstTimeLineShown = false;
+
     var div_rect = d3.select(timeline_div).node().getBoundingClientRect();
 
     var cover = {
@@ -1524,6 +1603,8 @@ function show_global_timeline()
                 width = div_rect.width - cover.left - cover.right,
                 height = div_rect.height - cover.top - cover.bottom;
           
+
+
     if(!isGlobalTimelineDefined)
     {
         d3.select(timeline_div)
@@ -1601,6 +1682,9 @@ function show_global_timeline()
 
     var svg = d3.select(timeline_div).select("svg");
 
+    // Remove all points
+    svg.selectAll("circle").remove();
+
     // Show biocapacity of world and country
     svg.append("path")
         .datum(world_biocap)
@@ -1617,7 +1701,25 @@ function show_global_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke)
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(world_biocap)			
+                .enter().append("circle")								
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#5ab4ac");
+        });
+
+
     
     // Show footprint of world and country
     svg.append("path")
@@ -1636,7 +1738,23 @@ function show_global_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke)
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(world_footprint)			
+                .enter().append("circle")								
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#d8b365");
+        });
 
     if(!isGlobalTimelineDefined)
     {
