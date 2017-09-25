@@ -8,7 +8,9 @@ var bubble_chart_div = ".container-bubble #graph";
 var timeline_div = ".container-timeline #graph";
 var closing_div = ".container-closing #graph";
 var timeline_opacity = 1;
-var timeline_stroke = 4;
+var timeline_circle_width = 3;
+var timeline_circle_opacity = .6;
+var timeline_stroke = 2;
 var timeline_inactive_opacity = .3;
 var colors = ['#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e'];
 
@@ -1124,9 +1126,12 @@ function draw_timeline(data)
     timeline_metrics_data = data;
 }
 
+var isWorstTimeLineShown = false;
 function show_worst_timeline()
 {
-    
+    if(isWorstTimeLineShown) return;
+
+    isWorstTimeLineShown = true;
     var svg = d3.select(timeline_div)
         .select("svg");
     
@@ -1141,6 +1146,9 @@ function show_worst_timeline()
         .transition()
         .duration(animation_time/2)
         .attr("stroke-opacity", 0);
+
+    // Remove all points
+    svg.selectAll("circle").remove();
 
     var fiji_biocap = timeline_metrics_data.filter(function (d){
         return d.record == "BiocapPerCap" &&
@@ -1169,7 +1177,56 @@ function show_worst_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke)
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(fiji_biocap)		 
+                .enter().append("circle")		
+                .on("mouseover", function(d) {                    
+                    var otherValue = GetOtherValue(fiji_footprint, d.year)[0].total;
+                    var balance = d.total - otherValue;
+
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<table>"
+                            +"<tr><td colspan='2'><b>"+d.year.getFullYear()+"</b></td></tr>"
+                            +"<tr><td>Biocap:</td><td>"+d.total.toFixed(2)+" ha</td></tr>"
+                            +"<tr><td>"+(balance > 0 ? "Surplus" : "Deficit" )+":</td><td>"
+                            +balance.toFixed(2)+" ha</td></tr>"
+                            +"</table>");
+                    svg.append("line")
+                        .attr("class", "deficit-line")
+                        .attr("x1", x_timeline(d.year))
+                        .attr("y1", y_timeline(d.total))
+                        .attr("x2", x_timeline(d.year))
+                        .attr("y2", y_timeline(otherValue))    
+                        .style("opacity", 1);                    
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+
+                    svg.select(".deficit-line")
+                        .remove();
+                })									
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#5ab4ac");
+            });
     
     // Show footprint of world and country
     svg.append("path")
@@ -1189,7 +1246,56 @@ function show_worst_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke)
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(fiji_footprint)			
+                .enter().append("circle")	                
+                .on("mouseover", function(d) {                    
+                    var otherValue = GetOtherValue(fiji_biocap, d.year)[0].total;
+                    var balance = otherValue - d.total;
+
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<table>"
+                            +"<tr><td colspan='2'><b>"+d.year.getFullYear()+"</b></td></tr>"
+                            +"<tr><td>Footprint:</td><td>"+d.total.toFixed(2)+" ha</td></tr>"
+                            +"<tr><td>"+(balance > 0 ? "Surplus" : "Deficit" )+":</td><td>"
+                            +balance.toFixed(2)+" ha</td></tr>"
+                            +"</table>");
+                    svg.append("line")
+                        .attr("class", "deficit-line")
+                        .attr("x1", x_timeline(d.year))
+                        .attr("y1", y_timeline(d.total))
+                        .attr("x2", x_timeline(d.year))
+                        .attr("y2", y_timeline(otherValue))    
+                        .style("opacity", 1);                    
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+
+                    svg.select(".deficit-line")
+                        .remove();
+                })							
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#d8b365");
+            });
 
     // Show legend
     var legend = svg.append("g");
@@ -1337,6 +1443,8 @@ function RemoveTimelineAnnotations(div_name)
 
 function show_best_timeline()
 {
+    isWorstTimeLineShown = false;
+
     var svg = d3.select(timeline_div)
         .select("svg");
 
@@ -1351,6 +1459,9 @@ function show_best_timeline()
         .transition()
         .duration(animation_time)
         .attr("stroke-opacity", 0);
+
+    // Remove all points
+    svg.selectAll("circle").remove();
 
     RemoveTimelineAnnotations(timeline_div);        
 
@@ -1381,7 +1492,56 @@ function show_best_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke)
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(cyprus_biocap)			
+                .enter().append("circle")                
+                .on("mouseover", function(d) {                    
+                    var otherValue = GetOtherValue(cyprus_footprint, d.year)[0].total;
+                    var balance = d.total - otherValue;
+
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<table>"
+                            +"<tr><td colspan='2'><b>"+d.year.getFullYear()+"</b></td></tr>"
+                            +"<tr><td>Footprint:</td><td>"+d.total.toFixed(2)+" ha</td></tr>"
+                            +"<tr><td>"+(balance > 0 ? "Surplus" : "Deficit" )+":</td><td>"
+                            +balance.toFixed(2)+" ha</td></tr>"
+                            +"</table>");
+                    svg.append("line")
+                        .attr("class", "deficit-line")
+                        .attr("x1", x_timeline(d.year))
+                        .attr("y1", y_timeline(d.total))
+                        .attr("x2", x_timeline(d.year))
+                        .attr("y2", y_timeline(otherValue))    
+                        .style("opacity", 1);                    
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+
+                    svg.select(".deficit-line")
+                        .remove();
+                })							
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#5ab4ac");
+        });
     
     // Show footprint of world
     svg.append("path")
@@ -1401,7 +1561,56 @@ function show_best_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke) 
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(cyprus_footprint)			
+                .enter().append("circle")	                
+                .on("mouseover", function(d) {                    
+                    var otherValue = GetOtherValue(cyprus_biocap, d.year)[0].total;
+                    var balance = otherValue - d.total;
+
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<table>"
+                            +"<tr><td colspan='2'><b>"+d.year.getFullYear()+"</b></td></tr>"
+                            +"<tr><td>Footprint:</td><td>"+d.total.toFixed(2)+" ha</td></tr>"
+                            +"<tr><td>"+(balance > 0 ? "Surplus" : "Deficit" )+":</td><td>"
+                            +balance.toFixed(2)+" ha</td></tr>"
+                            +"</table>");
+                    svg.append("line")
+                        .attr("class", "deficit-line")
+                        .attr("x1", x_timeline(d.year))
+                        .attr("y1", y_timeline(d.total))
+                        .attr("x2", x_timeline(d.year))
+                        .attr("y2", y_timeline(otherValue))    
+                        .style("opacity", 1);                    
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+
+                    svg.select(".deficit-line")
+                        .remove();
+                })								
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#d8b365");
+            });
 
         // Show legend
         var legend = svg.append("g");
@@ -1513,6 +1722,8 @@ function show_best_timeline()
 var isGlobalTimelineDefined = false;
 function show_global_timeline()
 {    
+    isWorstTimeLineShown = false;
+
     var div_rect = d3.select(timeline_div).node().getBoundingClientRect();
 
     var cover = {
@@ -1524,6 +1735,8 @@ function show_global_timeline()
                 width = div_rect.width - cover.left - cover.right,
                 height = div_rect.height - cover.top - cover.bottom;
           
+
+
     if(!isGlobalTimelineDefined)
     {
         d3.select(timeline_div)
@@ -1601,6 +1814,12 @@ function show_global_timeline()
 
     var svg = d3.select(timeline_div).select("svg");
 
+    // Remove all points
+    svg.selectAll("circle").remove();
+
+    
+    var tooltip_div = d3.select(".tooltip");
+
     // Show biocapacity of world and country
     svg.append("path")
         .datum(world_biocap)
@@ -1617,7 +1836,58 @@ function show_global_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke)
+        .on("end", function(d) 
+        {
+            var tooltip_div = d3.select(".tooltip");
+            
+            svg.selectAll("dot")	
+                .data(world_biocap)			
+                .enter().append("circle")	
+                .on("mouseover", function(d) {
+                    var otherValue = GetOtherValue(world_footprint, d.year)[0].total;
+                    var balance = d.total - otherValue;
+
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<table>"
+                            +"<tr><td colspan='2'><b>"+d.year.getFullYear()+"</b></td></tr>"
+                            +"<tr><td>Biocap:</td><td>"+d.total.toFixed(2)+" ha</td></tr>"
+                            +"<tr><td>"+(balance > 0 ? "Surplus" : "Deficit" )+":</td><td>"
+                            +balance.toFixed(2)+" ha</td></tr>"
+                            +"</table>");
+                    svg.append("line")
+                        .attr("class", "deficit-line")
+                        .attr("x1", x_timeline(d.year))
+                        .attr("y1", y_timeline(d.total))
+                        .attr("x2", x_timeline(d.year))
+                        .attr("y2", y_timeline(otherValue))    
+                        .style("opacity", 1);                    
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+
+                    svg.select(".deficit-line")
+                        .remove();
+                })								
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#5ab4ac");
+        });
+
+
     
     // Show footprint of world and country
     svg.append("path")
@@ -1636,7 +1906,54 @@ function show_global_timeline()
         .ease(d3.easePolyInOut)
         .attr("d", line)
         .attr("stroke-opacity", timeline_opacity)
-        .attr("stroke-width", timeline_stroke);
+        .attr("stroke-width", timeline_stroke)
+        .on("end", function(d) 
+        {   
+            svg.selectAll("dot")	
+                .data(world_footprint)			
+                .enter().append("circle")		
+                .on("mouseover", function(d) {                    
+                    var otherValue = GetOtherValue(world_biocap, d.year)[0].total;
+                    var balance = otherValue - d.total;
+
+                    tooltip_div
+                        .style("left", (d3.event.pageX + 10) + "px")		
+                        .style("top", (d3.event.pageY + 10) + "px")	
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 8);
+                    tooltip_div.html("<table>"
+                            +"<tr><td colspan='2'><b>"+d.year.getFullYear()+"</b></td></tr>"
+                            +"<tr><td>Footprint:</td><td>"+d.total.toFixed(2)+" ha</td></tr>"
+                            +"<tr><td>"+(balance > 0 ? "Surplus" : "Deficit" )+":</td><td>"
+                            +balance.toFixed(2)+" ha</td></tr>"
+                            +"</table>");
+                    svg.append("line")
+                        .attr("class", "deficit-line")
+                        .attr("x1", x_timeline(d.year))
+                        .attr("y1", y_timeline(d.total))
+                        .attr("x2", x_timeline(d.year))
+                        .attr("y2", y_timeline(otherValue))    
+                        .style("opacity", 1);                    
+                })	
+                .on("mouseout", function(d){
+                    tooltip_div
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+
+                    svg.select(".deficit-line")
+                        .remove();
+                })								
+                .attr("r", timeline_circle_width)	
+                .style("opacity", 0)	
+                .attr("cx", function(d) { return x_timeline(d.year); })		 
+                .attr("cy", function(d) { return y_timeline(d.total); })	
+                .transition()		
+                .duration(1000)		
+                .style("opacity", timeline_circle_opacity)	
+                .attr("fill", "#d8b365");
+        });
 
     if(!isGlobalTimelineDefined)
     {
@@ -1734,6 +2051,13 @@ function show_global_timeline()
         AnnotateSource(svg, width - 200 , height + 55);    
     }
     isGlobalTimelineDefined = true;
+}
+
+function GetOtherValue(data, year)
+{
+    return data.filter(function (d){
+        return d.year.getFullYear() == year.getFullYear();
+    });
 }
 
 function start_worst()
