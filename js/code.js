@@ -41,7 +41,8 @@ var svg_worldmap;
 
 function render()
 {
-
+    window.scrollTo(0, 0);
+    location.reload();
 }
 
 function highlight_country()
@@ -2902,7 +2903,5 @@ function fadeOutMap(alpha)
 }
 
 window.onscroll=scrollVertical
-
-render();
 
 d3.select(window).on('resize', render)
