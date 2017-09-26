@@ -2432,7 +2432,7 @@ function draw_overview_bubble(data)
 
     // create scale for radius/population
     r_scale = d3.scaleLinear()
-        .range([3, 50])
+        .range([1, 60])
         .domain([0, Math.sqrt(maxPopulation)]);
 
     // draw bubbles
