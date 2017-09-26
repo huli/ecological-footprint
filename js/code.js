@@ -360,7 +360,7 @@ function ChangeCountryOrHideInfos(div)
 
 function GetNextRanking(isForeward, name)
 {
-    var nextRanking = country_metrics_rankings.indexOf(name);
+    var nextRanking = country_metrics_rankings.indexOf(CorrectCountryNames(name));
     if(isForeward)
     {
         nextRanking = nextRanking+1;
