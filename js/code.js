@@ -1349,7 +1349,7 @@ function show_worst_timeline()
                 label: "Fijian coup d'état.",
                 title: "2006"
             },
-            data: { date: new Date(2006, 1, 1), value: 2.8 },            
+            data: { date: new Date(2006, 1, 1), value: 2.82 },            
             subject: { radius: 20, radiusPadding: 3 },
             dy: -50,
             dx: -130
@@ -1371,7 +1371,7 @@ function show_worst_timeline()
                 label: "Interruption of democratic rule by military coups",
                 title: "1987"
             },
-            data: { date: new Date(1987, 1, 1), value: 2.0 },
+            data: { date: new Date(1987, 1, 1), value: 1.9 },
             subject: { radius: 40, radiusPadding: 10 },
             dy: 80,
             dx: 0
